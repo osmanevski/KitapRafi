@@ -2,15 +2,18 @@
  * Çalıştırma:  npm install && node server.js
  * Site:        http://localhost:3000
  * Admin:       http://localhost:3000/admin.html
- * Admin şifresini değiştir: aşağıdaki ADMIN_KEY ya da ortam değişkeni
+ * Admin şifresi ZORUNLU ortam değişkeniyle verilir (kodda gömülü şifre yok):
  *   Windows:  set ADMIN_KEY=guclu-sifre && node server.js
+ *   PM2:      pm2 restart kitaprafi --update-env  (ADMIN_KEY set edildikten sonra)
+ * ADMIN_KEY ayarlı değilse admin paneli güvenlik için devre dışı kalır.
  */
 const express = require('express');
 const multer  = require('multer');
 const fs      = require('fs');
 const path    = require('path');
 
-const ADMIN_KEY = process.env.ADMIN_KEY || 'osman';
+const ADMIN_KEY = process.env.ADMIN_KEY || '';
+if (!ADMIN_KEY) console.warn('UYARI: ADMIN_KEY ortam değişkeni ayarlı değil — admin paneli devre dışı.');
 const PORT      = process.env.PORT || 3000;
 
 const DATA_FILE   = path.join(__dirname, 'data', 'books.json');
@@ -96,7 +99,7 @@ function migrateAuthors() {
 }
 
 const auth = (req, res, next) =>
-  req.headers['x-admin-key'] === ADMIN_KEY
+  ADMIN_KEY && req.headers['x-admin-key'] === ADMIN_KEY
     ? next()
     : res.status(401).json({ error: 'Yetkisiz. Admin şifresi hatalı.' });
 
@@ -284,7 +287,7 @@ app.put('/api/authors/:id', auth, (req, res) => {
 });
 
 app.post('/api/auth', (req, res) =>
-  res.json({ ok: req.headers['x-admin-key'] === ADMIN_KEY }));
+  res.json({ ok: !!ADMIN_KEY && req.headers['x-admin-key'] === ADMIN_KEY }));
 
 app.post('/api/books', auth, upload.single('cover'), (req, res) => {
   try {
@@ -427,5 +430,5 @@ migrateAuthors();
 app.listen(PORT, () => {
   console.log('Roman Rafı çalışıyor →  http://localhost:' + PORT);
   console.log('Admin paneli        →  http://localhost:' + PORT + '/admin.html');
-  console.log('Admin şifresi       →  ' + (process.env.ADMIN_KEY ? '(ortam değişkeninden)' : ADMIN_KEY + '  (server.js içinden değiştir!)'));
+  console.log('Admin şifresi       →  ' + (ADMIN_KEY ? '(ortam değişkeninden)' : 'AYARLI DEĞİL — admin devre dışı'));
 });

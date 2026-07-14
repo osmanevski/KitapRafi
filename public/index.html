@@ -375,6 +375,10 @@ body::before{
 
 <script>
 const $ = id => document.getElementById(id);
+// Güvenlik: içerik admin + LLM'den geliyor; XSS'e karşı basılmadan önce temizle.
+// esc: tüm HTML'i escape eder. em: yalnızca <em>/</em> etiketlerine izin verir.
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const em  = s => esc(s).replace(/&lt;(\/?)em&gt;/gi, '<$1em>');
 let BOOKS = [];
 let idx = 0;
 
@@ -393,7 +397,7 @@ function render(book){
   root.style.setProperty('--acc2', book.pal.acc2);
 
   $('introAuthor').textContent = book.authorName;
-  $('introTitle').innerHTML = book.title;
+  $('introTitle').innerHTML = em(book.title);
 
   const cover = $('cover');
   cover.style.setProperty('--cb', book.pal.bg);
@@ -404,43 +408,43 @@ function render(book){
   }else{
     cover.classList.remove('has-img');
     $('stack').innerHTML = (book.stack || []).map(([w,c]) =>
-      `<span style="color:${book.pal[c] || book.pal.c1};font-size:${stackFontSize(w)}">${w}</span>`
+      `<span style="color:${esc(book.pal[c] || book.pal.c1)};font-size:${stackFontSize(w)}">${esc(w)}</span>`
     ).join('');
   }
 
   book.notes.forEach((n,i) => {
     const el = $('note'+(i+1));
     const titleHtml = (i === 0)
-      ? `<button class="author-link" id="authorBtn">${book.authorName}</button>`
-      : (n.title || '');
+      ? `<button class="author-link" id="authorBtn">${esc(book.authorName)}</button>`
+      : esc(n.title || '');
     el.innerHTML =
-      `<span class="tag">${n.tag}</span>` +
+      `<span class="tag">${esc(n.tag)}</span>` +
       `<h3>${titleHtml}</h3>` +
-      `<p>${n.p}</p>` +
+      `<p>${em(n.p)}</p>` +
       (i === 0 ? `<span class="click-hint">isme tıkla, dosyası açılsın →</span>` : '');
   });
   $('authorBtn').addEventListener('click', openPanel);
 
   const s = book.summary;
   $('summary').innerHTML =
-    `<div class="rule"></div><h2>${s.h}</h2>` +
-    s.ps.map(p => `<p>${p}</p>`).join('') +
-    `<div class="meta">` + s.meta.map(([b,l]) => `<div><b>${b}</b>${l}</div>`).join('') + `</div>`;
+    `<div class="rule"></div><h2>${em(s.h)}</h2>` +
+    s.ps.map(p => `<p>${em(p)}</p>`).join('') +
+    `<div class="meta">` + s.meta.map(([b,l]) => `<div><b>${esc(b)}</b>${esc(l)}</div>`).join('') + `</div>`;
 
-  $('footQuote').innerHTML = book.quote;
+  $('footQuote').innerHTML = em(book.quote);
 
   // yazar dosyası artık kitaptan değil, book.author'dan (aynı yazarın tüm
   // kitaplarında ortak). "Bu Yazarın Kitapları" = sitedeki tüm kitapları.
   const A = book.author || { name: book.authorName, dates: book.dates, bio: book.bio||[], fact: book.fact||'', siteBooks: [] };
-  $('panelTitle').innerHTML = (A.name||'').split(' ').join('<br>');
+  $('panelTitle').innerHTML = esc(A.name||'').split(' ').join('<br>');
   $('panelDates').textContent = A.dates || '';
   const sb = (A.siteBooks || []).filter(x => x.slug !== book.slug); // bu kitabı listeleme
   $('panelBody').innerHTML =
-    (A.bio||[]).map(p => `<p>${p}</p>`).join('') +
-    (A.fact ? `<div class="fact">${A.fact}</div>` : '') +
+    (A.bio||[]).map(p => `<p>${em(p)}</p>`).join('') +
+    (A.fact ? `<div class="fact">${em(A.fact)}</div>` : '') +
     (sb.length
       ? `<div class="works"><h4>Bu Yazarın Diğer Kitapları</h4><ul>` +
-        sb.map(x => `<li class="linked" data-goslug="${x.slug}">${x.plain}</li>`).join('') +
+        sb.map(x => `<li class="linked" data-goslug="${esc(x.slug)}">${esc(x.plain)}</li>`).join('') +
         `</ul></div>`
       : '');
 
@@ -685,7 +689,7 @@ $('catBtn').addEventListener('click', () => {
   ALL.forEach(b => { const c=b.category||'Roman'; counts[c]=(counts[c]||0)+1; });
   const cats = Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
   let html = `<button class="drop-item ${!activeCategory?'active':''}" data-cat="__all__">Tümü <small>${ALL.length} kitap</small></button>`;
-  html += cats.map(c => `<button class="drop-item ${activeCategory===c?'active':''}" data-cat="${c}">${c} <small>${counts[c]} kitap</small></button>`).join('');
+  html += cats.map(c => `<button class="drop-item ${activeCategory===c?'active':''}" data-cat="${esc(c)}">${esc(c)} <small>${counts[c]} kitap</small></button>`).join('');
   $('dropList').innerHTML = html;
   $('dropList').querySelectorAll('[data-cat]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
@@ -706,7 +710,7 @@ $('authBtn').addEventListener('click', () => {
   });
   const names = Object.keys(byAuthor).sort((a,b)=>a.localeCompare(b,'tr'));
   $('dropList').innerHTML = names.map(n =>
-    `<button class="drop-item" data-author="${n.replace(/"/g,'&quot;')}">${n} <small>${byAuthor[n].length} kitap</small></button>`
+    `<button class="drop-item" data-author="${esc(n)}">${esc(n)} <small>${byAuthor[n].length} kitap</small></button>`
   ).join('');
   $('dropList').querySelectorAll('[data-author]').forEach(btn=>{
     btn.addEventListener('click', ()=>{

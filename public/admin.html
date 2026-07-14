@@ -208,6 +208,8 @@ hr{border:none;border-top:1px dashed var(--line);margin:20px 0}
 
 <script>
 const $ = id => document.getElementById(id);
+// Güvenlik: liste içeriği admin+LLM verisinden geliyor; innerHTML'e basmadan önce escape et.
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let KEY = sessionStorage.getItem('rr-key') || '';
 let BOOKS = [];
 let editingSlug = null;   // null = yeni kitap
@@ -257,15 +259,15 @@ function renderList(){
   $('bookList').innerHTML = BOOKS.map((b,i)=>`
     <li>
       ${b.cover
-        ? `<img class="thumb" src="${b.cover}" alt="">`
-        : `<div class="thumb" style="background:${b.pal.bg}">${stripHtml(b.plain).charAt(0)}</div>`}
-      <div class="name"><b>${b.plain}</b><span>${b.authorName}</span></div>
+        ? `<img class="thumb" src="${esc(b.cover)}" alt="">`
+        : `<div class="thumb" style="background:${esc(b.pal.bg)}">${esc((b.plain||'').charAt(0))}</div>`}
+      <div class="name"><b>${esc(b.plain)}</b><span>${esc(b.authorName)}</span></div>
       <div class="ops">
         <button class="btn ghost sm" data-up="${i}" ${i===0?'disabled':''}>↑</button>
         <button class="btn ghost sm" data-down="${i}" ${i===BOOKS.length-1?'disabled':''}>↓</button>
-        <button class="btn ghost sm" data-cover="${b.slug}">Kapak Bul</button>
-        <button class="btn ghost sm" data-edit="${b.slug}">Düzenle</button>
-        <button class="btn danger sm" data-del="${b.slug}">Sil</button>
+        <button class="btn ghost sm" data-cover="${esc(b.slug)}">Kapak Bul</button>
+        <button class="btn ghost sm" data-edit="${esc(b.slug)}">Düzenle</button>
+        <button class="btn danger sm" data-del="${esc(b.slug)}">Sil</button>
       </div>
     </li>`).join('');
 }
@@ -330,10 +332,10 @@ function renderAuthors(){
   BOOKS.forEach(b=>{ const id=b.authorId||('yzr-'+stripHtml(b.authorName)); count[b.authorId]=(count[b.authorId]||0)+1; });
   $('authorList').innerHTML = AUTHORS.map(a=>`
     <li>
-      <div class="thumb" style="background:#6E6B45;font-size:13px">${(a.name||'?').charAt(0)}</div>
-      <div class="name"><b style="font-size:16px">${a.name}</b><span>${a.dates||'—'} · ${count[a.id]||0} kitap · ${(a.works||[]).length} eser</span></div>
+      <div class="thumb" style="background:#6E6B45;font-size:13px">${esc((a.name||'?').charAt(0))}</div>
+      <div class="name"><b style="font-size:16px">${esc(a.name)}</b><span>${esc(a.dates||'—')} · ${count[a.id]||0} kitap · ${(a.works||[]).length} eser</span></div>
       <div class="ops">
-        <button class="btn ghost sm" data-aedit="${a.id}">Düzenle</button>
+        <button class="btn ghost sm" data-aedit="${esc(a.id)}">Düzenle</button>
       </div>
     </li>`).join('');
 }

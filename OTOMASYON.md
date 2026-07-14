@@ -1,85 +1,81 @@
-# Otomasyon — Gemini + n8n ile Kitap Ekleme
+# Otomasyon — OpenRouter + n8n ile Kitap Ekleme
 
-Sen n8n formuna kitap adı yazacaksın → Gemini araştırıp veri üretecek →
-otomatik siteye eklenecek. İstediğin an `admin.html`'den elle düzeltebilirsin.
-İkisi de aynı `data/books.json`'a yazdığı için sorun olmaz.
+n8n formuna kitap adı ve isteğe bağlı yazar girilir. OpenRouter üzerindeki model kitabı
+araştırıp yapılandırılmış içerik üretir; n8n bu içeriği Kitap Rafı API'sine gönderir.
+Sonuç yönetim panelinden gözden geçirilebilir ve düzenlenebilir.
 
----
+## Çalışan akış
 
-## 1. Gemini API anahtarı al (ücretsiz)
+Akış beş adımdan oluşur:
 
-1. https://aistudio.google.com/apikey adresine Google hesabınla gir.
-2. **"Create API key"** / **"API anahtarı oluştur"** de.
-3. Çıkan anahtarı (AIza... ile başlar) kopyala. Bu senin `GEMINI_API_KEY`'in.
+1. **Kitap Formu** — kitap adı, yazar ve güncelleme tercihini alır.
+2. **Prompt Hazırla** — model talimatını oluşturur.
+3. **OpenRouter'a Sor** — `google/gemini-3-flash-preview` modelinden JSON ister.
+4. **JSON Ayıkla** — model yanıtını temizleyip kitap objesine dönüştürür.
+5. **Siteye Ekle** — veriyi `http://localhost:3000/api/books/ingest` adresine gönderir.
 
-Ücretsiz kotası küçük kitap ekleme işi için fazlasıyla yeter.
+Canlı form:
 
----
+https://n8n.osmanevski.com/form/7bec16cd-44a1-482c-bf83-395fd5d1d00f
 
-## 2. Site sunucusunu çalıştır (VDS'te)
+## Gereken anahtarlar
 
-Önce ana uygulama ayakta olmalı (bkz. README.md). PM2 ile:
+### OpenRouter anahtarı
+
+1. https://openrouter.ai/settings/keys adresinden bir API anahtarı oluştur.
+2. n8n'de **OpenRouter'a Sor** node'unu aç.
+3. `Authorization` başlığındaki placeholder'ı `Bearer OPENROUTER_ANAHTARI` biçiminde değiştir.
+
+Anahtarı Git'e, dokümantasyona veya handoff dosyasına yazma.
+
+### Kitap Rafı admin anahtarı
+
+Sunucu uygulaması `ADMIN_KEY` ortam değişkenini kullanır. n8n'deki **Siteye Ekle** node'unda
+`x-admin-key` başlığı aynı değere sahip olmalıdır. Anahtar kodda gömülü değildir ve
+`ADMIN_KEY` ayarlı değilse yazma endpoint'leri kapalıdır.
+
+## Workflow'u içe aktarma
+
+1. n8n arayüzünü aç.
+2. **Import from File** ile `n8n-workflow.json` dosyasını seç.
+3. **OpenRouter'a Sor** node'unda OpenRouter anahtarını ayarla.
+4. **Siteye Ekle** node'unda `x-admin-key` değerini ayarla.
+5. Modelin `google/gemini-3-flash-preview` olduğunu doğrula.
+6. Workflow'u kaydet ve **Publish/Active** yap.
+
+Repo dosyası güvenlik nedeniyle gerçek anahtar içermez ve `active: false` olarak tutulabilir.
+Canlı n8n kaydı ayrıca yayınlanmalıdır. n8n ve Kitap Rafı aynı sunucuda olduğu için ingest
+adresi `http://localhost:3000/api/books/ingest` olarak kalır.
+
+CLI ile yayınlama gerekiyorsa canlı workflow kimliğiyle:
+
+```cmd
+node C:\n8n\node_modules\n8n\bin\n8n publish:workflow --id=nSiVboAyXDF2yuas
+pm2 restart n8n
 ```
-pm2 start server.js --name kitap-rafi
-pm2 save
-```
-`http://localhost:3000/api/books` çalışıyor olmalı.
 
-**Önemli:** `server.js` içindeki `ADMIN_KEY`'i değiştirdiysen, aşağıda o şifreyi kullanacaksın.
+## Kullanım
 
----
+1. Canlı formu aç.
+2. Kitap adını ve mümkünse yazarı yaz.
+3. Yeni kayıt için **Var olanı güncelle? → Hayır** seç.
+4. Mevcut kitabı yenilemek için **Evet** seç.
+5. Gönderimden sonra kitabı sitede ve yönetim panelinde kontrol et.
 
-## 3. n8n'e workflow'u yükle
+Model bilgileri özellikle tarihler, künye ve alıntılarda hatalı olabilir. Otomasyon ilk
+taslağı üretir; son kontrol yönetim panelinden yapılmalıdır.
 
-1. n8n arayüzünü aç (VDS'inde zaten kurulu).
-2. Sağ üstten **⋯ → Import from File** (Dosyadan içe aktar).
-3. `n8n-workflow.json` dosyasını seç.
-4. Akış 5 kutu halinde gelir: Form → Prompt Hazırla → Gemini → JSON Ayıkla → Siteye Ekle.
+## Kapak davranışı
 
-### İki yeri düzenle:
+- Modelin verdiği kapak URL'si önce sunucu tarafından indirilir.
+- URL yoksa Google Books üzerinden kapak aranır.
+- Görsel indirilemezse kayıt yine oluşturulur ve site tipografik CSS kapağa düşer.
+- Gerekirse yönetim panelinden kapak yüklenebilir veya **Kapak Bul** kullanılabilir.
 
-**a) "Gemini'ye Sor" kutusu** — Query Parameters bölümünde `key` değerini
-`GEMINI_API_KEY_BURAYA` yerine kendi Gemini anahtarınla değiştir.
+## Güvenlik ve veri kuralları
 
-**b) "Siteye Ekle" kutusu** — Header'da `x-admin-key` değerini
-`ADMIN_SIFREN_BURAYA` yerine `server.js`'teki ADMIN_KEY ile değiştir.
-
-> Not: n8n ile site aynı VDS'te olduğu için URL `http://localhost:3000/api/books/ingest`
-> olarak kalabilir. Farklı sunucudaysa `localhost` yerine site IP'sini yaz.
-
-5. Workflow'u **Active** yap (sağ üst anahtar).
-
----
-
-## 4. Kullan
-
-1. "Kitap Formu" kutusuna tıkla → **Production URL** / **Form URL**'i kopyala.
-   (Bu, tarayıcıdan açabileceğin bir form sayfası.)
-2. Formu aç, kitap adını (istersen yazarı da) yaz, gönder.
-3. Birkaç saniye içinde kitap sitene düşer. `http://SUNUCU_IP:3000` → sağa kaydırıp gör.
-4. Beğenmediğin bir alan olursa `admin.html`'e gir, o kitabı **Düzenle**.
-
-**Var olan kitabı güncellemek** için formda "Var olanı güncelle? → Evet" seç.
-
----
-
-## Nasıl çalışıyor / güvenlik notları
-
-- Gemini bazen kapak URL'si **uydurur**. Server URL'yi gerçekten indirmeye çalışır;
-  erişilemezse kapağı boş bırakır ve site otomatik CSS (tipografik) kapağa düşer — hiç kırılmaz.
-  En garanti kapak için panelden elle yükleme her zaman açık.
-- Gemini eksik/bozuk alan gönderse bile server `normalizeBook` ile şemaya oturtur
-  (4 nota tamamlar, renk paleti yoksa otomatik üretir). Yani akış çökmez.
-- `ingest` endpoint'i de `x-admin-key` ister; şifresiz kimse kitap ekleyemez.
-- Aynı kitap iki kez gelirse `overwrite:false` iken 409 döner (çift kayıt olmaz).
-
----
-
-## İpuçları
-
-- Toplu ekleme istersen: n8n'de Form yerine bir "Edit Fields" + "Split Out" ile
-  kitap listesi verip döngüye sokabilirsin. İstersen o versiyonu da hazırlarım.
-- Gemini modeli `gemini-2.0-flash` (hızlı ve ücretsiz). Daha detaylı sonuç istersen
-  URL'deki model adını `gemini-2.5-pro` yapabilirsin (kota/ücret değişebilir).
-- Gemini'nin ürettiği bilgide hata olabilir — özellikle tarih ve künye.
-  Otomasyon "ilk taslağı" üretir; son sözü panelden sen söylersin.
+- `/api/books/ingest` yalnız doğru `x-admin-key` ile çalışır.
+- Aynı slug mevcutsa `overwrite: false` durumunda `409` döner; çift kayıt oluşmaz.
+- Gelen veri `normalizeBook` ile temel şemaya oturtulur ve dört not alanına tamamlanır.
+- Canlı `data/` ve `uploads/` üretim verisidir; workflow veya kod dağıtımında ezilmemelidir.
+- OpenRouter ve admin anahtarlarını repo, log veya paylaşım dosyalarına koyma.

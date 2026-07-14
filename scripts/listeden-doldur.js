@@ -4,7 +4,7 @@
  * sorup içeriği (notlar, özet, yazar dosyası, kategori, renk) doldurtur ve
  * siteye ekler. 1000kitap'a HİÇ istek gitmez (liste zaten hazır) — 403 yok.
  *
- * KULLANIM (VDS'te, roman-rafi klasöründe):
+ * KULLANIM (VDS'te, kitaprafi klasöründe):
  *   set ADMIN_KEY=osman
  *   set OPENROUTER_KEY=sk-or-v1-...
  *   set LIMIT=3

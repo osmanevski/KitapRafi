@@ -1,4 +1,4 @@
-/* ROMAN RAFI — sunucu
+/* KİTAP RAFI — sunucu
  * Çalıştırma:  npm install && node server.js
  * Site:        http://localhost:3000
  * Admin:       http://localhost:3000/admin.html
@@ -428,7 +428,7 @@ app.put('/api/order', auth, (req, res) => {
 migrateAuthors();
 
 app.listen(PORT, () => {
-  console.log('Roman Rafı çalışıyor →  http://localhost:' + PORT);
+  console.log('Kitap Rafı çalışıyor →  http://localhost:' + PORT);
   console.log('Admin paneli        →  http://localhost:' + PORT + '/admin.html');
   console.log('Admin şifresi       →  ' + (ADMIN_KEY ? '(ortam değişkeninden)' : 'AYARLI DEĞİL — admin devre dışı'));
 });

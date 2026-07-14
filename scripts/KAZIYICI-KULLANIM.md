@@ -3,7 +3,7 @@
 101 kitabı 1000kitap listenden çekip siteye "iskelet" olarak ekler
 (ad + yazar + 1000kitap linki). İçerikler boş gelir; sonra modelle doldurulur.
 
-## Çalıştırma (VDS'te, roman-rafi klasöründe)
+## Çalıştırma (VDS'te, `kitaprafi` klasöründe)
 
 Windows CMD:
 ```

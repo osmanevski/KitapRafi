@@ -1,10 +1,10 @@
 {
-  "name": "Roman Rafı — OpenRouter Kitap Ekleyici",
+  "name": "Kitap Rafı — OpenRouter Kitap Ekleyici",
   "nodes": [
     {
       "parameters": {
         "path": "7bec16cd-44a1-482c-bf83-395fd5d1d00f",
-        "formTitle": "Roman Rafı — Kitap Ekle",
+        "formTitle": "Kitap Rafı — Kitap Ekle",
         "formDescription": "Kitap adını ve yazarını yaz. Model araştırıp siteye ekleyecek.",
         "formFields": {
           "values": [

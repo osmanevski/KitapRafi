@@ -20,7 +20,7 @@ otomatik siteye eklenecek. İstediğin an `admin.html`'den elle düzeltebilirsin
 
 Önce ana uygulama ayakta olmalı (bkz. README.md). PM2 ile:
 ```
-pm2 start server.js --name roman-rafi
+pm2 start server.js --name kitap-rafi
 pm2 save
 ```
 `http://localhost:3000/api/books` çalışıyor olmalı.

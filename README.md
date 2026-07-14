@@ -1,4 +1,4 @@
-# Roman Rafı
+# Kitap Rafı
 
 Scroll ile gezilen Türk edebiyatı kitap tanıtım sitesi + yönetim paneli.
 
@@ -33,6 +33,6 @@ Varsayılan: `degistir-beni` — **mutlaka değiştir.**
 ## VDS'te sürekli çalıştırma (PM2)
 ```
 npm install -g pm2
-pm2 start server.js --name roman-rafi
+pm2 start server.js --name kitap-rafi
 pm2 save
 ```

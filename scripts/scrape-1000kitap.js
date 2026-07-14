@@ -3,7 +3,7 @@
  * çeker ve senin siteye "iskelet" olarak ekler. İçerikler (notlar, özet, bio)
  * boş gelir; sonra otomasyon/model ile doldurulur.
  *
- * Kullanım (VDS'te, roman-rafi klasöründe):
+ * Kullanım (VDS'te, kitaprafi klasöründe):
  *   node scripts/scrape-1000kitap.js "https://1000kitap.com/Osmanevski/kitaplari/okuduklari"
  *
  * Ayarlar (ortam değişkeni ile):

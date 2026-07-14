@@ -4,7 +4,7 @@
  * sorup içeriği (notlar, özet, yazar dosyası, kategori, renk) doldurtur ve
  * kapakla birlikte siteye ekler. n8n'e dokunmaz.
  *
- * KULLANIM (VDS'te, roman-rafi klasöründe):
+ * KULLANIM (VDS'te, kitaprafi klasöründe):
  *   Windows CMD:
  *     set ADMIN_KEY=osman
  *     set OPENROUTER_KEY=sk-or-v1-...

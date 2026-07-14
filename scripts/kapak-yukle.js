@@ -4,7 +4,7 @@
  * senin siteye (find-cover endpoint'i) gönderir. Server URL'den kapağı
  * indirip kitaba ekler. 1000kitap CDN'inden büyük (size:400) kapaklar.
  *
- * KULLANIM (VDS'te, roman-rafi klasöründe):
+ * KULLANIM (VDS'te, kitaprafi klasöründe):
  *   set ADMIN_KEY=osman
  *   set LIMIT=3
  *   node scripts/kapak-yukle.js

@@ -6,7 +6,7 @@ Bu script her kitap için OpenRouter'a sorup içeriği doldurtur ve siteye ekler
 
 ## ÖNCE 3 kitapla TEST et
 
-Windows CMD (roman-rafi klasöründe):
+Windows CMD (`kitaprafi` klasöründe):
 ```
 set ADMIN_KEY=osman
 set OPENROUTER_KEY=sk-or-v1-SENIN-ANAHTARIN

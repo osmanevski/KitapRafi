@@ -1,5 +1,5 @@
 {
-  "name": "roman-rafi",
+  "name": "kitap-rafi",
   "version": "1.0.0",
   "description": "Scroll-driven kitap tanıtım sitesi + admin paneli",
   "main": "server.js",

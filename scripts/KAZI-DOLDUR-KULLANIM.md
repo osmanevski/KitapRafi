@@ -7,7 +7,7 @@ sorup içeriği doldurtur, kapakla birlikte siteye ekler. n8n'e dokunmaz.
 
 101 kitabı körlemesine çalıştırma. Önce 3 kitapla dene, her şey doğru mu gör:
 
-Windows CMD (roman-rafi klasöründe):
+Windows CMD (`kitaprafi` klasöründe):
 ```
 set ADMIN_KEY=osman
 set OPENROUTER_KEY=sk-or-v1-SENIN-ANAHTARIN

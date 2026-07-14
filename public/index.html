@@ -230,7 +230,10 @@ body::before{
   }
 
   .note h3 { font-size: clamp(18px, 5.2vw, 24px) !important; margin-bottom: 7px !important; line-height: 1.1 !important; }
-  .note p  { font-size: 13px !important; line-height: 1.46 !important; margin-top: 7px !important; }
+  /* uzun kelime dar sarma satırına sığmayınca boşluk bırakıp aşağı atlamasın:
+     hecele (tr) ya da gerekirse kelimeyi böl */
+  .note p  { font-size: 13px !important; line-height: 1.46 !important; margin-top: 7px !important;
+             hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
   .note .tag { font-size: 9.5px !important; padding: 3px 8px !important; margin-bottom: 7px !important; letter-spacing: .18em !important; }
   .click-hint { font-size: 14px !important; }
 

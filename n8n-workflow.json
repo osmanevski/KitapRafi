@@ -1,0 +1,87 @@
+{
+  "name": "Roman Rafı — Gemini Kitap Ekleyici",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Roman Rafı — Kitap Ekle",
+        "formDescription": "Eklemek istediğin kitabın adını ve yazarını yaz. Gemini araştırıp siteye ekleyecek.",
+        "formFields": {
+          "values": [
+            { "fieldLabel": "Kitap Adı", "requiredField": true },
+            { "fieldLabel": "Yazar", "requiredField": false },
+            { "fieldLabel": "Var olanı güncelle?", "fieldType": "dropdown", "fieldOptions": { "values": [ { "option": "Hayır" }, { "option": "Evet" } ] } }
+          ]
+        }
+      },
+      "id": "form-trigger",
+      "name": "Kitap Formu",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2,
+      "position": [ 240, 300 ],
+      "webhookId": "roman-rafi-form"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "sendQuery": true,
+        "queryParameters": { "parameters": [ { "name": "key", "value": "GEMINI_API_KEY_BURAYA" } ] },
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "Content-Type", "value": "application/json" } ] },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ contents: [{ parts: [{ text: $node['Prompt Hazırla'].json.prompt }] }], generationConfig: { temperature: 0.4, responseMimeType: 'application/json' } } ) }}",
+        "options": {}
+      },
+      "id": "gemini-call",
+      "name": "Gemini'ye Sor",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [ 680, 300 ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const kitap = $input.first().json['Kitap Adı'];\nconst yazar = $input.first().json['Yazar'] || '';\nconst guncelle = ($input.first().json['Var olanı güncelle?'] || 'Hayır') === 'Evet';\n\nconst prompt = `Sen bir Türk edebiyatı uzmanısın. Aşağıdaki kitap için bir tanıtım kartı verisi üreteceksin. SADECE geçerli JSON döndür, başka hiçbir şey yazma.\n\nKitap: \"${kitap}\"${yazar ? ' — Yazar: ' + yazar : ''}\n\nŞu JSON şemasına BİREBİR uy:\n{\n  \"plain\": \"Kitabın düz adı\",\n  \"title\": \"Kitap adı, vurgulanacak kelime <em>...</em> içinde (örn: Kurt <em>Kanunu</em>)\",\n  \"authorName\": \"Yazarın tam adı\",\n  \"dates\": \"Yazarın doğum-ölüm ve yeri (örn: 1910 — 1973 · İstanbul)\",\n  \"pal\": { \"bg\":\"#hex kapak zemin\", \"c1\":\"#hex\", \"c2\":\"#hex\", \"acc\":\"#hex vurgu\", \"acc2\":\"#hex\" },\n  \"stack\": [[\"KELİME\",\"c1\"],[\"KELİME\",\"c2\"]],\n  \"notes\": [\n    {\"tag\":\"Yazar\",\"title\":null,\"p\":\"Yazar hakkında 1-2 cümle\"},\n    {\"tag\":\"Dönem\",\"title\":\"Kısa başlık\",\"p\":\"Kitabın geçtiği/yazıldığı dönem, siyasi bağlam\"},\n    {\"tag\":\"Yazarın Hayatından\",\"title\":\"Kısa başlık\",\"p\":\"Yazarın şahsi hayatından çarpıcı bilgi\"},\n    {\"tag\":\"İlginç\",\"title\":\"Kısa başlık\",\"p\":\"Kitapla ilgili ilginç detay\"}\n  ],\n  \"summary\": { \"h\":\"Peki roman <em>neyi</em> anlatıyor?\", \"ps\":[\"1. paragraf\",\"2. paragraf\"], \"meta\":[[\"1969\",\"İlk baskı\"],[\"Roman\",\"Tür\"],[\"Etiket\",\"Açıklama\"]] },\n  \"quote\": \"Kısa çarpıcı kapanış cümlesi, bir kelime <em>...</em> içinde\",\n  \"bio\": [\"Yazar biyografisi 1. paragraf\",\"2. paragraf\"],\n  \"fact\": \"Yazar dosyasında çerçeveli gösterilecek çarpıcı bilgi\",\n  \"works\": [[\"Eser Adı\",\"Yıl/Not\"]],\n  \"coverUrl\": \"Kitabın kapak görselinin TAM URL'si. Emin değilsen boş string bırak.\"\n}\n\nKURALLAR:\n- Renkler kitabın kapağıyla veya temasıyla uyumlu, birbirini tamamlayan tonlar olsun. c1 ve c2 zemin (bg) üstünde okunaklı olmalı.\n- stack: yazar adı + kitap adının kelimeleri, büyük harf, c1/c2 dönüşümlü.\n- Bilgiler doğru ve gerçek olsun; uydurma. Emin olmadığın coverUrl'yi boş bırak.\n- SADECE JSON döndür.`;\n\nreturn [{ json: { prompt, guncelle } }];"
+      },
+      "id": "prompt-build",
+      "name": "Prompt Hazırla",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [ 460, 300 ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Gemini yanıtından JSON'u çıkar\nconst resp = $input.first().json;\nlet text = resp?.candidates?.[0]?.content?.parts?.[0]?.text || '';\ntext = text.replace(/```json/gi,'').replace(/```/g,'').trim();\nlet book;\ntry { book = JSON.parse(text); }\ncatch(e){ throw new Error('Gemini geçerli JSON vermedi: ' + text.slice(0,200)); }\nbook.overwrite = $node['Prompt Hazırla'].json.guncelle === true;\nreturn [{ json: book }];"
+      },
+      "id": "parse",
+      "name": "JSON Ayıkla",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [ 900, 300 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/books/ingest",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "x-admin-key", "value": "ADMIN_SIFREN_BURAYA" }, { "name": "Content-Type", "value": "application/json" } ] },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "ingest",
+      "name": "Siteye Ekle",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [ 1120, 300 ]
+    }
+  ],
+  "connections": {
+    "Kitap Formu": { "main": [ [ { "node": "Prompt Hazırla", "type": "main", "index": 0 } ] ] },
+    "Prompt Hazırla": { "main": [ [ { "node": "Gemini'ye Sor", "type": "main", "index": 0 } ] ] },
+    "Gemini'ye Sor": { "main": [ [ { "node": "JSON Ayıkla", "type": "main", "index": 0 } ] ] },
+    "JSON Ayıkla": { "main": [ [ { "node": "Siteye Ekle", "type": "main", "index": 0 } ] ] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

@@ -1,0 +1,406 @@
+[
+  {
+    "slug": "nutuk",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_1716366565_t8CZq.jpg"
+  },
+  {
+    "slug": "yabanci",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F27823_1779009384_M8RS7.jpeg"
+  },
+  {
+    "slug": "veba",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F646407_c90d4_1629473510.jpg"
+  },
+  {
+    "slug": "kurt-kanunu",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F39535_3SgLB_1504728818.jpg"
+  },
+  {
+    "slug": "esir-sehrin-mahpusu",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F621026_1759932932_bDzXZ.jpeg"
+  },
+  {
+    "slug": "esir-sehrin-insanlari",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F621026_1781239083_bM7rH.jpeg"
+  },
+  {
+    "slug": "istanbul-hatirasi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F9414_6d1b9_1572359885.jpg"
+  },
+  {
+    "slug": "ates-sonene-kadar",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F568685_9c3c6_1610092536.jpg"
+  },
+  {
+    "slug": "yenisehir-de-bir-ogle-vakti",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F3802_1427748406.gif"
+  },
+  {
+    "slug": "kavim",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F9414_176e2_1572360132.jpg"
+  },
+  {
+    "slug": "seytan-ayrintida-gizlidir",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F568685_e6ef5_1575446026.jpg"
+  },
+  {
+    "slug": "agatha-nin-anahtari",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F568685_9830c_1574329738.jpg"
+  },
+  {
+    "slug": "surgun",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F392466_be384_1550592602.jpg"
+  },
+  {
+    "slug": "zehra",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F162235_75254_1567803610.jpg"
+  },
+  {
+    "slug": "son-ada",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F27823_1746899337_rf1fL.jpeg"
+  },
+  {
+    "slug": "beyoglu-nun-en-guzel-abisi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F13011_Beyoglunun_En_Guzel_Abisi-Ahmet_umit571.jpg"
+  },
+  {
+    "slug": "intibah",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F39535_UHGqL_1525619129.jpg"
+  },
+  {
+    "slug": "bir-tereddudun-romani",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F39535_95Rtp_1501960955.jpg"
+  },
+  {
+    "slug": "serguzest",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F27823_xaobK_1519218019.jpg"
+  },
+  {
+    "slug": "fatih-harbiye",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F39535_1KDfQ_1501095661.jpg"
+  },
+  {
+    "slug": "dokuzuncu-hariciye-kogusu",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F705_eoh7X_1476034246.jpg"
+  },
+  {
+    "slug": "serenad",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_2218b_1621537273.jpg"
+  },
+  {
+    "slug": "nar-agaci",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F621026_1759987836_YQphl.jpeg"
+  },
+  {
+    "slug": "bozkurtlar",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F646407_d2072_1602014050.jpg"
+  },
+  {
+    "slug": "deli-kurt",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F646407_6ee81_1602019110.jpg"
+  },
+  {
+    "slug": "ruh-adam",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F621026_1758613014_8w4BK.png"
+  },
+  {
+    "slug": "vatan-yahut-silistre",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F4228_34ff0_1530742991.jpg"
+  },
+  {
+    "slug": "dune",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F7927_1462859155.jpg"
+  },
+  {
+    "slug": "baba",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_d42ef_1589641444.jpg"
+  },
+  {
+    "slug": "ikinci-vakif",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_40b6e_1597740185.jpg"
+  },
+  {
+    "slug": "sisifos-soyleni",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_1682657753_ypveN.jpg"
+  },
+  {
+    "slug": "vakif-ve-imparatorluk",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F9532_XTKCa_1526450640.jpg"
+  },
+  {
+    "slug": "efendi-ile-usagi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56085_vjXec_1504284252.jpg"
+  },
+  {
+    "slug": "duvar",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F27823_f2008_1529940056.jpg"
+  },
+  {
+    "slug": "paris-ve-londra-da-bes-parasiz",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F568685_4e94c_1609940042.jpg"
+  },
+  {
+    "slug": "gulyabani",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F2553527_1760970944_TmC4O.jpeg"
+  },
+  {
+    "slug": "toprak-ana",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F866_1463868155.jpg"
+  },
+  {
+    "slug": "vakif",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F287121_97e9e_1534071045.jpg"
+  },
+  {
+    "slug": "sonsuzlugun-sonu",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F61046_vfOnb_1501459595.jpg"
+  },
+  {
+    "slug": "ben-robot",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F9414_45wkh_1484848921.jpg"
+  },
+  {
+    "slug": "dava",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F621026_1760894597_w1VzW.jpeg"
+  },
+  {
+    "slug": "zeytindagi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F332663_d512d_1551814166.jpg"
+  },
+  {
+    "slug": "hangi-ataturk",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2FHangi-Ataturk_17638_1394475897.jpg"
+  },
+  {
+    "slug": "cumhuriyet-in-100-gunu",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F1637855_1700852234_BmtWF.jpg"
+  },
+  {
+    "slug": "suyu-arayan-adam",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_1658205082_2nzNx.jpg"
+  },
+  {
+    "slug": "yalniziz",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F621026_1677655934_bSzAo.jpg"
+  },
+  {
+    "slug": "kuyucakli-yusuf",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F27823_1768286654_D8Ygl.jpeg"
+  },
+  {
+    "slug": "beyaz-gemi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F820_1463867535.jpg"
+  },
+  {
+    "slug": "imparatorlugun-en-uzun-yuzyili",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F27823_E1DYU_1522177066.jpg"
+  },
+  {
+    "slug": "kurk-mantolu-madonna",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F27823_bd015_1544034092.jpg"
+  },
+  {
+    "slug": "katalonya-ya-selam",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F568685_58b92_1613471029.jpg"
+  },
+  {
+    "slug": "cumhuriyet-in-100-ismi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F1637855_1700852207_nw7xG.jpg"
+  },
+  {
+    "slug": "turkculugun-esaslari",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F13199_M39Pr_1642887809.jpg"
+  },
+  {
+    "slug": "dunyalar-savasi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F9414_5cda9_1534690027.jpg"
+  },
+  {
+    "slug": "silmarillion",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F965115_1663926607_orc4N.jpg"
+  },
+  {
+    "slug": "dusus",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F27823_1727690490_1HV7C.jpg"
+  },
+  {
+    "slug": "nasil-olunur",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F316900_6200e_1567426382.jpg"
+  },
+  {
+    "slug": "kapilarin-disinda",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F23496_aM2Fh_1490794621.jpg"
+  },
+  {
+    "slug": "aspidistra",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F568685_06a60_1614358854.jpg"
+  },
+  {
+    "slug": "fahrenheit-451",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F290007_NtfIA_1527626700.jpg"
+  },
+  {
+    "slug": "kendime-dusunceler",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F621026_1761801392_iAQ3J.jpeg"
+  },
+  {
+    "slug": "babaya-mektup",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F39535_O8MHw_1509399789.jpg"
+  },
+  {
+    "slug": "kucuk-prens",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F568685_eaaa9_1599234558.jpg"
+  },
+  {
+    "slug": "mutlu-olum",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_6djVz_1647590113.jpg"
+  },
+  {
+    "slug": "biz",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F285482_83e54_1566294286.jpg"
+  },
+  {
+    "slug": "yaz",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F196554_T0O9m_1644992905.jpg"
+  },
+  {
+    "slug": "ermis",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F621026_1761773570_dG0SG.jpeg"
+  },
+  {
+    "slug": "sherlock-holmes-korku-vadisi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_627cc_1586281658.jpg"
+  },
+  {
+    "slug": "durust-hirsiz",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F135378_rQ6B7_1518104925.jpg"
+  },
+  {
+    "slug": "bilinmeyen-bir-kadinin-mektubu",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_1658894462_Rfojn.jpg"
+  },
+  {
+    "slug": "bir-idam-mahk-munun-son-gunu",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F2553527_1779528798_muign.jpeg"
+  },
+  {
+    "slug": "kardesimin-hikayesi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F4922_Kardesimin_Hikayesi-Zulfu_Livaneli486.jpg"
+  },
+  {
+    "slug": "sokrates-in-savunmasi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F2553527_1769090248_2NUDY.jpeg"
+  },
+  {
+    "slug": "savas-sanati",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F2553527_1779205803_8UrQE.jpeg"
+  },
+  {
+    "slug": "toplum-sozlesmesi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F332663_9b6dc_1561908018.jpg"
+  },
+  {
+    "slug": "devlet",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F39535_e85It_1502742900.jpg"
+  },
+  {
+    "slug": "zaman-makinesi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F135378_rhlgc_1517223185.jpg"
+  },
+  {
+    "slug": "sherlock-holmes-butun-hikayeleri-5",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F332663_3f1fc_1557430353.jpg"
+  },
+  {
+    "slug": "sherlock-holmes-butun-hikayeleri-4",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F332663_40958_1557430206.jpg"
+  },
+  {
+    "slug": "sherlock-holmes-butun-hikayeleri-3",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F332663_6541b_1557429748.jpg"
+  },
+  {
+    "slug": "sherlock-holmes-butun-hikayeleri-2",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F274523_4f833_1557410425.jpg"
+  },
+  {
+    "slug": "sherlock-holmes-butun-hikayeleri-1",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F274523_66d71_1546957429.jpg"
+  },
+  {
+    "slug": "sherlock-holmes-kizil-dosya",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_8b14b_1598816182.jpg"
+  },
+  {
+    "slug": "sherlock-holmes-dortlerin-imzasi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_4fe8e_1586281642.jpg"
+  },
+  {
+    "slug": "yeraltindan-notlar",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F621026_1761647098_b5UEi.jpeg"
+  },
+  {
+    "slug": "cesur-yeni-dunya",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F1057_1464209425.jpg"
+  },
+  {
+    "slug": "hobbit",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F9532_du5ZV_1521026215.jpg"
+  },
+  {
+    "slug": "yuzuklerin-efendisi-kralin-donusu",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2FYuzuklerin-Efendisi-Iii-Kralin-Donusu_15200_1388004747.jpg"
+  },
+  {
+    "slug": "yuzuklerin-efendisi-iki-kule",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F9053_1463678584.jpg"
+  },
+  {
+    "slug": "yuzuklerin-efendisi-yuzuk-kardesligi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2FYuzuklerin-Efendisi-Birinci-Kisim-Yuzuk-Kardesligi_1645_1397759989.jpg"
+  },
+  {
+    "slug": "tersi-ve-yuzu",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F87436_a5e19_1581343358.jpg"
+  },
+  {
+    "slug": "turkiye-nin-yakin-tarihi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F27823_6f11b_1551089395.jpg"
+  },
+  {
+    "slug": "otomatik-portakal",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F2553527_1757688847_h6cQJ.jpeg"
+  },
+  {
+    "slug": "hayvan-ciftligi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F621026_1756070151_qU0vv.jpeg"
+  },
+  {
+    "slug": "1984",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F316900_5e8ef_1609835363.jpg"
+  },
+  {
+    "slug": "icimizdeki-seytan",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2FIcimizdeki-Seytan_562_1410469176.jpg"
+  },
+  {
+    "slug": "bu-hik-ye-senden-uzun-osman",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F621026_1755988274_C4UhU.jpeg"
+  },
+  {
+    "slug": "solaris",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_1685335624_01TsE.jpg"
+  },
+  {
+    "slug": "meden-bilgiler",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F621026_1757884740_6nH0L.jpeg"
+  },
+  {
+    "slug": "baskerville-lerin-kopegi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F56586_150e6_1586282589.jpg"
+  },
+  {
+    "slug": "yuzuklerin-efendisi",
+    "coverUrl": "https://r2.1k-cdn.com/sig/size:640/plain/https%3A%2F%2F1k-cdn.com%2Fresimler%2Fkitaplar%2F9414_0ad79_1573926658.jpg"
+  }
+]

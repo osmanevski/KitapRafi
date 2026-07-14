@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitap Rafı — Yönetim</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#EDE6D6;--ink:#1C1710;--acc:#B5121B;--olive:#6E6B45;--line:#cfc6b2}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:'Archivo',sans-serif;padding-bottom:80px}
+.wrap{max-width:880px;margin:0 auto;padding:28px 18px}
+h1{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:clamp(30px,5vw,44px)}
+h1 em{font-style:normal;color:var(--acc)}
+.sub{color:var(--olive);font-weight:600;margin:6px 0 26px;font-size:14px}
+a{color:var(--acc)}
+
+.card{background:#fff;border:2px solid var(--ink);padding:20px;margin-bottom:18px;box-shadow:5px 5px 0 var(--ink)}
+/* form açıkken modal gibi üstte belirir, sayfa kaymaz */
+#formCard.asmodal, #authorFormCard.asmodal{
+  position:fixed; left:50%; top:24px; transform:translateX(-50%);
+  width:min(760px,94vw); max-height:calc(100vh - 48px); overflow-y:auto;
+  z-index:100; box-shadow:0 20px 60px rgba(0,0,0,.4)
+}
+.modal-back{position:fixed;inset:0;background:rgba(28,23,16,.45);z-index:90;display:none}
+.modal-back.on{display:block}
+label{display:block;font-weight:800;font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:14px 0 5px;color:var(--olive)}
+label small{font-weight:400;text-transform:none;letter-spacing:0;color:#8a8064}
+input[type=text],input[type=password],textarea{
+  width:100%;border:2px solid var(--ink);background:var(--paper);
+  padding:9px 11px;font:inherit;font-size:14px;
+}
+textarea{resize:vertical;min-height:64px}
+input:focus,textarea:focus{outline:3px solid var(--acc);outline-offset:1px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.row{grid-template-columns:1fr}}
+.colors{display:flex;gap:14px;flex-wrap:wrap}
+.colors div{text-align:center}
+.colors input[type=color]{width:52px;height:40px;border:2px solid var(--ink);background:none;cursor:pointer;padding:2px}
+.colors span{display:block;font-size:10px;font-weight:700;margin-top:3px;letter-spacing:.08em}
+
+.btn{font-weight:800;letter-spacing:.15em;text-transform:uppercase;font-size:12px;border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:11px 18px;cursor:pointer;transition:background .2s,color .2s}
+.btn:hover{background:var(--acc);border-color:var(--acc)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+.btn.danger{background:transparent;color:var(--acc);border-color:var(--acc)}
+.btn.danger:hover{background:var(--acc);color:#fff}
+.btn.sm{padding:6px 10px;font-size:10px}
+
+.booklist{list-style:none}
+.booklist li{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line)}
+.booklist .thumb{width:34px;height:52px;background:#999;flex:none;border:1px solid var(--ink);object-fit:cover;display:flex;align-items:center;justify-content:center;font-family:'Anton';color:#fff;font-size:15px}
+.booklist .name{flex:1;min-width:0}
+.booklist .name b{font-family:'Anton',sans-serif;text-transform:uppercase;font-weight:400;font-size:17px;display:block}
+.booklist .name span{font-size:12px;color:var(--olive)}
+.booklist .ops{display:flex;gap:6px;flex-wrap:wrap}
+
+.notegrid{border:1px dashed var(--line);padding:12px;margin-top:8px}
+.notegrid h4{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:15px;color:var(--acc)}
+.msg{padding:11px 14px;margin:14px 0;font-weight:600;font-size:14px;display:none}
+.msg.ok{display:block;background:#DFE8D2;border:2px solid var(--olive)}
+.msg.err{display:block;background:#F3D6D6;border:2px solid var(--acc)}
+.coverprev{margin-top:8px;max-width:120px;border:2px solid var(--ink);display:none}
+.hint{font-size:12px;color:#8a8064;margin-top:4px;line-height:1.5}
+#formCard{display:none}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tab{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:16px;letter-spacing:.04em;border:2px solid var(--ink);background:var(--paper);color:var(--ink);padding:8px 18px;cursor:pointer;transition:background .2s,color .2s}
+.tab.active{background:var(--ink);color:var(--paper)}
+.formhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;background:#fff;padding-bottom:8px;z-index:2}
+.formhead h2{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:24px}
+hr{border:none;border-top:1px dashed var(--line);margin:20px 0}
+</style>
+</head>
+<body>
+<div class="modal-back" id="modalBack"></div>
+<div class="wrap">
+  <h1>Roman Rafı · <em>Yönetim</em></h1>
+  <div class="sub">Kitap ekle, düzenle, sırala. Siteye dön: <a href="/">ana sayfa</a></div>
+
+  <!-- GİRİŞ -->
+  <div class="card" id="loginCard">
+    <label for="pw">Admin Şifresi <small>(server.js içindeki ADMIN_KEY)</small></label>
+    <input type="password" id="pw" placeholder="şifre">
+    <div style="margin-top:14px"><button class="btn" id="loginBtn">Giriş Yap</button></div>
+    <div class="msg err" id="loginMsg"></div>
+  </div>
+
+  <!-- LİSTE -->
+  <!-- SEKMELER -->
+  <div class="tabs" id="tabs" style="display:none">
+    <button class="tab active" data-tab="books">Kitaplar</button>
+    <button class="tab" data-tab="authors">Yazarlar</button>
+  </div>
+
+  <div class="card" id="listCard" style="display:none">
+    <div class="formhead">
+      <h2 style="font-family:'Anton';text-transform:uppercase;font-size:22px">Kitaplar</h2>
+      <button class="btn" id="newBtn">+ Yeni Kitap</button>
+    </div>
+    <ul class="booklist" id="bookList"></ul>
+  </div>
+
+  <!-- YAZARLAR -->
+  <div class="card" id="authorsCard" style="display:none">
+    <div class="formhead">
+      <h2 style="font-family:'Anton';text-transform:uppercase;font-size:22px">Yazarlar</h2>
+      <span class="hint">Yazar bilgisi bir kez yazılır, o yazarın tüm kitaplarında ortak görünür.</span>
+    </div>
+    <ul class="booklist" id="authorList"></ul>
+  </div>
+
+  <!-- YAZAR DÜZENLEME FORMU -->
+  <div class="card" id="authorFormCard" style="display:none">
+    <div class="formhead">
+      <h2 id="authorFormTitle">Yazar Düzenle</h2>
+      <button class="btn ghost sm" id="authorCancelBtn">✕ Vazgeç</button>
+    </div>
+    <div class="msg" id="authorMsg"></div>
+    <div class="row">
+      <div><label>Yazar Adı</label><input type="text" id="aName"></div>
+      <div><label>Tarih/Yer <small>— örn: 1910 — 1973 · İstanbul</small></label><input type="text" id="aDates"></div>
+    </div>
+    <label>Biyografi <small>— paragrafları boş satırla ayır</small></label>
+    <textarea id="aBio" rows="5"></textarea>
+    <label>Çerçeveli Bilgi <small>— panelde vurgulu kutuda görünür</small></label>
+    <textarea id="aFact" rows="3"></textarea>
+    <label>Seçme Eserler <small>— her satır: Eser Adı|Yıl/Not. Sitede ekli kitaplar otomatik tıklanabilir olur.</small></label>
+    <textarea id="aWorks" rows="4"></textarea>
+    <div style="margin-top:20px"><button class="btn" id="authorSaveBtn">Kaydet</button></div>
+  </div>
+
+  <!-- FORM -->
+  <div class="card" id="formCard">
+    <div class="formhead">
+      <h2 id="formTitle">Yeni Kitap</h2>
+      <button class="btn ghost sm" id="cancelBtn">✕ Vazgeç</button>
+    </div>
+    <div class="msg" id="formMsg"></div>
+
+    <div class="row">
+      <div>
+        <label>Kitap Adı <small>— vurgulanacak kelimeyi *yıldız* içine al: Kurt *Kanunu*</small></label>
+        <input type="text" id="fTitle" placeholder="Kurt *Kanunu*">
+      </div>
+      <div>
+        <label>Yazar Adı</label>
+        <input type="text" id="fAuthor" placeholder="Kemal Tahir">
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Yazar Tarih/Yer <small>— panelde görünür</small></label>
+        <input type="text" id="fDates" placeholder="1910 — 1973 · İstanbul">
+      </div>
+      <div>
+        <label>Kapak Görseli <small>— yüklersen CSS kapak yerine bu görünür</small></label>
+        <input type="file" id="fCover" accept="image/*">
+        <img class="coverprev" id="coverPrev" alt="kapak önizleme">
+        <div class="hint" id="coverHint"></div>
+      </div>
+    </div>
+
+    <label>Renk Paleti <small>— görsel yüklesen bile sayfadaki vurgu renkleri buradan gelir</small></label>
+    <div class="colors">
+      <div><input type="color" id="cBg" value="#B5121B"><span>Kapak Zemin</span></div>
+      <div><input type="color" id="cC1" value="#C9A227"><span>Kapak Yazı 1</span></div>
+      <div><input type="color" id="cC2" value="#6E6B45"><span>Kapak Yazı 2</span></div>
+      <div><input type="color" id="cAcc" value="#B5121B"><span>Sayfa Vurgu</span></div>
+      <div><input type="color" id="cAcc2" value="#C9A227"><span>Panel Vurgu</span></div>
+    </div>
+
+    <label>Kapak Yazı Dizilimi <small>— görsel yoksa kullanılır. Her satır: KELİME|c1 veya KELİME|c2. Boş bırakırsan yazar+kitap adından otomatik üretilir.</small></label>
+    <textarea id="fStack" placeholder="KEMAL|c1&#10;TAHİR|c2&#10;KURT|c1&#10;KANUNU|c2"></textarea>
+
+    <hr>
+    <div id="notesArea"></div>
+
+    <hr>
+    <label>Özet Başlığı</label>
+    <input type="text" id="fSumH" value="Peki roman *neyi* anlatıyor?">
+    <label>Özet <small>— paragrafları boş satırla ayır (2 paragraf idealdir)</small></label>
+    <textarea id="fSumP" rows="5"></textarea>
+    <label>Künye <small>— 3 satır, format: Değer|Etiket (örn. 1969|İlk baskı)</small></label>
+    <textarea id="fMeta" rows="3" placeholder="1969|İlk baskı&#10;Roman|Tür&#10;Tarihsel|Gerçek olaylara dayalı"></textarea>
+    <label>Kapanış Cümlesi <small>— sayfa sonunda büyük puntoyla görünür, *vurgu* kullanabilirsin</small></label>
+    <input type="text" id="fQuote">
+
+    <hr>
+    <div style="background:#F1EAD8;border:1px dashed var(--olive);padding:10px 12px;font-size:12.5px;color:#6b6244;line-height:1.5">
+      <b>Yazar Dosyası:</b> Buradaki bilgiler ilgili yazar için <b>yalnızca ilk kez</b> kaydedilir.
+      Yazar zaten varsa bu alanlar onun mevcut dosyasını <b>değiştirmez</b> — yazar bilgisini
+      güncellemek için üstteki <b>Yazarlar</b> sekmesini kullan. Yeni bir yazarın ilk kitabını
+      ekliyorsan doldurman yeterli.
+    </div>
+    <label>Yazar Dosyası — Biyografi <small>— paragrafları boş satırla ayır</small></label>
+    <textarea id="fBio" rows="5"></textarea>
+    <label>Yazar Dosyası — Çerçeveli Bilgi <small>— panelde vurgulu kutuda görünür</small></label>
+    <textarea id="fFact" rows="3"></textarea>
+    <label>Seçme Eserler <small>— her satır: Eser Adı|Yıl/Not</small></label>
+    <textarea id="fWorks" rows="4" placeholder="Devlet Ana|1967 · TDK Roman Ödülü"></textarea>
+
+    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" id="saveBtn">Kaydet</button>
+      <button class="btn danger" id="removeCoverBtn" style="display:none">Kapak Görselini Kaldır</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let KEY = sessionStorage.getItem('rr-key') || '';
+let BOOKS = [];
+let editingSlug = null;   // null = yeni kitap
+let removeCover = false;
+
+const NOTE_DEFS = [
+  {name:'Not 1 — Yazar (sol üst)', hint:'Başlık otomatik olarak yazar adıdır ve tıklanınca yazar dosyası açılır.', fixedTitle:true, defTag:'Yazar'},
+  {name:'Not 2 — Dönem (sağ üst)', hint:'Kitabın yazıldığı/geçtiği dönem, siyasi bağlam.', defTag:'Dönem'},
+  {name:'Not 3 — Yazarın Hayatından (sol alt)', hint:'Yazarın şahsi hayatından dikkat çeken bilgi.', defTag:'Yazarın Hayatından'},
+  {name:'Not 4 — İlginç Bilgi (sağ alt)', hint:'Kitapla ilgili çarpıcı bir detay.', defTag:'İlginç'}
+];
+
+/* --- yardımcılar --- */
+const star2em = s => (s||'').replace(/\*(.+?)\*/g, '<em>$1</em>');
+const em2star = s => (s||'').replace(/<em>/g,'*').replace(/<\/em>/g,'*');
+const stripHtml = s => (s||'').replace(/<[^>]+>/g,'');
+const lines = s => (s||'').split('\n').map(l=>l.trim()).filter(Boolean);
+const paras = s => (s||'').split(/\n\s*\n/).map(p=>p.trim().replace(/\n/g,' ')).filter(Boolean);
+const pairs = s => lines(s).map(l => { const i = l.indexOf('|'); return i<0 ? [l,''] : [l.slice(0,i).trim(), l.slice(i+1).trim()]; });
+
+function api(method, url, body, isForm){
+  const headers = {'x-admin-key': KEY};
+  if(!isForm) headers['Content-Type'] = 'application/json';
+  return fetch(url, {method, headers, body: isForm ? body : (body ? JSON.stringify(body) : undefined)})
+    .then(async r => { const d = await r.json().catch(()=>({})); if(!r.ok) throw new Error(d.error || r.status); return d; });
+}
+
+/* --- giriş --- */
+function tryLogin(){
+  KEY = $('pw').value || KEY;
+  fetch('/api/auth', {method:'POST', headers:{'x-admin-key': KEY}})
+    .then(r=>r.json())
+    .then(d=>{
+      if(d.ok){ sessionStorage.setItem('rr-key', KEY); $('loginCard').style.display='none'; $('tabs').style.display='flex'; $('listCard').style.display='block'; loadBooks(); }
+      else { $('loginMsg').textContent='Şifre hatalı.'; $('loginMsg').className='msg err'; }
+    });
+}
+$('loginBtn').addEventListener('click', tryLogin);
+$('pw').addEventListener('keydown', e=>{ if(e.key==='Enter') tryLogin(); });
+if(KEY) tryLogin();
+
+/* --- liste --- */
+function loadBooks(){
+  fetch('/api/books').then(r=>r.json()).then(d=>{ BOOKS = d; renderList(); });
+}
+function renderList(){
+  $('bookList').innerHTML = BOOKS.map((b,i)=>`
+    <li>
+      ${b.cover
+        ? `<img class="thumb" src="${b.cover}" alt="">`
+        : `<div class="thumb" style="background:${b.pal.bg}">${stripHtml(b.plain).charAt(0)}</div>`}
+      <div class="name"><b>${b.plain}</b><span>${b.authorName}</span></div>
+      <div class="ops">
+        <button class="btn ghost sm" data-up="${i}" ${i===0?'disabled':''}>↑</button>
+        <button class="btn ghost sm" data-down="${i}" ${i===BOOKS.length-1?'disabled':''}>↓</button>
+        <button class="btn ghost sm" data-cover="${b.slug}">Kapak Bul</button>
+        <button class="btn ghost sm" data-edit="${b.slug}">Düzenle</button>
+        <button class="btn danger sm" data-del="${b.slug}">Sil</button>
+      </div>
+    </li>`).join('');
+}
+$('bookList').addEventListener('click', e=>{
+  const t = e.target;
+  if(t.dataset.edit) openForm(BOOKS.find(b=>b.slug===t.dataset.edit));
+  if(t.dataset.cover){
+    const slug = t.dataset.cover;
+    t.disabled = true; t.textContent = 'Aranıyor…';
+    api('POST','/api/books/'+slug+'/find-cover')
+      .then(d=>{ loadBooks(); })
+      .catch(err=>{ alert(err.message); t.disabled=false; t.textContent='Kapak Bul'; });
+  }
+  if(t.dataset.del){
+    const b = BOOKS.find(x=>x.slug===t.dataset.del);
+    if(confirm(`"${b.plain}" silinsin mi? Bu işlem geri alınamaz.`))
+      api('DELETE','/api/books/'+t.dataset.del).then(loadBooks).catch(err=>alert(err.message));
+  }
+  if(t.dataset.up !== undefined || t.dataset.down !== undefined){
+    const i = +(t.dataset.up ?? t.dataset.down);
+    const j = t.dataset.up !== undefined ? i-1 : i+1;
+    [BOOKS[i], BOOKS[j]] = [BOOKS[j], BOOKS[i]];
+    api('PUT','/api/order',{order:BOOKS.map(b=>b.slug)}).then(loadBooks).catch(err=>alert(err.message));
+  }
+});
+$('newBtn').addEventListener('click', ()=>openForm(null));
+function closeModals(){
+  ['formCard','authorFormCard'].forEach(id=>{
+    $(id).style.display='none';
+    $(id).classList.remove('asmodal');
+  });
+  $('modalBack').classList.remove('on');
+  document.body.style.overflow='';
+}
+$('cancelBtn').addEventListener('click', closeModals);
+$('modalBack').addEventListener('click', closeModals);
+window.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModals(); });
+
+/* --- sekmeler --- */
+let AUTHORS = [];
+$('tabs').addEventListener('click', e=>{
+  const tab = e.target.dataset.tab;
+  if(!tab) return;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active', x.dataset.tab===tab));
+  closeModals();
+  if(tab==='books'){
+    $('listCard').style.display='block'; $('authorsCard').style.display='none';
+  }else{
+    $('listCard').style.display='none'; $('authorsCard').style.display='block';
+    loadAuthors();
+  }
+});
+
+/* --- yazarlar --- */
+function loadAuthors(){
+  fetch('/api/authors').then(r=>r.json()).then(d=>{ AUTHORS = d; renderAuthors(); });
+}
+function renderAuthors(){
+  if(!AUTHORS.length){ $('authorList').innerHTML = '<li style="padding:14px;color:#8a8064">Henüz yazar yok. Kitap ekledikçe yazarlar otomatik oluşur.</li>'; return; }
+  // her yazarın kaç kitabı ekli
+  const count = {};
+  BOOKS.forEach(b=>{ const id=b.authorId||('yzr-'+stripHtml(b.authorName)); count[b.authorId]=(count[b.authorId]||0)+1; });
+  $('authorList').innerHTML = AUTHORS.map(a=>`
+    <li>
+      <div class="thumb" style="background:#6E6B45;font-size:13px">${(a.name||'?').charAt(0)}</div>
+      <div class="name"><b style="font-size:16px">${a.name}</b><span>${a.dates||'—'} · ${count[a.id]||0} kitap · ${(a.works||[]).length} eser</span></div>
+      <div class="ops">
+        <button class="btn ghost sm" data-aedit="${a.id}">Düzenle</button>
+      </div>
+    </li>`).join('');
+}
+$('authorList').addEventListener('click', e=>{
+  const id = e.target.dataset.aedit;
+  if(id) openAuthorForm(AUTHORS.find(a=>a.id===id));
+});
+
+let editingAuthorId = null;
+function openAuthorForm(a){
+  if(!a) return;
+  editingAuthorId = a.id;
+  $('authorMsg').className='msg';
+  $('authorFormCard').style.display='block';
+  $('authorFormTitle').textContent = 'Yazar: ' + a.name;
+  $('aName').value  = a.name || '';
+  $('aDates').value = a.dates || '';
+  $('aBio').value   = (a.bio||[]).join('\n\n');
+  $('aFact').value  = a.fact || '';
+  $('aWorks').value = (a.works||[]).map(w=>Array.isArray(w)?w.join('|'):w).join('\n');
+  $('authorFormCard').classList.add('asmodal');
+  $('modalBack').classList.add('on');
+  document.body.style.overflow='hidden';
+  $('authorFormCard').scrollTop = 0;
+}
+$('authorCancelBtn').addEventListener('click', closeModals);
+$('authorSaveBtn').addEventListener('click', ()=>{
+  const body = {
+    name: $('aName').value.trim(),
+    dates: $('aDates').value.trim(),
+    bio: paras($('aBio').value),
+    fact: $('aFact').value.trim(),
+    works: pairs($('aWorks').value)
+  };
+  api('PUT','/api/authors/'+editingAuthorId, body)
+    .then(()=>{
+      const m=$('authorMsg'); m.textContent='Kaydedildi ✓'; m.className='msg ok';
+      loadAuthors();
+      setTimeout(closeModals, 700);
+    })
+    .catch(err=>{ const m=$('authorMsg'); m.textContent='Hata: '+err.message; m.className='msg err'; });
+});
+
+/* --- not alanları --- */
+function buildNoteFields(){
+  $('notesArea').innerHTML = NOTE_DEFS.map((d,i)=>`
+    <div class="notegrid">
+      <h4>${d.name}</h4>
+      <div class="hint">${d.hint}</div>
+      <div class="row">
+        <div><label>Etiket</label><input type="text" id="nTag${i}" value="${d.defTag}"></div>
+        <div><label>Başlık ${d.fixedTitle?'<small>(otomatik: yazar adı)</small>':''}</label>
+          <input type="text" id="nTitle${i}" ${d.fixedTitle?'disabled placeholder="Yazar adı kullanılır"':''}></div>
+      </div>
+      <label>Metin</label>
+      <textarea id="nP${i}" rows="2"></textarea>
+    </div>`).join('');
+}
+buildNoteFields();
+
+/* --- form aç/doldur --- */
+function openForm(book){
+  editingSlug = book ? book.slug : null;
+  removeCover = false;
+  $('formTitle').textContent = book ? 'Düzenle: ' + book.plain : 'Yeni Kitap';
+  $('formMsg').className = 'msg';
+  $('formCard').style.display = 'block';
+  $('fCover').value = '';
+  $('coverPrev').style.display = 'none';
+  $('removeCoverBtn').style.display = (book && book.cover) ? 'inline-block' : 'none';
+  $('coverHint').textContent = (book && book.cover) ? 'Mevcut görsel: ' + book.cover : '';
+
+  $('fTitle').value  = book ? em2star(book.title) : '';
+  $('fAuthor').value = book ? book.authorName : '';
+  $('fDates').value  = book ? book.dates : '';
+  $('cBg').value  = book ? book.pal.bg  : '#B5121B';
+  $('cC1').value  = book ? book.pal.c1  : '#C9A227';
+  $('cC2').value  = book ? book.pal.c2  : '#6E6B45';
+  $('cAcc').value = book ? book.pal.acc : '#B5121B';
+  $('cAcc2').value= book ? book.pal.acc2: '#C9A227';
+  $('fStack').value = book && book.stack ? book.stack.map(s=>s[0]+'|'+s[1]).join('\n') : '';
+
+  NOTE_DEFS.forEach((d,i)=>{
+    const n = book ? book.notes[i] : null;
+    $('nTag'+i).value = n ? n.tag : d.defTag;
+    if(!d.fixedTitle) $('nTitle'+i).value = n && n.title ? n.title : '';
+    $('nP'+i).value = n ? n.p : '';
+  });
+
+  $('fSumH').value  = book ? em2star(book.summary.h) : 'Peki roman *neyi* anlatıyor?';
+  $('fSumP').value  = book ? book.summary.ps.join('\n\n') : '';
+  $('fMeta').value  = book ? book.summary.meta.map(m=>m.join('|')).join('\n') : '';
+  $('fQuote').value = book ? em2star(book.quote) : '';
+  $('fBio').value   = book ? book.bio.join('\n\n') : '';
+  $('fFact').value  = book ? book.fact : '';
+  $('fWorks').value = book ? book.works.map(w=>w.join('|')).join('\n') : '';
+
+  $('formCard').classList.add('asmodal');
+  $('modalBack').classList.add('on');
+  document.body.style.overflow='hidden';
+  $('formCard').scrollTop = 0;
+}
+
+$('fCover').addEventListener('change', ()=>{
+  const f = $('fCover').files[0];
+  if(f){ $('coverPrev').src = URL.createObjectURL(f); $('coverPrev').style.display='block'; removeCover = false; }
+});
+$('removeCoverBtn').addEventListener('click', ()=>{
+  removeCover = true;
+  $('fCover').value = '';
+  $('coverPrev').style.display='none';
+  $('coverHint').textContent = 'Görsel kaydedince kaldırılacak — CSS kapak kullanılacak.';
+});
+
+/* --- kaydet --- */
+function collect(){
+  const authorName = $('fAuthor').value.trim();
+  const titleRaw   = $('fTitle').value.trim();
+  if(!authorName || !titleRaw) throw new Error('Kitap adı ve yazar adı zorunlu.');
+  const plain = titleRaw.replace(/\*/g,'');
+
+  let stack = pairs($('fStack').value).map(([w,c])=>[w.toUpperCase(), (c==='c2'?'c2':'c1')]);
+  if(!stack.length){
+    stack = [...authorName.split(/\s+/), ...plain.split(/\s+/)]
+      .map((w,i)=>[w.toUpperCase(), i%2 ? 'c2' : 'c1']);
+  }
+
+  const notes = NOTE_DEFS.map((d,i)=>({
+    tag:  $('nTag'+i).value.trim() || d.defTag,
+    title: d.fixedTitle ? null : ($('nTitle'+i).value.trim() || ''),
+    p:    $('nP'+i).value.trim()
+  }));
+
+  const ps = paras($('fSumP').value);
+  const meta = pairs($('fMeta').value);
+  if(!ps.length) throw new Error('Özet boş olamaz.');
+
+  return {
+    slug: editingSlug || undefined,
+    title: star2em(titleRaw), plain,
+    authorName, dates: $('fDates').value.trim(),
+    pal: {bg:$('cBg').value, c1:$('cC1').value, c2:$('cC2').value, acc:$('cAcc').value, acc2:$('cAcc2').value},
+    stack, notes,
+    summary: { h: star2em($('fSumH').value.trim() || 'Peki roman *neyi* anlatıyor?'), ps, meta },
+    quote: star2em($('fQuote').value.trim()),
+    bio: paras($('fBio').value),
+    fact: $('fFact').value.trim(),
+    works: pairs($('fWorks').value),
+    removeCover: removeCover || undefined
+  };
+}
+
+$('saveBtn').addEventListener('click', ()=>{
+  let book;
+  try { book = collect(); } catch(e){ showMsg(e.message, true); return; }
+
+  const fd = new FormData();
+  fd.append('book', JSON.stringify(book));
+  const f = $('fCover').files[0];
+  if(f) fd.append('cover', f);
+
+  const req = editingSlug
+    ? api('PUT', '/api/books/' + editingSlug, fd, true)
+    : api('POST', '/api/books', fd, true);
+
+  req.then(()=>{
+    showMsg('Kaydedildi ✓', false);
+    loadBooks();
+    setTimeout(closeModals, 700);
+  }).catch(err=>showMsg('Hata: ' + err.message, true));
+});
+
+function showMsg(text, isErr){
+  const m = $('formMsg');
+  m.textContent = text;
+  m.className = 'msg ' + (isErr ? 'err' : 'ok');
+}
+</script>
+</body>
+</html>

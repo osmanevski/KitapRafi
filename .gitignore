@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Yüklenen içerik (sunucuda tutulur, repo'da sadece klasör yapısı)
+uploads/*
+!uploads/.gitkeep
+
+# Ortam & log
+.env
+.env.*
+*.log
+npm-debug.log*
+
+# İşletim sistemi
+.DS_Store
+Thumbs.db
+
+# PM2
+.pm2/

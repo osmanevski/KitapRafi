@@ -11,6 +11,9 @@ const express = require('express');
 const multer  = require('multer');
 const fs      = require('fs');
 const path    = require('path');
+const crypto  = require('crypto');
+const dns     = require('dns').promises;
+const net     = require('net');
 
 const ADMIN_KEY = process.env.ADMIN_KEY || '';
 if (!ADMIN_KEY) console.warn('UYARI: ADMIN_KEY ortam değişkeni ayarlı değil — admin paneli devre dışı.');
@@ -22,24 +25,35 @@ const UPLOAD_DIR  = path.join(__dirname, 'uploads');
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const app = express();
+app.disable('x-powered-by');
+// Caddy reverse proxy arkasında: gerçek istemci IP'si için (rate-limit doğru çalışsın)
+app.set('trust proxy', 1);
 
-/* --- kapak görseli yükleme --- */
+/* --- kapak görseli yükleme ---
+   GÜVENLİK: dosya adı/uzantısı istemciden ALINMAZ. Uzantı yalnız izin verilen
+   görsel mime'larından türetilir; böylece .svg/.html gibi çalıştırılabilir
+   uzantılar uploads'a yazılamaz (aynı-origin depolanan XSS engellenir). */
+const IMG_EXT = { 'image/png':'png', 'image/jpeg':'jpg', 'image/jpg':'jpg', 'image/webp':'webp', 'image/gif':'gif' };
 const storage = multer.diskStorage({
   destination: UPLOAD_DIR,
   filename: (req, file, cb) => {
-    const safe = file.originalname.replace(/[^\w.\-]/g, '_');
-    cb(null, Date.now() + '-' + safe);
+    const ext = IMG_EXT[String(file.mimetype).toLowerCase()] || 'png';
+    const rand = crypto.randomBytes(4).toString('hex');
+    cb(null, Date.now() + '-' + rand + '.' + ext);
   }
 });
 const upload = multer({
   storage,
   limits: { fileSize: 8 * 1024 * 1024 },
   fileFilter: (req, file, cb) =>
-    cb(null, /^image\/(png|jpe?g|webp|gif)$/.test(file.mimetype))
+    cb(null, Object.prototype.hasOwnProperty.call(IMG_EXT, String(file.mimetype).toLowerCase()))
 });
 
 app.use(express.json({ limit: '2mb' }));
-app.use('/uploads', express.static(UPLOAD_DIR));
+// yüklenen dosyalar: içerik-tipi tahmini kapalı (nosniff) — savunma derinliği
+app.use('/uploads', express.static(UPLOAD_DIR, {
+  setHeaders: (res) => res.setHeader('X-Content-Type-Options', 'nosniff')
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 /* --- yardımcılar --- */
@@ -98,21 +112,96 @@ function migrateAuthors() {
   if (changed) { saveAuthors(authors); save(books); }
 }
 
-const auth = (req, res, next) =>
-  ADMIN_KEY && req.headers['x-admin-key'] === ADMIN_KEY
-    ? next()
-    : res.status(401).json({ error: 'Yetkisiz. Admin şifresi hatalı.' });
+/* Admin anahtarı karşılaştırması — sabit zamanlı (timing sızıntısı yok). */
+function keyMatches(provided) {
+  if (!ADMIN_KEY || typeof provided !== 'string') return false;
+  const a = Buffer.from(provided);
+  const b = Buffer.from(ADMIN_KEY);
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
+}
+
+/* Basit, bağımlılıksız IP-başına brute-force limiti (yalnız başarısız denemeleri sayar).
+   15 dakikada 20 başarısız denemeden sonra kısa süre kilitler. */
+const AUTH_WINDOW_MS = 15 * 60 * 1000;
+const AUTH_MAX_FAILS = 20;
+const authFails = new Map(); // ip -> { count, resetAt }
+setInterval(() => { const now = Date.now(); for (const [ip, e] of authFails) if (now > e.resetAt) authFails.delete(ip); }, AUTH_WINDOW_MS).unref();
+
+function clientIp(req) { return req.ip || (req.socket && req.socket.remoteAddress) || 'unknown'; }
+function tooManyFails(ip) { const e = authFails.get(ip); return !!e && Date.now() <= e.resetAt && e.count >= AUTH_MAX_FAILS; }
+function recordFail(ip) {
+  const now = Date.now();
+  let e = authFails.get(ip);
+  if (!e || now > e.resetAt) { e = { count: 0, resetAt: now + AUTH_WINDOW_MS }; authFails.set(ip, e); }
+  e.count++;
+}
+function clearFails(ip) { authFails.delete(ip); }
+
+const auth = (req, res, next) => {
+  const ip = clientIp(req);
+  if (tooManyFails(ip))
+    return res.status(429).json({ error: 'Çok fazla başarısız deneme. Biraz sonra tekrar dene.' });
+  if (keyMatches(req.headers['x-admin-key'])) { clearFails(ip); return next(); }
+  recordFail(ip);
+  return res.status(401).json({ error: 'Yetkisiz. Admin şifresi hatalı.' });
+};
+
+/* --- SSRF koruması: bir IP özel/loopback/link-local/metadata mı? --- */
+function isPrivateIP(ip) {
+  if (!ip) return true;
+  ip = ip.toLowerCase();
+  if (ip.startsWith('::ffff:')) ip = ip.slice(7); // IPv4-mapped IPv6
+  if (net.isIPv4(ip)) {
+    const [a, b] = ip.split('.').map(Number);
+    return a === 0 || a === 10 || a === 127 ||
+           (a === 169 && b === 254) ||                 // link-local / metadata
+           (a === 172 && b >= 16 && b <= 31) ||
+           (a === 192 && b === 168) ||
+           a >= 224;                                    // multicast/reserved
+  }
+  // IPv6: loopback, unique-local (fc00::/7), link-local (fe80::/10), unspecified
+  return ip === '::1' || ip === '::' || ip.startsWith('fc') || ip.startsWith('fd') || ip.startsWith('fe8') || ip.startsWith('fe9') || ip.startsWith('fea') || ip.startsWith('feb');
+}
+
+/* Hostname'in TÜM çözümlenen IP'leri public mi? Değilse fırlat. */
+async function assertPublicHost(hostname) {
+  const addrs = await dns.lookup(hostname, { all: true });
+  if (!addrs.length) throw new Error('host çözümlenemedi');
+  for (const { address } of addrs)
+    if (isPrivateIP(address)) throw new Error('özel/iç adres reddedildi: ' + hostname);
+}
+
+/* SSRF-güvenli fetch: her hop'ta host doğrulanır, redirect'ler elle takip edilir. */
+async function safeFetch(rawUrl, maxRedirects = 3) {
+  let current = rawUrl;
+  for (let i = 0; i <= maxRedirects; i++) {
+    let u;
+    try { u = new URL(current); } catch { return null; }
+    if (u.protocol !== 'http:' && u.protocol !== 'https:') return null;
+    await assertPublicHost(u.hostname); // özel IP ise fırlatır -> downloadCover yakalar
+    const ctrl = new AbortController();
+    const to = setTimeout(() => ctrl.abort(), 12000);
+    let r;
+    try { r = await fetch(u.href, { signal: ctrl.signal, redirect: 'manual' }); }
+    finally { clearTimeout(to); }
+    if (r.status >= 300 && r.status < 400 && r.headers.get('location')) {
+      current = new URL(r.headers.get('location'), u).href; // sonraki hop yeniden doğrulanır
+      continue;
+    }
+    return r;
+  }
+  return null; // çok fazla redirect
+}
 
 /* --- URL'den kapak indir (Gemini'nin verdiği link) ---
-   Erişilemezse null döner; site CSS kapağa düşer, çökmez. */
+   Erişilemezse null döner; site CSS kapağa düşer, çökmez.
+   SSRF: safeFetch iç/özel adresleri ve doğrulanmamış redirect'leri engeller. */
 async function downloadCover(url) {
   try {
     if (!/^https?:\/\//i.test(url)) return null;
-    const ctrl = new AbortController();
-    const to = setTimeout(() => ctrl.abort(), 12000);
-    const r = await fetch(url, { signal: ctrl.signal, redirect: 'follow' });
-    clearTimeout(to);
-    if (!r.ok) return null;
+    const r = await safeFetch(url);
+    if (!r || !r.ok) return null;
     const type = (r.headers.get('content-type') || '').toLowerCase();
     const m = type.match(/^image\/(png|jpe?g|webp|gif)/);
     if (!m) return null;
@@ -286,8 +375,14 @@ app.put('/api/authors/:id', auth, (req, res) => {
   } catch (e) { res.status(400).json({ error: e.message }); }
 });
 
-app.post('/api/auth', (req, res) =>
-  res.json({ ok: !!ADMIN_KEY && req.headers['x-admin-key'] === ADMIN_KEY }));
+app.post('/api/auth', (req, res) => {
+  const ip = clientIp(req);
+  if (tooManyFails(ip))
+    return res.status(429).json({ ok: false, error: 'Çok fazla başarısız deneme. Biraz sonra tekrar dene.' });
+  const ok = keyMatches(req.headers['x-admin-key']);
+  if (ok) clearFails(ip); else recordFail(ip);
+  res.json({ ok });
+});
 
 app.post('/api/books', auth, upload.single('cover'), (req, res) => {
   try {

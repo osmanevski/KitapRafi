@@ -6,7 +6,7 @@
  *
  * KULLANIM (VDS'te, kitaprafi klasöründe):
  *   Windows CMD:
- *     set ADMIN_KEY=osman
+ *     set ADMIN_KEY=senin-sifren
  *     set OPENROUTER_KEY=sk-or-v1-...
  *     node scripts/kazi-ve-doldur.js "https://1000kitap.com/Osmanevski/kitaplari/okuduklari"
  *

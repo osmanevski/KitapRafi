@@ -8,7 +8,7 @@ Bu script her kitap için OpenRouter'a sorup içeriği doldurtur ve siteye ekler
 
 Windows CMD (`kitaprafi` klasöründe):
 ```
-set ADMIN_KEY=osman
+set ADMIN_KEY=senin-sifren
 set OPENROUTER_KEY=sk-or-v1-SENIN-ANAHTARIN
 set LIMIT=3
 node scripts/listeden-doldur.js
@@ -20,7 +20,7 @@ Siteyi aç (F5), 3 kitap düzgün geldiyse devam.
 
 `set LIMIT=3` yerine `set LIMIT=0` (ya da hiç yazma):
 ```
-set ADMIN_KEY=osman
+set ADMIN_KEY=senin-sifren
 set OPENROUTER_KEY=sk-or-v1-SENIN-ANAHTARIN
 node scripts/listeden-doldur.js
 ```

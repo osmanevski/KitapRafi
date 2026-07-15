@@ -5,7 +5,7 @@
  * indirip kitaba ekler. 1000kitap CDN'inden büyük (size:400) kapaklar.
  *
  * KULLANIM (VDS'te, kitaprafi klasöründe):
- *   set ADMIN_KEY=osman
+ *   set ADMIN_KEY=senin-sifren
  *   set LIMIT=3
  *   node scripts/kapak-yukle.js
  *

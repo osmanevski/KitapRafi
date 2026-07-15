@@ -9,7 +9,7 @@ sorup içeriği doldurtur, kapakla birlikte siteye ekler. n8n'e dokunmaz.
 
 Windows CMD (`kitaprafi` klasöründe):
 ```
-set ADMIN_KEY=osman
+set ADMIN_KEY=senin-sifren
 set OPENROUTER_KEY=sk-or-v1-SENIN-ANAHTARIN
 set LIMIT=3
 node scripts/kazi-ve-doldur.js "https://1000kitap.com/Osmanevski/kitaplari/okuduklari"
@@ -21,7 +21,7 @@ Siteyi aç (F5), 3 kitap düzgün geldiyse (içerik + kapak) devam et.
 
 `set LIMIT=` satırını atla (ya da `set LIMIT=0`), aynı komutu çalıştır:
 ```
-set ADMIN_KEY=osman
+set ADMIN_KEY=senin-sifren
 set OPENROUTER_KEY=sk-or-v1-SENIN-ANAHTARIN
 node scripts/kazi-ve-doldur.js "https://1000kitap.com/Osmanevski/kitaplari/okuduklari"
 ```

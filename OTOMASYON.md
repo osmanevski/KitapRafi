@@ -68,7 +68,8 @@ taslağı üretir; son kontrol yönetim panelinden yapılmalıdır.
 ## Kapak davranışı
 
 - Modelin verdiği kapak URL'si önce sunucu tarafından indirilir.
-- URL yoksa Google Books üzerinden kapak aranır.
+- URL yoksa Google Books üzerinden kapak aranır; kota/sonuç sorunu olursa Open Library
+  otomatik yedek sağlayıcı olarak kullanılır.
 - Görsel indirilemezse kayıt yine oluşturulur ve site tipografik CSS kapağa düşer.
 - Gerekirse yönetim panelinden kapak yüklenebilir veya **Kapak Bul** kullanılabilir.
 

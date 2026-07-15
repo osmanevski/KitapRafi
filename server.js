@@ -214,17 +214,16 @@ async function downloadCover(url) {
   } catch { return null; }
 }
 
-/* --- Google Books'tan kapak URL'si bul (anahtar gerektirmez) ---
-   coverUrl boş geldiğinde otomatik denenir. Bulamazsa null. */
+/* --- Google Books'tan kapak URL'si bul ---
+   Anahtarsız kullanım desteklenir ama Google aynı sunucu IP'sini 429 ile
+   sınırlayabilir. GOOGLE_BOOKS_KEY verilirse sorguya eklenir. */
 async function findCoverViaGoogleBooks(title, author) {
   try {
     const q = [title, author].filter(Boolean).join(' ');
-    const url = 'https://www.googleapis.com/books/v1/volumes?country=TR&maxResults=5&q=' + encodeURIComponent(q);
-    const ctrl = new AbortController();
-    const to = setTimeout(() => ctrl.abort(), 10000);
-    const r = await fetch(url, { signal: ctrl.signal });
-    clearTimeout(to);
-    if (!r.ok) return null;
+    let url = 'https://www.googleapis.com/books/v1/volumes?country=TR&maxResults=5&q=' + encodeURIComponent(q);
+    if (process.env.GOOGLE_BOOKS_KEY) url += '&key=' + encodeURIComponent(process.env.GOOGLE_BOOKS_KEY);
+    const r = await safeFetch(url);
+    if (!r || !r.ok) return null;
     const d = await r.json();
     for (const it of (d.items || [])) {
       const img = it.volumeInfo && it.volumeInfo.imageLinks;
@@ -236,6 +235,29 @@ async function findCoverViaGoogleBooks(title, author) {
     }
     return null;
   } catch { return null; }
+}
+
+/* Google Books kota/sonuç sorunu yaşarsa Open Library kapaklarına düş.
+   cover_i doğrudan Open Library'nin kapak CDN kimliğidir. */
+async function findCoverViaOpenLibrary(title, author) {
+  try {
+    const params = new URLSearchParams({
+      title: title || '', author: author || '', limit: '10',
+      fields: 'title,author_name,cover_i'
+    });
+    const r = await safeFetch('https://openlibrary.org/search.json?' + params);
+    if (!r || !r.ok) return null;
+    const d = await r.json();
+    const hit = (d.docs || []).find(x => Number.isInteger(x.cover_i));
+    // L boyutu archive.org'un bazı arşiv düğümlerinde sık zaman aşımına uğruyor;
+    // M, kitap kartı için yeterli çözünürlükte ve belirgin biçimde daha güvenilir.
+    return hit ? `https://covers.openlibrary.org/b/id/${hit.cover_i}-M.jpg` : null;
+  } catch { return null; }
+}
+
+async function findCoverUrl(title, author) {
+  return await findCoverViaGoogleBooks(title, author)
+      || await findCoverViaOpenLibrary(title, author);
 }
 
 /* --- basit renk paleti üreticisi (Gemini renk vermezse) --- */
@@ -452,7 +474,7 @@ app.post('/api/books/ingest', auth, async (req, res) => {
     let coverUrl = raw.coverUrl || raw.cover;
     if (!raw.skipCover) {
       if (!coverUrl || !/^https?:\/\//i.test(coverUrl)) {
-        coverUrl = await findCoverViaGoogleBooks(book.plain, book.authorName);
+        coverUrl = await findCoverUrl(book.plain, book.authorName);
       }
       if (coverUrl && /^https?:\/\//i.test(coverUrl)) {
         const local = await downloadCover(coverUrl);
@@ -490,15 +512,15 @@ app.post('/api/books/ingest', auth, async (req, res) => {
   }
 });
 
-/* --- tek kitaba Google Books'tan kapak bul & ata (panel butonu) --- */
+/* --- tek kitaba Google Books / Open Library'den kapak bul & ata --- */
 app.post('/api/books/:slug/find-cover', auth, async (req, res) => {
   try {
     const books = load();
     const i = books.findIndex(b => b.slug === req.params.slug);
     if (i < 0) return res.status(404).json({ error: 'Kitap bulunamadı' });
-    // gövdede coverUrl geldiyse onu kullan; yoksa Google Books'tan bul
+    // gövdede coverUrl geldiyse onu kullan; yoksa sağlayıcılarda ara
     let url = (req.body && req.body.coverUrl) ? req.body.coverUrl : null;
-    if (!url) url = await findCoverViaGoogleBooks(books[i].plain, books[i].authorName);
+    if (!url) url = await findCoverUrl(books[i].plain, books[i].authorName);
     if (!url) return res.status(404).json({ error: 'Kapak bulunamadı. Elle yükleyebilirsin.' });
     const local = await downloadCover(url);
     if (!local) return res.status(502).json({ error: 'Kapak bulundu ama indirilemedi.' });

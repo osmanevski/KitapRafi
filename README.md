@@ -23,6 +23,9 @@ ADMIN_KEY=guclu-bir-sifre npm start
 `ADMIN_KEY` zorunludur. Ayarlanmazsa site açılır ancak yönetim işlemleri güvenlik için
 devre dışı kalır. Kod içinde varsayılan veya gömülü admin şifresi yoktur.
 
+İsteğe bağlı `GOOGLE_BOOKS_KEY`, Google Books'un anahtarsız kota sınırına takılmasını
+önler. Anahtar yoksa veya Google sonuç vermezse kapak araması Open Library'ye düşer.
+
 Windows CMD:
 
 ```cmd
@@ -34,7 +37,7 @@ npm start
 
 - **+ Yeni Kitap** ile kitap eklenir; mevcut kitaplar düzenlenebilir, silinebilir ve sıralanabilir.
 - Yazar bilgileri **Yazarlar** sekmesinden ortak bir dosya olarak yönetilir.
-- Kapak görseli yüklenebilir veya Google Books üzerinden aranabilir.
+- Kapak görseli yüklenebilir veya Google Books/Open Library üzerinden aranabilir.
 - Kapak yoksa renk paleti ve yazı dizilimiyle tipografik CSS kapak gösterilir.
 - Metinde `*vurgu*` kullanımı güvenli biçimde `<em>` vurgusuna dönüştürülür.
 - Özet ve biyografi paragrafları boş satırlarla ayrılır.

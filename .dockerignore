@@ -1,0 +1,13 @@
+node_modules
+uploads
+.git
+.gitignore
+.DS_Store
+*.log
+sast
+README.md
+OTOMASYON.md
+n8n-workflow.json
+scripts
+.env
+.env.*

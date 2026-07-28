@@ -1,0 +1,16 @@
+# Kitap Rafı — yeni Ubuntu sunucusu için deploy
+# Konteyner SADECE 127.0.0.1'e bağlanır (UFW bypass tuzağına karşı); dışa yalnız Caddy açılır.
+services:
+  kitaprafi:
+    build: .
+    image: kitaprafi:latest
+    container_name: kitaprafi
+    restart: unless-stopped
+    env_file: .env          # ADMIN_KEY burada (repoya girmez)
+    environment:
+      - PORT=3000
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./data:/app/data       # kanonik kitap/yazar verisi (kalıcı)
+      - ./uploads:/app/uploads # kapak görselleri (kalıcı)

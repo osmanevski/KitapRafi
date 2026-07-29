@@ -20,8 +20,10 @@ if (!ADMIN_KEY) console.warn('UYARI: ADMIN_KEY ortam değişkeni ayarlı değil 
 const PORT      = process.env.PORT || 3000;
 
 // Yapay zekâ ile kitap ekleme (n8n yerine app-içi). Anahtar yoksa özellik pasif.
+// GEMINI_API_KEY (Google AI Studio) varsa Gemini kullanılır; yoksa OPENROUTER_KEY.
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const OPENROUTER_KEY = process.env.OPENROUTER_KEY || '';
-const AI_MODEL       = process.env.AI_MODEL || 'google/gemini-3-flash-preview';
+const AI_MODEL       = process.env.AI_MODEL || (GEMINI_API_KEY ? 'gemini-2.5-flash' : 'google/gemini-3-flash-preview');
 
 const DATA_FILE   = path.join(__dirname, 'data', 'books.json');
 const AUTHORS_FILE = path.join(__dirname, 'data', 'authors.json');
@@ -550,9 +552,31 @@ KURALLAR:
 - SADECE JSON döndür.`;
 }
 
-async function aiGenerateBook(kitap, yazar) {
-  if (!OPENROUTER_KEY) { const e = new Error('OPENROUTER_KEY ayarlı değil (sunucu .env).'); e.status = 503; throw e; }
-  const prompt = buildBookPrompt(kitap, yazar);
+// Google AI Studio (Gemini) — generateContent; anahtar header'da (URL'de değil).
+async function callGemini(prompt) {
+  const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + AI_MODEL + ':generateContent';
+  const ctrl = new AbortController();
+  const to = setTimeout(() => ctrl.abort(), 60000);
+  let r;
+  try {
+    r = await fetch(url, {
+      method: 'POST', signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': GEMINI_API_KEY },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.4, responseMimeType: 'application/json' }
+      })
+    });
+  } finally { clearTimeout(to); }
+  if (!r.ok) throw new Error('Gemini yanıtı HTTP ' + r.status);
+  const data = await r.json();
+  return (data && data.candidates && data.candidates[0] && data.candidates[0].content
+    && data.candidates[0].content.parts && data.candidates[0].content.parts[0]
+    && data.candidates[0].content.parts[0].text) || '';
+}
+
+// OpenRouter — OpenAI uyumlu chat/completions.
+async function callOpenRouter(prompt) {
   const ctrl = new AbortController();
   const to = setTimeout(() => ctrl.abort(), 60000);
   let r;
@@ -565,8 +589,16 @@ async function aiGenerateBook(kitap, yazar) {
   } finally { clearTimeout(to); }
   if (!r.ok) throw new Error('OpenRouter yanıtı HTTP ' + r.status);
   const data = await r.json();
-  let text = (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
-  text = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+  return (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+}
+
+async function aiGenerateBook(kitap, yazar) {
+  const prompt = buildBookPrompt(kitap, yazar);
+  let text;
+  if (GEMINI_API_KEY)      text = await callGemini(prompt);
+  else if (OPENROUTER_KEY) text = await callOpenRouter(prompt);
+  else { const e = new Error('Yapay zekâ anahtarı yok — sunucu .env\'ine GEMINI_API_KEY (Google AI Studio) veya OPENROUTER_KEY ekle.'); e.status = 503; throw e; }
+  text = String(text).replace(/```json/gi, '').replace(/```/g, '').trim();
   let book = JSON.parse(text);
   if (Array.isArray(book)) book = book[0];
   if (!book || typeof book !== 'object') throw new Error('Model beklenen kitap objesini vermedi');

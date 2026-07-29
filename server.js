@@ -475,16 +475,16 @@ async function ingestBook(raw) {
   const book = normalizeBook(raw);
   book.slug = book.slug || slugify(book.plain);
 
-  // kapak: coverUrl geldiyse indir; boşsa sağlayıcılardan bulmayı dene
-  let coverUrl = raw.coverUrl || raw.cover;
+  // kapak: önce verilen coverUrl'yi dene; inmezse/boşsa sağlayıcılarda ara (fallback)
   if (!raw.skipCover) {
-    if (!coverUrl || !/^https?:\/\//i.test(coverUrl)) {
-      coverUrl = await findCoverUrl(book.plain, book.authorName);
+    let local = null;
+    const given = raw.coverUrl || raw.cover;
+    if (given && /^https?:\/\//i.test(given)) local = await downloadCover(given);
+    if (!local) {
+      const found = await findCoverUrl(book.plain, book.authorName);
+      if (found) local = await downloadCover(found);
     }
-    if (coverUrl && /^https?:\/\//i.test(coverUrl)) {
-      const local = await downloadCover(coverUrl);
-      if (local) book.cover = local; else delete book.cover;
-    }
+    if (local) book.cover = local; else delete book.cover;
   }
   delete book.coverUrl; delete book.overwrite; delete book.skipCover;
 

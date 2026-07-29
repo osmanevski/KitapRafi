@@ -97,6 +97,14 @@ hr{border:none;border-top:1px dashed var(--line);margin:20px 0}
       <h2 style="font-family:'Anton';text-transform:uppercase;font-size:22px">Kitaplar</h2>
       <button class="btn" id="newBtn">+ Yeni Kitap</button>
     </div>
+    <div class="ai-add" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 16px;padding:12px 14px;border:1px dashed #b7ad86;border-radius:10px">
+      <strong style="font-size:13px">🤖 Yapay Zekâ ile Ekle</strong>
+      <input type="text" id="aiKitap" placeholder="Kitap adı" style="flex:2;min-width:150px">
+      <input type="text" id="aiYazar" placeholder="Yazar (opsiyonel)" style="flex:1;min-width:120px">
+      <label style="font-size:12px;display:flex;align-items:center;gap:5px;white-space:nowrap"><input type="checkbox" id="aiGuncelle"> Var olanı güncelle</label>
+      <button class="btn sm" id="aiAddBtn">Ekle</button>
+      <span class="msg" id="aiMsg" style="flex-basis:100%;margin:0"></span>
+    </div>
     <ul class="booklist" id="bookList"></ul>
   </div>
 
@@ -294,6 +302,27 @@ $('bookList').addEventListener('click', e=>{
   }
 });
 $('newBtn').addEventListener('click', ()=>openForm(null));
+
+/* --- yapay zekâ ile ekle (n8n yerine) --- */
+$('aiAddBtn').addEventListener('click', ()=>{
+  const kitap = $('aiKitap').value.trim();
+  const yazar = $('aiYazar').value.trim();
+  const guncelle = $('aiGuncelle').checked;
+  const m = $('aiMsg'), btn = $('aiAddBtn');
+  if(!kitap){ m.textContent='Kitap adı gir.'; m.className='msg err'; return; }
+  const old = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Üretiliyor…';
+  m.textContent = 'Yapay zekâ kitabı araştırıyor (10-30 sn sürebilir)…'; m.className='msg';
+  api('POST','/api/books/ai-add',{kitap, yazar, guncelle})
+    .then(d=>{
+      m.textContent = (d.updated?'Güncellendi':'Eklendi')+' ✓  '+d.slug+(d.cover?' · kapak bulundu':' · kapak yok');
+      m.className='msg ok';
+      $('aiKitap').value=''; $('aiYazar').value=''; $('aiGuncelle').checked=false;
+      loadBooks();
+    })
+    .catch(err=>{ m.textContent='Hata: '+err.message; m.className='msg err'; })
+    .finally(()=>{ btn.disabled=false; btn.textContent=old; });
+});
 function closeModals(){
   ['formCard','authorFormCard'].forEach(id=>{
     $(id).style.display='none';

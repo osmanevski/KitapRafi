@@ -19,6 +19,10 @@ const ADMIN_KEY = process.env.ADMIN_KEY || '';
 if (!ADMIN_KEY) console.warn('UYARI: ADMIN_KEY ortam değişkeni ayarlı değil — admin paneli devre dışı.');
 const PORT      = process.env.PORT || 3000;
 
+// Yapay zekâ ile kitap ekleme (n8n yerine app-içi). Anahtar yoksa özellik pasif.
+const OPENROUTER_KEY = process.env.OPENROUTER_KEY || '';
+const AI_MODEL       = process.env.AI_MODEL || 'google/gemini-3-flash-preview';
+
 const DATA_FILE   = path.join(__dirname, 'data', 'books.json');
 const AUTHORS_FILE = path.join(__dirname, 'data', 'authors.json');
 const UPLOAD_DIR  = path.join(__dirname, 'uploads');
@@ -463,52 +467,135 @@ app.delete('/api/books/:slug', auth, (req, res) => {
    JSON gövde (multipart değil). Gelen ham kitabı normalize eder,
    coverUrl varsa indirir, ekler veya (varsa) günceller.
    Gövde: kitap objesi + opsiyonel { coverUrl, overwrite:true }  */
+/* Ham kitap objesini (n8n/AI/CLI'dan) normalize edip kapağı indirir, yazarı
+   oluşturur ve kaydeder. Zaten varsa overwrite gerektirir (409 fırlatır). */
+async function ingestBook(raw) {
+  const book = normalizeBook(raw);
+  book.slug = book.slug || slugify(book.plain);
+
+  // kapak: coverUrl geldiyse indir; boşsa sağlayıcılardan bulmayı dene
+  let coverUrl = raw.coverUrl || raw.cover;
+  if (!raw.skipCover) {
+    if (!coverUrl || !/^https?:\/\//i.test(coverUrl)) {
+      coverUrl = await findCoverUrl(book.plain, book.authorName);
+    }
+    if (coverUrl && /^https?:\/\//i.test(coverUrl)) {
+      const local = await downloadCover(coverUrl);
+      if (local) book.cover = local; else delete book.cover;
+    }
+  }
+  delete book.coverUrl; delete book.overwrite; delete book.skipCover;
+
+  // yazar: ilk kez geliyorsa dosyasını oluştur; zaten varsa DOKUNMA
+  const authors = loadAuthors();
+  const aid = authorId(book.authorName);
+  book.authorId = aid;
+  if (!authors.find(a => a.id === aid)) {
+    upsertAuthor(authors, { name: book.authorName, dates: book.dates, bio: book.bio, fact: book.fact, works: book.works });
+    saveAuthors(authors);
+  }
+
+  const books = load();
+  const i = books.findIndex(b => b.slug === book.slug);
+  if (i >= 0) {
+    if (!raw.overwrite) {
+      const e = new Error('Bu kitap zaten var: ' + book.slug + '. Güncellemek için "Var olanı güncelle" işaretle.');
+      e.status = 409; e.slug = book.slug; throw e;
+    }
+    if (!book.cover && books[i].cover) book.cover = books[i].cover; // eski kapağı koru
+    books[i] = book;
+  } else {
+    books.push(book);
+  }
+  save(books);
+  return { ok: true, slug: book.slug, updated: i >= 0, cover: book.cover || null };
+}
+
+/* --- Yapay zekâ (OpenRouter) ile kitap kartı üret --- */
+function buildBookPrompt(kitap, yazar) {
+  return `Sen bir Türk edebiyatı uzmanısın. Aşağıdaki kitap için bir tanıtım kartı verisi üreteceksin. SADECE geçerli JSON döndür, başka hiçbir şey yazma.
+Kitap: "${kitap}"${yazar ? ' — Yazar: ' + yazar : ''}
+Şu JSON şemasına BİREBİR uy:
+{
+  "plain": "Kitabın düz adı",
+  "title": "Kitap adı, vurgulanacak kelime <em>...</em> içinde (örn: Kurt <em>Kanunu</em>)",
+  "authorName": "Yazarın tam adı",
+  "dates": "Yazarın doğum-ölüm ve yeri (örn: 1910 — 1973 · İstanbul)",
+  "pal": { "bg":"#hex kapak zemin", "c1":"#hex", "c2":"#hex", "acc":"#hex vurgu", "acc2":"#hex" },
+  "stack": [["KELİME","c1"],["KELİME","c2"]],
+  "notes": [
+    {"tag":"Yazar","title":null,"p":"Yazar hakkında 1-2 cümle"},
+    {"tag":"Dönem","title":"BAŞINDA YIL OLAN kısa başlık (örn: 1926 · İzmir Suikastı)","p":"Kitabın geçtiği/yazıldığı dönem, siyasi bağlam"},
+    {"tag":"Yazarın Hayatından","title":"Kısa başlık","p":"Yazarın şahsi hayatından çarpıcı bilgi"},
+    {"tag":"İlginç","title":"Kısa başlık","p":"Kitapla ilgili ilginç detay"}
+  ],
+  "summary": { "h":"Peki roman <em>neyi</em> anlatıyor?", "ps":["1. paragraf","2. paragraf"], "meta":[["1969","İlk baskı"],["Roman","Tür"],["Etiket","Açıklama"]] },
+  "quote": "Kısa çarpıcı kapanış cümlesi, bir kelime <em>...</em> içinde",
+  "bio": ["Yazar biyografisi 1. paragraf","2. paragraf"],
+  "fact": "Yazar dosyasında çerçeveli gösterilecek çarpıcı bilgi",
+  "works": [["Eser Adı","Yıl/Not"]],
+  "coverUrl": "Kitabın kapak görselinin TAM URL'si. Emin değilsen boş string bırak.",
+  "category": "Kitabın türü — tek kelime/kısa (örn: Roman, Tarihi Roman, Polisiye, Öykü, Şiir, Deneme, Anı)"
+}
+KURALLAR:
+- RENK OKUNABİLİRLİĞİ ÇOK ÖNEMLİ, şu kurallara MUTLAKA uy:
+- Renkler kitabın kapağıyla/temasıyla uyumlu olsun ama önce okunabilirlik gelir.
+- bg (kapak zemini) koyu veya orta-koyu bir ton olsun; c1 ve c2 bunun üstünde net okunacak kadar açık/parlak olsun.
+- acc (sayfa vurgu rengi) KOYU bir renk olsun; hem açık bej zemin üstünde yazı, hem yazar panelinde ARKA PLAN (üstüne BEYAZ yazı) olur. Bu yüzden acc asla açık/parlak olmasın (koyu kırmızı, bordo, lacivert, koyu yeşil, kahve, antrasit gibi).
+- acc2 (koyu acc zemini üstünde küçük vurgu metinleri) AÇIK/parlak olsun (açık sarı, altın, krem, açık turkuaz gibi).
+- stack: yazar adı + kitap adının kelimeleri, büyük harf, c1/c2 dönüşümlü.
+- Dönem notunun title alanı MUTLAKA bir yılla başlasın, sonra ' · ' ve kısa bir olay/mekan gelsin.
+- category kitabın gerçek türünü yansıtsın, kısa ve standart olsun.
+- Bilgiler doğru ve gerçek olsun; uydurma. Emin olmadığın coverUrl'yi boş bırak.
+- SADECE JSON döndür.`;
+}
+
+async function aiGenerateBook(kitap, yazar) {
+  if (!OPENROUTER_KEY) { const e = new Error('OPENROUTER_KEY ayarlı değil (sunucu .env).'); e.status = 503; throw e; }
+  const prompt = buildBookPrompt(kitap, yazar);
+  const ctrl = new AbortController();
+  const to = setTimeout(() => ctrl.abort(), 60000);
+  let r;
+  try {
+    r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST', signal: ctrl.signal,
+      headers: { 'Authorization': 'Bearer ' + OPENROUTER_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: AI_MODEL, messages: [{ role: 'user', content: prompt }], response_format: { type: 'json_object' } })
+    });
+  } finally { clearTimeout(to); }
+  if (!r.ok) throw new Error('OpenRouter yanıtı HTTP ' + r.status);
+  const data = await r.json();
+  let text = (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+  text = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+  let book = JSON.parse(text);
+  if (Array.isArray(book)) book = book[0];
+  if (!book || typeof book !== 'object') throw new Error('Model beklenen kitap objesini vermedi');
+  return book;
+}
+
 app.post('/api/books/ingest', auth, async (req, res) => {
   try {
-    const raw = req.body || {};
-    const book = normalizeBook(raw);
-    book.slug = book.slug || slugify(book.plain);
-
-    // kapak: coverUrl geldiyse indir; boşsa Google Books'tan bulmayı dene
-    // (skipCover:true ise hiç arama yapma — kaziyici iskelet eklerken kullanılır)
-    let coverUrl = raw.coverUrl || raw.cover;
-    if (!raw.skipCover) {
-      if (!coverUrl || !/^https?:\/\//i.test(coverUrl)) {
-        coverUrl = await findCoverUrl(book.plain, book.authorName);
-      }
-      if (coverUrl && /^https?:\/\//i.test(coverUrl)) {
-        const local = await downloadCover(coverUrl);
-        if (local) book.cover = local; else delete book.cover;
-      }
-    }
-    delete book.coverUrl;
-    delete book.overwrite;
-    delete book.skipCover;
-
-    // yazar: ilk kez geliyorsa dosyasını oluştur; zaten varsa DOKUNMA
-    // (aynı yazarın 2. kitabı mevcut yazar dosyasını ezmesin)
-    const authors = loadAuthors();
-    const aid = authorId(book.authorName);
-    book.authorId = aid;
-    if (!authors.find(a => a.id === aid)) {
-      upsertAuthor(authors, { name: book.authorName, dates: book.dates, bio: book.bio, fact: book.fact, works: book.works });
-      saveAuthors(authors);
-    }
-
-    const books = load();
-    const i = books.findIndex(b => b.slug === book.slug);
-    if (i >= 0) {
-      if (!raw.overwrite)
-        return res.status(409).json({ error: 'Bu kitap zaten var: ' + book.slug + '. Güncellemek için overwrite:true gönder.', slug: book.slug });
-      if (!book.cover && books[i].cover) book.cover = books[i].cover; // eski kapağı koru
-      books[i] = book;
-    } else {
-      books.push(book);
-    }
-    save(books);
-    res.json({ ok: true, slug: book.slug, updated: i >= 0, cover: book.cover || null });
+    res.json(await ingestBook(req.body || {}));
   } catch (e) {
+    if (e.status === 409) return res.status(409).json({ error: e.message, slug: e.slug });
     res.status(400).json({ error: 'Ingest hatası: ' + e.message });
+  }
+});
+
+/* --- Admin panelinden yapay zekâ ile kitap ekle (n8n'in yerine) --- */
+app.post('/api/books/ai-add', auth, async (req, res) => {
+  try {
+    const kitap = String((req.body && req.body.kitap) || '').trim();
+    const yazar = String((req.body && req.body.yazar) || '').trim();
+    const guncelle = !!(req.body && req.body.guncelle);
+    if (!kitap) return res.status(400).json({ error: 'Kitap adı gerekli.' });
+    const book = await aiGenerateBook(kitap, yazar);
+    book.overwrite = guncelle;
+    res.json(await ingestBook(book));
+  } catch (e) {
+    if (e.status === 409) return res.status(409).json({ error: e.message, slug: e.slug });
+    if (e.status === 503) return res.status(503).json({ error: e.message });
+    res.status(400).json({ error: 'AI ekleme hatası: ' + e.message });
   }
 });
 

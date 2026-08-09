@@ -1,6 +1,6 @@
 ---
 id: TASK-20260809-002-hermes-fable-orchestration
-status: accepted
+status: completed
 risk: medium
 owner: human
 orchestrator: Fable 5 (Claude Code)

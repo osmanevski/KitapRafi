@@ -83,13 +83,13 @@ other paid fallback. No product file changed.
 
 - The passing r3 review covers the implementation through `a13f9a7`; the r3
   review artifact and task-status update are evidence-only follow-up changes.
-- `skills.external_dirs.0` currently resolves from the task worktree. After
-  fast-forward integration, rerun `scripts/hermes-profile-setup.sh --apply`
-  from the main checkout to pin the stable repository path.
+- `skills.external_dirs.0` was reapplied from the stable main checkout after
+  integration.
 - The OAuth credential and profile are user-level state, intentionally outside
   Git. Repository scripts validate presence and fail closed when unavailable.
 
 ## Next action
 
-Commit the r3 evidence, then perform the human-authorized fast-forward
-integration. Do not push or deploy.
+Completed: r3 evidence was committed, the branch was integrated by
+human-authorized fast-forward, and the Hermes skill path was repinned to the
+stable main checkout. Nothing was pushed or deployed.

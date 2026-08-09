@@ -98,8 +98,10 @@ provider. Missing capability is an error, never a downgrade.
   never reads or prints credentials, and never touches Anthropic keys.
   Authentication remains an explicit interactive human step.
 - **Usage output path**: an explicit `--out` target must not exist. Its physical
-  parent is resolved, repository paths are rejected, and the file is reserved
-  with noclobber before Hermes starts; existing files and symbolic links fail.
+  parent is resolved and repository paths are rejected before creation; then the
+  file is reserved with noclobber before Hermes starts. Existing files and
+  symbolic links fail. The physical temporary root must also be outside the
+  repository before any default output, transcript, or safe-root is created.
 
 ## Glossary
 

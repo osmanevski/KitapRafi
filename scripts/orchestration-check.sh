@@ -94,10 +94,12 @@ if [ -f "$review_script" ]; then
     note_fail "hermes-review.sh must restrict toolsets to file"
   grep -Fq -- '--usage-file' "$review_script" ||
     note_fail "hermes-review.sh must request native usage JSON"
-  grep -Fq 'No fallback providers configured' "$review_script" ||
-    note_fail "hermes-review.sh must require a provably empty fallback chain"
+  grep -Fq 'HERMES_EMPTY_FALLBACK_OUTPUT' "$review_script" ||
+    note_fail "hermes-review.sh must require the exact empty fallback output"
   grep -Fq 'set -o noclobber' "$review_script" ||
     note_fail "hermes-review.sh must reserve usage output without overwrite"
+  grep -Fq 'temporary root must be outside the repository' "$review_script" ||
+    note_fail "hermes-review.sh must reject a repository-local temporary root"
   if grep -Eq '^[^#]*ANTHROPIC_API_KEY' "$review_script"; then
     note_fail "hermes-review.sh must never use ANTHROPIC_API_KEY"
   fi

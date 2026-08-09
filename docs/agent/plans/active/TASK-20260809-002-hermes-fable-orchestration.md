@@ -127,5 +127,9 @@ python3 /Users/osmanevski/.codex/skills/.system/skill-creator/scripts/quick_vali
   device OAuth flow. Authentication completed successfully; the default Hermes
   profile was not changed.
 - Hermes/Codex r1 reviewed `f45dc15..6ccd0c3` and returned `blocked` with four
-  actionable findings. Commit `8d3590f` closes the fallback, authority,
-  usage-path, and handoff-evidence findings; r2 remains required.
+  actionable findings. Commit `8d3590f` attempted their closure; r2 confirmed
+  authority and handoff evidence, but required stronger fallback and path
+  checks.
+- Hermes/Codex r2 reviewed `f45dc15..8da14b4`. Human authority and immutable
+  evidence refs closed; exact full-output fallback matching and pre-creation
+  path rejection remained blocked and are remediated in the next commit.

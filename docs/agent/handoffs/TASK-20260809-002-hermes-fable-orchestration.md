@@ -55,6 +55,7 @@ other paid fallback. No product file changed.
 | `quick_validate.py .agents/skills/kitaprafi-orchestration` | pass | `Skill is valid!` |
 | `scripts/hermes-profile-setup.sh --apply` | pass | isolated profile created and pinned |
 | `hermes --profile kitaprafi auth add openai-codex --type oauth` | pass | device OAuth completed |
+| repository-local `hermes-review.sh --out` probe | pass | rejected before creating the target |
 | `git diff --check` | pass | no whitespace errors |
 
 ## Deviations
@@ -72,10 +73,14 @@ other paid fallback. No product file changed.
   charge; the wrapper rejects API-key authentication.
 - Hermes/Codex r1 returned `blocked`: fallback verification, human authority,
   usage-output path safety, and this handoff's stale ref required remediation.
+- Hermes/Codex r2 reviewed immutable ref `8da14b4`; authority and evidence refs
+  closed, while exact fallback-output matching and pre-creation path rejection
+  required another remediation.
 
 ## Remaining risks and assumptions
 
-- Hermes review r1 is blocked; integration must wait for a passing r2 verdict.
+- Hermes reviews r1 and r2 are blocked; integration must wait for a passing r3
+  verdict.
 - `skills.external_dirs.0` currently resolves from the task worktree. After
   fast-forward integration, rerun `scripts/hermes-profile-setup.sh --apply`
   from the main checkout to pin the stable repository path.
@@ -84,5 +89,5 @@ other paid fallback. No product file changed.
 
 ## Next action
 
-Commit the r1 remediation, resolve the exact immutable commit in the r2 prompt,
-record the reviewer artifact, and integrate by fast-forward only if r2 passes.
+Commit the r2 remediation and evidence, resolve the exact immutable commit in
+the r3 prompt, and integrate by fast-forward only if r3 passes.

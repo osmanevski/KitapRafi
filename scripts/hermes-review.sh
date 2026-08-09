@@ -66,12 +66,26 @@ configured_provider="$(hermes --profile "$HERMES_PROFILE" config get model.provi
 if ! fallback_output="$(hermes --profile "$HERMES_PROFILE" fallback list 2>&1)"; then
   fail "cannot verify the fallback chain; refusing review"
 fi
-printf '%s\n' "$fallback_output" |
-  grep -Eq '^[[:space:]]*No fallback providers configured\.[[:space:]]*$' ||
-  fail "profile fallback chain is not provably empty; clear it before review"
+fallback_normalized="$(
+  printf '%s\n' "$fallback_output" |
+    sed -e '/^[[:space:]]*$/d' \
+        -e 's/^[[:space:]]*//' \
+        -e 's/[[:space:]]*$//'
+)"
+readonly HERMES_EMPTY_FALLBACK_OUTPUT="No fallback providers configured.
+Add one with:  hermes fallback add"
+[ "$fallback_normalized" = "$HERMES_EMPTY_FALLBACK_OUTPUT" ] ||
+  fail "profile fallback output is not exactly the Hermes empty-chain status"
 
 hermes --profile "$HERMES_PROFILE" auth status "$HERMES_PROVIDER" >/dev/null 2>&1 ||
   fail "'$HERMES_PROVIDER' OAuth is unavailable; authenticate interactively"
+
+temp_root="${TMPDIR:-/tmp}"
+[ -d "$temp_root" ] || fail "temporary root does not exist: $temp_root"
+temp_root="$(cd "$temp_root" && pwd -P)"
+case "$temp_root" in
+  "$repo_root"|"$repo_root"/*) fail "temporary root must be outside the repository" ;;
+esac
 
 if [ -n "$usage_json" ]; then
   case "$usage_json" in
@@ -84,23 +98,23 @@ if [ -n "$usage_json" ]; then
   usage_parent="$(dirname "$usage_json")"
   [ -d "$usage_parent" ] || fail "--out parent directory does not exist: $usage_parent"
   usage_json="$(cd "$usage_parent" && pwd -P)/$(basename "$usage_json")"
+  case "$usage_json" in
+    "$repo_root"|"$repo_root"/*) fail "--out must point outside the repository" ;;
+  esac
   # Reserve the exact destination with noclobber before handing it to Hermes.
   # This rejects a link or file created between the earlier check and this open.
   if ! (umask 077; set -o noclobber; : >"$usage_json") 2>/dev/null; then
     fail "cannot securely reserve --out without overwriting an existing path"
   fi
 else
-  usage_json="$(mktemp "${TMPDIR:-/tmp}/hermes-review-usage.XXXXXX.json")"
+  usage_json="$(mktemp "$temp_root/hermes-review-usage.XXXXXX.json")"
 fi
-case "$usage_json" in
-  "$repo_root"|"$repo_root"/*) fail "--out must point outside the repository" ;;
-esac
 
-write_sentinel="$(mktemp -d "${TMPDIR:-/tmp}/hermes-review-safe-root.XXXXXX")"
-transcript="$(mktemp "${TMPDIR:-/tmp}/hermes-review-transcript.XXXXXX")"
+write_sentinel="$(mktemp -d "$temp_root/hermes-review-safe-root.XXXXXX")"
+transcript="$(mktemp "$temp_root/hermes-review-transcript.XXXXXX")"
 cleanup() {
   case "$write_sentinel" in
-    "${TMPDIR:-/tmp}"/hermes-review-safe-root.*) rm -rf "$write_sentinel" ;;
+    "$temp_root"/hermes-review-safe-root.*) rm -rf "$write_sentinel" ;;
   esac
 }
 trap cleanup EXIT

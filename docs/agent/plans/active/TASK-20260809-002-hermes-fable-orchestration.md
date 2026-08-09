@@ -111,7 +111,7 @@ python3 /Users/osmanevski/.codex/skills/.system/skill-creator/scripts/quick_vali
 - Hermes is treated as an isolated supporting harness for read-only review, not
   as a delegation API; its MCP server is a messaging bridge only.
 - The `-z` one-shot mode auto-bypasses approvals, so the review wrapper is
-  read-only by construction: only `file,project` toolsets plus a
+  read-only by construction: only the `file` toolset plus a
   `HERMES_WRITE_SAFE_ROOT` sentinel outside the repository.
 - `AGENTS.md` stays canonical for Hermes; no `.hermes.md` is created.
 - Fable 5 orchestrated the repository implementation through Claude Code and

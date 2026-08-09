@@ -31,8 +31,8 @@ other paid fallback. No product file changed.
   repairs only the isolated `kitaprafi` profile, pins
   `openai-codex`/`gpt-5.6-sol`, disables fallbacks, and links the repository
   skill directory.
-- `scripts/hermes-review.sh`: one-shot read-only review using only
-  `file,project` toolsets, a safe-root sentinel outside the repository, and
+- `scripts/hermes-review.sh`: one-shot read-only review using only the `file`
+  toolset, a safe-root sentinel outside the repository, and
   transcript/usage files outside the repository.
 - `scripts/orchestration-check.sh`: deterministic checks for agent placement,
   frontmatter, safe providers, wrapper syntax, and safety gates.

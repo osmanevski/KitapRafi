@@ -90,8 +90,8 @@ if [ -f "$review_script" ]; then
     note_fail "hermes-review.sh must set HERMES_WRITE_SAFE_ROOT"
   grep -Fq "openai-codex" "$review_script" ||
     note_fail "hermes-review.sh must pin provider openai-codex"
-  grep -Fq 'HERMES_TOOLSETS="file,project"' "$review_script" ||
-    note_fail "hermes-review.sh must restrict toolsets to file,project"
+  grep -Fq 'HERMES_TOOLSETS="file"' "$review_script" ||
+    note_fail "hermes-review.sh must restrict toolsets to file"
   grep -Fq -- '--usage-file' "$review_script" ||
     note_fail "hermes-review.sh must request native usage JSON"
   if grep -Eq '^[^#]*ANTHROPIC_API_KEY' "$review_script"; then

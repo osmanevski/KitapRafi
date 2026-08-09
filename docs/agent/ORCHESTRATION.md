@@ -84,8 +84,8 @@ provider. Missing capability is an error, never a downgrade.
   `scripts/hermes-review.sh` exits non-zero with a clear message. The
   orchestrator falls back to the `opus-reviewer` subagent.
 - **One-shot approval bypass**: Hermes one-shot (`-z`) mode auto-bypasses
-  approvals. The review wrapper therefore enables only the `file` and `project`
-  toolsets. Terminal, delegation, memory, and skill tools are absent, while
+  approvals. The review wrapper therefore enables only the `file` toolset.
+  Terminal, delegation, memory, skill, and desktop-project tools are absent, while
   `HERMES_WRITE_SAFE_ROOT` points to a throwaway directory outside the repo so
   file writes to the worktree are hard-blocked.
 - **Budget exhaustion**: the Claude session stops at `--max-budget-usd`. Rerun

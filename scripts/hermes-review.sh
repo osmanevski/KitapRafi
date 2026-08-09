@@ -6,7 +6,7 @@ set -euo pipefail
 readonly HERMES_PROFILE="kitaprafi"
 readonly HERMES_PROVIDER="openai-codex"
 readonly HERMES_MODEL="gpt-5.6-sol"
-readonly HERMES_TOOLSETS="file,project"
+readonly HERMES_TOOLSETS="file"
 
 usage() {
   cat >&2 <<'EOF'
@@ -96,7 +96,7 @@ prompt="$(<"$prompt_file")"
 echo "Harness:  hermes (profile $HERMES_PROFILE)"
 echo "Provider: $HERMES_PROVIDER (ChatGPT/Codex subscription OAuth)"
 echo "Model:    $HERMES_MODEL"
-echo "Toolsets: $HERMES_TOOLSETS (terminal/delegation/memory/skills absent)"
+echo "Toolset:  $HERMES_TOOLSETS (terminal/delegation/memory/skills absent)"
 echo "Safe root: $HERMES_WRITE_SAFE_ROOT"
 
 set +e

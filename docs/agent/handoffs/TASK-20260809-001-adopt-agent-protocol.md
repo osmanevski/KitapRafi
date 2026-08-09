@@ -35,6 +35,7 @@ automation, and deployment boundaries without modifying product behavior.
 | original checkout status | pass | Kitap Rafı `main` remains clean. |
 | Fable independent review r1 | blocked | Budget ended before a verdict. |
 | Fable independent review r2 | blocked | CLI exposed no tools; no diff was read. |
+| Fable independent review r3 | pass | Full diff review; no blocking finding. |
 
 ## Deviations
 
@@ -52,9 +53,13 @@ automation, and deployment boundaries without modifying product behavior.
 - Claude Code reported USD 0.938235 for the joint skill/pilot review attempt; no
   substantive reviewer output was returned.
 - The diff-only r2 attempt reported USD 0.154582 but exposed an empty tool list;
-  total joint-review spend is USD 1.092817 with no verdict.
+  r3 reported USD 0.875712 and delivered a complete pass verdict. Total joint
+  skill/pilot review spend is USD 1.968529.
+- Fable noted that strict `CLAUDE.md` first-line enforcement can conflict with
+  coexistence on a future repository that already has Claude instructions. This
+  no-conflict pilot is valid; soften or document that check before global install.
 
 ## Next action
 
-- Generate immutable raw diff files outside the reviewer, obtain authority for a
-  Read-only review of those files, remediate findings, then request integration.
+- Human owner accepts or rejects the protocol-only pilot. On acceptance, rerun
+  the gate, integrate the branch, and complete the task.

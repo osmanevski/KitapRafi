@@ -88,3 +88,5 @@ git diff --name-only a12c76c761a393793fd8e8c074ee86bad6108f04
   returning a verdict; it is recorded as `blocked`, not `pass`.
 - Fable r2 started without tools because the CLI tool-pattern syntax was invalid;
   it returned no verdict and is also recorded as `blocked`.
+- Fable r3 read both immutable raw diffs and returned `VERDICT: PASS`; no blocking
+  finding remains. The CLI reported a post-response budget overrun separately.

@@ -1,11 +1,11 @@
 ---
 id: TASK-20260809-001-adopt-agent-protocol
-status: in_progress
+status: review
 risk: medium
 owner: osmanevski
 orchestrator: codex
 implementer: codex
-reviewer: independent-reviewer-pending
+reviewer: fable-pending-approval
 branch: agent/TASK-20260809-001-adopt-agent-protocol
 base_ref: a12c76c761a393793fd8e8c074ee86bad6108f04
 blocked_on: none
@@ -60,11 +60,11 @@ and receive independent review without relying on chat history.
 ## Acceptance criteria
 
 - [x] Pilot uses an isolated branch/worktree from a clean known base.
-- [ ] Shared instructions and the Claude adapter are project-specific and concise.
-- [ ] Task, handoff, review, and checker contracts exist.
-- [ ] Diff contains protocol artifacts only.
-- [ ] Protocol, syntax, parser, and whitespace checks pass.
-- [ ] Remaining limitations and next action are recorded in a handoff.
+- [x] Shared instructions and the Claude adapter are project-specific and concise.
+- [x] Task, handoff, review, and checker contracts exist.
+- [x] Diff contains protocol artifacts only.
+- [x] Protocol, syntax, parser, and whitespace checks pass.
+- [x] Remaining limitations and next action are recorded in a handoff.
 
 ## Verification
 
@@ -82,3 +82,5 @@ git diff --name-only a12c76c761a393793fd8e8c074ee86bad6108f04
 - The inspector identified `data/` and `uploads/` as protected stateful paths.
 - Scaffold installation completed only after a no-write dry run showed all
   destinations and no collisions.
+- Protocol-only implementation commit: `885f48e`.
+- Product files and protected state paths remain unchanged.

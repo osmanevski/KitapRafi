@@ -33,6 +33,7 @@ automation, and deployment boundaries without modifying product behavior.
 | `git diff --check` | pass | No whitespace errors. |
 | allowed-path inspection | pass | Only protocol artifacts changed. |
 | original checkout status | pass | Kitap Rafı `main` remains clean. |
+| Fable independent review r1 | blocked | Budget ended before a verdict. |
 
 ## Deviations
 
@@ -47,8 +48,10 @@ automation, and deployment boundaries without modifying product behavior.
 - No CI job invokes the protocol checker yet; the gate is local/manual.
 - Independent review and human acceptance are still pending.
 - Reviewer identity is a role contract, not cryptographically enforced.
+- Claude Code reported USD 0.938235 for the joint skill/pilot review attempt; no
+  substantive reviewer output was returned.
 
 ## Next action
 
-- Obtain explicit authority for an independent reviewer, review the stable pilot
-  commit, remediate findings, then ask the human owner whether to integrate it.
+- Obtain explicit authority for an optimized diff-only independent re-review,
+  remediate findings, then ask the human owner whether to integrate the pilot.

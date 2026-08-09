@@ -33,6 +33,17 @@ set "ADMIN_KEY=guclu-bir-sifre"
 npm start
 ```
 
+## Doğrulama
+
+```bash
+npm test
+```
+
+`npm test` deterministik kontrolleri tek komutta çalıştırır: `node --check server.js`,
+`node scripts/test-parse.js`, `bash scripts/orchestration-check.sh` ve
+`bash scripts/agent-protocol-check.sh`. İlk başarısız kontrolde durur ve sıfırdan farklı
+çıkış kodu döner. Sunucu başlatmaz, ağ erişimi istemez.
+
 ## Yönetim paneli
 
 - **+ Yeni Kitap** ile kitap eklenir; mevcut kitaplar düzenlenebilir, silinebilir ve sıralanabilir.

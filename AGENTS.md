@@ -45,10 +45,14 @@ work. Keep this file short; project details belong in authoritative source files
 - Start locally: `ADMIN_KEY=<local-secret> npm start`. Starting the server may
   create `uploads/` and migrate local JSON data, so do not use it for a
   protocol-only task.
+- Run all deterministic gates: `npm test`. It chains the gates below with `&&`,
+  so it stops at the first failing gate and exits non-zero. It starts no server,
+  needs no network, and installs nothing.
 - Syntax check: `node --check server.js`.
-- Parser smoke test: `node scripts/test-parse.js`.
+- Parser smoke test: `node scripts/test-parse.js`. It prints parsed output and
+  has no assertions, so it only fails on a crash.
 - Orchestration structure check: `bash scripts/orchestration-check.sh`.
-- No general `npm test` script is currently declared in `package.json`.
+- Agent protocol structure check: `bash scripts/agent-protocol-check.sh`.
 
 ## Protected project boundaries
 

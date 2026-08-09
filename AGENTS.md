@@ -14,6 +14,9 @@ work. Keep this file short; project details belong in authoritative source files
 - `OTOMASYON.md`, `n8n-workflow.json`: external book-ingestion automation.
 - `Dockerfile`, `docker-compose.yml`: container and persistent-volume boundary.
 - `docs/agent/PROTOCOL.md`: task, context, handoff, and review workflow.
+- `docs/agent/ORCHESTRATION.md`: orchestrator, worker, and reviewer wiring.
+- `.claude/agents/`: Claude Code agent definitions for those roles.
+- `.agents/skills/`: portable cross-harness skill packages.
 - `docs/agent/plans/active/`: current task contracts.
 - `docs/agent/plans/completed/`: completed task history.
 - `docs/agent/handoffs/`: implementation evidence.
@@ -44,6 +47,7 @@ work. Keep this file short; project details belong in authoritative source files
   protocol-only task.
 - Syntax check: `node --check server.js`.
 - Parser smoke test: `node scripts/test-parse.js`.
+- Orchestration structure check: `bash scripts/orchestration-check.sh`.
 - No general `npm test` script is currently declared in `package.json`.
 
 ## Protected project boundaries

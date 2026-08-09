@@ -70,6 +70,8 @@ Use the templates in `docs/agent/templates/`.
 - The human owner remains the final authority regardless of how many concurrent
   sessions run; sessions must not approve each other's destructive or external
   actions.
+- The concrete orchestration tooling for this repository (agent definitions,
+  skill, wrappers, cost model) is documented in `docs/agent/ORCHESTRATION.md`.
 
 ## Routing
 

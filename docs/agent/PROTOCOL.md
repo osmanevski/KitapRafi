@@ -52,6 +52,25 @@ Use the templates in `docs/agent/templates/`.
 - A blocked or interrupted review is evidence of an attempt, not acceptance.
 - Rerun deterministic project and protocol gates at integration time.
 
+## Models, harnesses, and session tooling
+
+- A session is one model running in one harness (Codex CLI, Claude Code, or
+  another agent runner) inside one worktree. Record which role a session holds
+  in the task card; a session may not silently switch roles mid-task.
+- Any capable model (Codex, Claude Code, Fable, Opus) may implement or review,
+  but the implementer and the reviewer of the same task must be different
+  sessions, and preferably different models or providers.
+- Harness-specific configuration (Claude Code settings, MCP servers, skills,
+  hooks) is per-session tooling, not project truth. Enabling an MCP server or
+  skill grants capability only; it never grants authority beyond the task card
+  and this protocol.
+- Do not install or modify global/user-level skills, MCP servers, or hooks as
+  part of a repository task. Repository-scoped tooling changes require their own
+  task card and human approval.
+- The human owner remains the final authority regardless of how many concurrent
+  sessions run; sessions must not approve each other's destructive or external
+  actions.
+
 ## Routing
 
 Route simple work directly. Add an independent reviewer as risk or ambiguity

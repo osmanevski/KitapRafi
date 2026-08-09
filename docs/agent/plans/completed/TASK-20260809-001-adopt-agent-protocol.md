@@ -1,6 +1,6 @@
 ---
 id: TASK-20260809-001-adopt-agent-protocol
-status: review
+status: completed
 risk: medium
 owner: osmanevski
 orchestrator: codex
@@ -11,6 +11,7 @@ base_ref: a12c76c761a393793fd8e8c074ee86bad6108f04
 blocked_on: none
 created: 2026-08-09
 updated: 2026-08-09
+completed: 2026-08-09
 ---
 
 # Adopt the agent-development protocol
@@ -90,3 +91,9 @@ git diff --name-only a12c76c761a393793fd8e8c074ee86bad6108f04
   it returned no verdict and is also recorded as `blocked`.
 - Fable r3 read both immutable raw diffs and returned `VERDICT: PASS`; no blocking
   finding remains. The CLI reported a post-response budget overrun separately.
+- Human owner authorized direct integration into `main` on 2026-08-09. The branch
+  was fast-forward merged (`main` at `26c7d7c`), the protocol checker and
+  deterministic project checks were rerun on `main`, and a session-tooling
+  boundary section (models, harnesses, MCP, skills) was added to
+  `docs/agent/PROTOCOL.md` to close a coverage gap found during the
+  integration audit. Task closed as completed.

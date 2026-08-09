@@ -1,6 +1,6 @@
 ---
 id: TASK-20260809-003-npm-test-entrypoint
-status: accepted
+status: completed
 risk: low
 owner: human
 orchestrator: opus-5-claude-code

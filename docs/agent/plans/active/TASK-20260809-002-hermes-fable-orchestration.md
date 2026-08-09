@@ -51,7 +51,8 @@ independent read-only review. Product behavior is unchanged.
 - `.agents/skills/kitaprafi-orchestration/` (new cross-harness skill).
 - `scripts/fable-orchestrate.sh`, `scripts/hermes-review.sh`,
   `scripts/orchestration-check.sh`, `scripts/hermes-profile-setup.sh`.
-- `docs/agent/ORCHESTRATION.md`, task card, handoff.
+- `docs/agent/ORCHESTRATION.md`, task card, handoff, and independent review
+  artifacts for this task.
 - `AGENTS.md` source map and project commands (additive lines only).
 - `docs/agent/PROTOCOL.md`: at most one pointer line.
 
@@ -125,3 +126,6 @@ python3 /Users/osmanevski/.codex/skills/.system/skill-creator/scripts/quick_vali
 - The user authorized creation of the isolated Hermes profile and the OpenAI
   device OAuth flow. Authentication completed successfully; the default Hermes
   profile was not changed.
+- Hermes/Codex r1 reviewed `f45dc15..6ccd0c3` and returned `blocked` with four
+  actionable findings. Commit `8d3590f` closes the fallback, authority,
+  usage-path, and handoff-evidence findings; r2 remains required.

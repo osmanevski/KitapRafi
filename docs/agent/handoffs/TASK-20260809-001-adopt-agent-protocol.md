@@ -34,6 +34,7 @@ automation, and deployment boundaries without modifying product behavior.
 | allowed-path inspection | pass | Only protocol artifacts changed. |
 | original checkout status | pass | Kitap Rafı `main` remains clean. |
 | Fable independent review r1 | blocked | Budget ended before a verdict. |
+| Fable independent review r2 | blocked | CLI exposed no tools; no diff was read. |
 
 ## Deviations
 
@@ -50,8 +51,10 @@ automation, and deployment boundaries without modifying product behavior.
 - Reviewer identity is a role contract, not cryptographically enforced.
 - Claude Code reported USD 0.938235 for the joint skill/pilot review attempt; no
   substantive reviewer output was returned.
+- The diff-only r2 attempt reported USD 0.154582 but exposed an empty tool list;
+  total joint-review spend is USD 1.092817 with no verdict.
 
 ## Next action
 
-- Obtain explicit authority for an optimized diff-only independent re-review,
-  remediate findings, then ask the human owner whether to integrate the pilot.
+- Generate immutable raw diff files outside the reviewer, obtain authority for a
+  Read-only review of those files, remediate findings, then request integration.

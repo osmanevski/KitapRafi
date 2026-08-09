@@ -18,18 +18,21 @@ updated: 2026-08-09
 ## Goal
 
 A repository-local orchestration layer exists: Claude Code agent definitions for
-an orchestrator plus implementer and reviewer subagents, a cross-harness skill,
-four safe shell wrappers, and an architecture document. Product behavior is
-unchanged and no agent binary is executed.
+a Fable orchestrator plus Opus implementer and reviewer subagents, a
+cross-harness skill, four safe shell wrappers, and an architecture document.
+Hermes has an isolated `kitaprafi` profile using ChatGPT/Codex OAuth for
+independent read-only review. Product behavior is unchanged.
 
 ## Non-goals
 
 - Changing product behavior (`server.js`, `public/`, `data/`, `uploads/`,
   product scripts in `package.json`).
 - Deployment, PM2, Docker, SSH, or live service actions.
-- Writing global or user-level configuration, Hermes profiles, or MCP servers.
-- Running the Hermes binary, OAuth flows, or any network call.
-- Committing or pushing; the orchestrator owns integration.
+- Installing or changing Hermes, Claude Code, Codex CLI, or MCP servers.
+- Changing the user's default Hermes profile or enabling a paid-provider
+  fallback.
+- Pushing or deploying; local commits and fast-forward integration are owned by
+  the orchestrator.
 
 ## Context entry points
 
@@ -60,9 +63,9 @@ unchanged and no agent binary is executed.
 - Hermes runs only with provider `openai-codex` over ChatGPT/Codex subscription
   OAuth. No fallback to OpenRouter, Anthropic, or any key-billed provider; the
   wrappers fail closed instead.
-- Exact Hermes flag spellings are unverified; every wrapper that touches
-  `hermes` probes `hermes --help` at runtime and exits non-zero when a needed
-  construct is absent.
+- Hermes v0.20.0 flag spellings and profile commands are verified against the
+  installed CLI. Wrappers still fail closed when required profile state or
+  credentials are absent.
 - Paid Claude model launches require an explicit `--authorize-paid-models`
   acknowledgment and a budget ceiling.
 - No secrets: never read or print `.env*` or credentials; usage JSON is written
@@ -71,23 +74,22 @@ unchanged and no agent binary is executed.
 
 ## Dependencies
 
-- Human runs the interactive Hermes authentication and profile creation; the
-  setup wrapper only prints the plan.
+- Human authorization for Hermes profile creation and interactive OAuth.
 - `python3` with `PyYAML` for skill validation.
 
 ## Acceptance criteria
 
-- [ ] `.claude/agents/{fable-orchestrator,opus-implementer,opus-reviewer}.md`
+- [x] `.claude/agents/{fable-orchestrator,opus-implementer,opus-reviewer}.md`
       exist with valid frontmatter.
-- [ ] `.agents/skills/kitaprafi-orchestration/SKILL.md` and
+- [x] `.agents/skills/kitaprafi-orchestration/SKILL.md` and
       `agents/openai.yaml` exist and validate.
-- [ ] Four wrappers exist, are executable, and pass `bash -n`.
-- [ ] `bash scripts/orchestration-check.sh` and
+- [x] Four wrappers exist, are executable, and pass `bash -n`.
+- [x] `bash scripts/orchestration-check.sh` and
       `bash scripts/agent-protocol-check.sh` pass.
-- [ ] `node --check server.js` and `node scripts/test-parse.js` still pass.
-- [ ] `docs/agent/ORCHESTRATION.md` documents roles, commands, cost, failure
+- [x] `node --check server.js` and `node scripts/test-parse.js` still pass.
+- [x] `docs/agent/ORCHESTRATION.md` documents roles, commands, cost, failure
       modes, and glossary without inventing Hermes flags.
-- [ ] Diff has no unrelated or product changes.
+- [x] Diff has no unrelated or product changes.
 
 ## Verification
 
@@ -109,9 +111,15 @@ python3 /Users/osmanevski/.codex/skills/.system/skill-creator/scripts/quick_vali
 - Hermes is treated as an isolated supporting harness for read-only review, not
   as a delegation API; its MCP server is a messaging bridge only.
 - The `-z` one-shot mode auto-bypasses approvals, so the review wrapper is
-  read-only by construction: write-capable toolsets disabled plus a
+  read-only by construction: only `file,project` toolsets plus a
   `HERMES_WRITE_SAFE_ROOT` sentinel outside the repository.
 - `AGENTS.md` stays canonical for Hermes; no `.hermes.md` is created.
-- Blocked: the session permission system refused writes to `.claude/`, so the
-  three agent definitions are missing and `scripts/orchestration-check.sh` fails
-  on exactly those files. See the handoff for the exact refusal.
+- Fable 5 orchestrated the repository implementation through Claude Code and
+  delegated file implementation to the `opus-implementer` subagent.
+- The initial implementation was corrected after deterministic inspection:
+  agent files now live in `.claude/agents/`; Fable uses `Agent`; the Claude
+  wrapper uses `--print`; Hermes receives `-z` as an argument; the dedicated
+  profile pins `openai-codex` / `gpt-5.6-sol` with no fallback.
+- The user authorized creation of the isolated Hermes profile and the OpenAI
+  device OAuth flow. Authentication completed successfully; the default Hermes
+  profile was not changed.

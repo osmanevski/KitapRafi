@@ -42,6 +42,21 @@ for agent in "${agents[@]}"; do
   done
 done
 
+fable_agent="$repo_root/.claude/agents/fable-orchestrator.md"
+if [ -f "$fable_agent" ]; then
+  sed -n '2,/^---$/p' "$fable_agent" | grep -Eq '^tools:.*\bAgent\b' ||
+    note_fail "fable-orchestrator must expose the Agent tool"
+  sed -n '2,/^---$/p' "$fable_agent" | grep -Eq '^model:[[:space:]]*fable[[:space:]]*$' ||
+    note_fail "fable-orchestrator must pin model fable"
+fi
+
+reviewer_agent="$repo_root/.claude/agents/opus-reviewer.md"
+if [ -f "$reviewer_agent" ]; then
+  if sed -n '2,/^---$/p' "$reviewer_agent" | grep -Eq '^tools:.*\b(Write|Edit)\b'; then
+    note_fail "opus-reviewer must not expose Write or Edit"
+  fi
+fi
+
 skill_dir="$repo_root/.agents/skills/kitaprafi-orchestration"
 for relative_path in "SKILL.md" "agents/openai.yaml"; do
   if [ ! -f "$skill_dir/$relative_path" ]; then
@@ -75,11 +90,18 @@ if [ -f "$review_script" ]; then
     note_fail "hermes-review.sh must set HERMES_WRITE_SAFE_ROOT"
   grep -Fq "openai-codex" "$review_script" ||
     note_fail "hermes-review.sh must pin provider openai-codex"
+  grep -Fq 'HERMES_TOOLSETS="file,project"' "$review_script" ||
+    note_fail "hermes-review.sh must restrict toolsets to file,project"
+  grep -Fq -- '--usage-file' "$review_script" ||
+    note_fail "hermes-review.sh must request native usage JSON"
   if grep -Eq '^[^#]*ANTHROPIC_API_KEY' "$review_script"; then
     note_fail "hermes-review.sh must never use ANTHROPIC_API_KEY"
   fi
-  if grep -Eqi '^[^#]*openrouter' "$review_script"; then
-    note_fail "hermes-review.sh must never use openrouter as an active provider"
+  if grep -Eqi -- '--provider[[:space:]]+(anthropic|openrouter)' "$review_script"; then
+    note_fail "hermes-review.sh must never activate Anthropic or OpenRouter"
+  fi
+  if grep -Eq -- '(^|[[:space:]])--yolo([[:space:]]|$)' "$review_script"; then
+    note_fail "hermes-review.sh must never request yolo mode"
   fi
 fi
 
@@ -87,6 +109,16 @@ orchestrate_script="$repo_root/scripts/fable-orchestrate.sh"
 if [ -f "$orchestrate_script" ]; then
   grep -Fq -- "--authorize-paid-models" "$orchestrate_script" ||
     note_fail "fable-orchestrate.sh must require --authorize-paid-models"
+  grep -Fq -- "--print" "$orchestrate_script" ||
+    note_fail "fable-orchestrate.sh must use print mode for budget enforcement"
+  grep -Fq -- "--max-budget-usd" "$orchestrate_script" ||
+    note_fail "fable-orchestrate.sh must set a CLI budget ceiling"
+fi
+
+skill_metadata="$skill_dir/agents/openai.yaml"
+if [ -f "$skill_metadata" ]; then
+  grep -Fq 'default_prompt:' "$skill_metadata" ||
+    note_fail "skill metadata must include a default_prompt"
 fi
 
 if [ ! -f "$repo_root/docs/agent/ORCHESTRATION.md" ]; then

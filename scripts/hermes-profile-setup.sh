@@ -1,41 +1,32 @@
 #!/usr/bin/env bash
-#
-# Plan (and only on request attempt) the local Hermes 'kitaprafi' profile.
-#
-# Dry-run by default: it prints the intended configuration and the interactive
-# command the human must run. Authentication is always an explicit human step;
-# this script never runs OAuth, never reads or prints credentials, and never
-# touches Anthropic keys.
-#
-# Usage:
-#   scripts/hermes-profile-setup.sh            # print the plan (default)
-#   scripts/hermes-profile-setup.sh --apply    # probe hermes, fail closed if unsure
+# Configure a dedicated Hermes profile without starting OAuth or reading secrets.
 
 set -euo pipefail
 
 readonly HERMES_PROFILE="kitaprafi"
 readonly HERMES_PROVIDER="openai-codex"
+readonly HERMES_MODEL="gpt-5.6-sol"
 
 fail() {
   echo "FAIL: $*" >&2
   exit 1
 }
 
+usage() {
+  cat >&2 <<'EOF'
+Usage: scripts/hermes-profile-setup.sh [--apply]
+
+  (no flags)  Print the exact plan without changing user configuration.
+  --apply     Create/update the isolated profile. OAuth remains a separate,
+              explicit interactive command.
+EOF
+}
+
 apply=0
 case "${1-}" in
   "") ;;
   --apply) apply=1 ;;
-  --help|-h)
-    cat >&2 <<'EOF'
-Usage: scripts/hermes-profile-setup.sh [--apply]
-
-  (no flags)  Dry run: print the intended profile plan and the interactive
-              authentication command for the human to run.
-  --apply     Probe 'hermes --help' for the exact config/profile subcommands and
-              fail closed if they cannot be confirmed. Never runs OAuth.
-EOF
-    exit 0
-    ;;
+  --help|-h) usage; exit 0 ;;
   *) fail "unknown argument '${1}'" ;;
 esac
 
@@ -45,89 +36,72 @@ repo_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
 cat <<EOF
 Hermes profile plan: $HERMES_PROFILE
 ====================================
+Provider/model : $HERMES_PROVIDER / $HERMES_MODEL
+Runtime        : Hermes tool loop (not Codex app-server migration)
+Fallbacks      : none
+Auxiliary LLMs : explicitly routed to $HERMES_PROVIDER
+Skill source   : $repo_root/.agents/skills
+Approvals      : smart; memory and skill writes require approval
+Instructions   : AGENTS.md remains canonical; no .hermes.md
 
-Purpose
-  Isolated supporting harness for read-only cross-provider review of this
-  repository. It never runs Fable or Opus.
+No API key is added or inspected. Anthropic and OpenRouter are not configured.
+OAuth is deliberately separate and interactive:
 
-Providers
-  primary provider          : $HERMES_PROVIDER (ChatGPT/Codex subscription OAuth)
-  auxiliary / small model   : $HERMES_PROVIDER (same subscription OAuth)
-  fallback providers        : none
-  rationale                 : every path must bill against the ChatGPT
-                              subscription. Anthropic via Hermes is prohibited:
-                              native Anthropic OAuth needs Claude Max plus extra
-                              credits, and an Anthropic API key bills per token.
-                              No OpenRouter or other key-billed provider.
-
-Skills
-  skills.external_dirs      : .agents/skills (repository-relative)
-                              absolute form on this machine:
-                              $repo_root/.agents/skills
-
-Approvals and toolsets
-  smart approvals           : on
-  memory writes             : approval required
-  skill writes              : approval required
-  review sessions           : run through scripts/hermes-review.sh, which
-                              disables the terminal, delegation, memory-write and
-                              skill-write toolsets and sets HERMES_WRITE_SAFE_ROOT
-                              to a throwaway directory outside the repository,
-                              because one-shot (-z) mode auto-bypasses approvals.
-
-Instructions file
-  AGENTS.md stays canonical. Do not create .hermes.md.
-
-Authentication (interactive human step, NOT run by this script)
-  hermes auth login --provider $HERMES_PROVIDER
-
-  Run it yourself in your own terminal and complete the ChatGPT/Codex OAuth flow.
-  This script never starts OAuth, never opens a browser, and never reads or
-  prints tokens. Confirm the exact subcommand spelling with 'hermes --help'.
+  hermes --profile $HERMES_PROFILE auth add $HERMES_PROVIDER --type oauth
 EOF
-
 if [ "$apply" -eq 0 ]; then
-  cat <<'EOF'
-
-Dry run only. Nothing was changed. Re-run with --apply to probe the Hermes CLI.
-EOF
+  echo
+  echo "Dry run only. Nothing was changed."
   exit 0
 fi
 
-echo
-echo "Probing 'hermes --help' for the constructs needed to apply this plan..."
-
 command -v hermes >/dev/null 2>&1 || fail "'hermes' binary not found in PATH"
 
-help_text="$(hermes --help 2>&1 || true)"
-[ -n "$help_text" ] || fail "'hermes --help' produced no output; cannot confirm subcommands"
+if ! hermes profile list | grep -Eq "(^|[[:space:]])${HERMES_PROFILE}([[:space:]]|$)"; then
+  hermes profile create "$HERMES_PROFILE" \
+    --no-skills \
+    --description "Read-only cross-provider review for the Kitaprafi repository"
+fi
 
-missing=()
-for construct in "config" "profile" "auth"; do
-  if ! printf '%s\n' "$help_text" | grep -Fq -- "$construct"; then
-    missing+=("$construct")
-  fi
+profile_config() {
+  hermes --profile "$HERMES_PROFILE" config set "$1" "$2"
+}
+
+profile_config model.provider "$HERMES_PROVIDER"
+profile_config model.default "$HERMES_MODEL"
+profile_config model.openai_runtime auto
+profile_config model.base_url ""
+profile_config auxiliary.free_only true
+profile_config auxiliary.title_generation.enabled false
+profile_config approvals.mode smart
+profile_config memory.write_approval true
+profile_config skills.write_approval true
+profile_config skills.guard_agent_created true
+profile_config skills.external_dirs.0 "$repo_root/.agents/skills"
+
+# Every auxiliary LLM route is explicit so a stale OpenRouter/API key cannot be
+# selected by the automatic resolver.
+auxiliary_tasks=(
+  vision web_extract compression skills_hub approval mcp
+  memory_query_rewrite tts_audio_tags triage_specifier kanban_decomposer
+  profile_describer goal_judge curator monitor background_review
+  moa_reference moa_aggregator
+)
+for auxiliary_task in "${auxiliary_tasks[@]}"; do
+  profile_config "auxiliary.${auxiliary_task}.provider" "$HERMES_PROVIDER"
 done
 
-if [ "${#missing[@]}" -ne 0 ]; then
-  echo "FAIL: could not confirm these Hermes constructs in 'hermes --help':" >&2
-  for construct in "${missing[@]}"; do
-    echo "  - $construct" >&2
-  done
-  echo "      Refusing to guess CLI spellings. Apply the plan above manually." >&2
-  exit 1
-fi
+hermes --profile "$HERMES_PROFILE" fallback clear
 
 cat <<EOF
 
-'hermes --help' mentions config, profile and auth, but this script still does not
-write configuration on your behalf: exact subcommand argument spellings for
-profile creation are not verified in this repository, and guessing them could
-create a profile with a paid fallback provider.
+Profile configuration applied. No OAuth flow was started and no credential was
+read. Complete the interactive subscription login yourself:
 
-Apply the plan above manually, then verify with:
-  bash scripts/hermes-review.sh <prompt-file>
+  hermes --profile $HERMES_PROFILE auth add $HERMES_PROVIDER --type oauth
 
-Authentication remains an explicit interactive human step.
+Then verify:
+
+  hermes --profile $HERMES_PROFILE auth status $HERMES_PROVIDER
+  scripts/hermes-review.sh /absolute/path/to/review-prompt.md
 EOF
-exit 1

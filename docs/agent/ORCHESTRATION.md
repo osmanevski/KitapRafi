@@ -33,9 +33,10 @@ scripts/fable-orchestrate.sh --authorize-paid-models --budget-usd 5 -- "goal tex
 # Cross-provider read-only review (prompt is a file, never interpolated)
 scripts/hermes-review.sh /tmp/review-prompt.md --out /tmp/review-usage.json
 
-# Print the Hermes profile plan; authentication stays a human step
+# Print or apply the isolated profile configuration; OAuth stays a human step
 scripts/hermes-profile-setup.sh
-scripts/hermes-profile-setup.sh --apply   # probes hermes --help, fails closed
+scripts/hermes-profile-setup.sh --apply
+hermes --profile kitaprafi auth add openai-codex --type oauth
 
 # Deterministic gates
 bash scripts/orchestration-check.sh
@@ -44,10 +45,10 @@ node --check server.js
 node scripts/test-parse.js
 ```
 
-`scripts/fable-orchestrate.sh` runs from the repository root with project
-settings intact (no bare mode, no permission bypass) and executes
-`claude --agent fable-orchestrator --model claude-fable-5 --max-budget-usd <n>`,
-printing the exact command first.
+`scripts/fable-orchestrate.sh` runs from the repository root in non-interactive
+print mode so `--max-budget-usd` is effective. It keeps project settings, uses
+no bare mode or permission bypass, refuses Anthropic API credentials, verifies
+Claude subscription login, and executes the `fable-orchestrator` agent.
 
 ## Context envelopes
 
@@ -70,7 +71,7 @@ and prints those paths.
 
 | Path | Billing | Control |
 |---|---|---|
-| Fable 5 and Opus in Claude Code | Claude subscription or Anthropic API | `--authorize-paid-models` gate plus `--max-budget-usd` ceiling (default 5) |
+| Fable 5 and Opus in Claude Code | Claude subscription | API credentials rejected; `--authorize-paid-models` plus `--max-budget-usd` (default 5) |
 | Hermes with `openai-codex` | ChatGPT/Codex subscription OAuth, not per token | profile pinned to one provider, no fallbacks |
 | Anthropic through Hermes | prohibited | needs Claude Max plus credits, or a per-token API key; wrappers never set an Anthropic key |
 
@@ -82,22 +83,20 @@ provider. Missing capability is an error, never a downgrade.
 - **Missing Hermes binary, profile, or `openai-codex` auth**:
   `scripts/hermes-review.sh` exits non-zero with a clear message. The
   orchestrator falls back to the `opus-reviewer` subagent.
-- **Unverified flag spellings**: exact Hermes flags beyond the documented
-  behavior are not verified here. Both Hermes wrappers probe `hermes --help` at
-  runtime for the constructs they use and fail closed instead of guessing.
 - **One-shot approval bypass**: Hermes one-shot (`-z`) mode auto-bypasses
-  approvals. The review wrapper is therefore read-only by construction: the
-  terminal, delegation, memory-write, and skill-write toolsets are disabled and
-  `HERMES_WRITE_SAFE_ROOT` points to a fresh `mktemp -d` sentinel outside the
-  repository, which is removed on exit.
+  approvals. The review wrapper therefore enables only the `file` and `project`
+  toolsets. Terminal, delegation, memory, and skill tools are absent, while
+  `HERMES_WRITE_SAFE_ROOT` points to a throwaway directory outside the repo so
+  file writes to the worktree are hard-blocked.
 - **Budget exhaustion**: the Claude session stops at `--max-budget-usd`. Rerun
   with a larger, explicitly acknowledged ceiling; do not disable the gate.
 - **Reviewer unavailable**: use `opus-reviewer`. A task still needs a different
   session for review than for implementation. A blocked review is evidence of an
   attempt, not acceptance.
-- **Profile setup**: `scripts/hermes-profile-setup.sh` is dry-run by default and
-  never runs OAuth, never reads or prints credentials, and never touches
-  Anthropic keys. Authentication is an explicit interactive human step.
+- **Profile setup**: `scripts/hermes-profile-setup.sh` is dry-run by default.
+  `--apply` writes only the dedicated profile configuration, never starts OAuth,
+  never reads or prints credentials, and never touches Anthropic keys.
+  Authentication remains an explicit interactive human step.
 
 ## Glossary
 

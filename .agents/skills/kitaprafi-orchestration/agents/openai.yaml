@@ -1,3 +1,4 @@
 interface:
   display_name: "Kitaprafi Orchestration"
-  short_description: "Help with Kitaprafi Orchestration tasks"
+  short_description: "Coordinate safe multi-agent repository work"
+  default_prompt: "Use $kitaprafi-orchestration to plan, delegate, review, and verify this repository task."

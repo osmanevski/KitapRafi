@@ -3,108 +3,85 @@
 ## Identity
 
 - Task: TASK-20260809-002-hermes-fable-orchestration
-- From role/agent: implementer (Opus, opus-implementer subagent)
-- To role/agent: orchestrator (Fable 5, Claude Code)
+- From role/agent: orchestrator (Fable 5) with Opus implementer; Codex hardening
+- To role/agent: independent Hermes/Codex reviewer
 - Branch: agent/TASK-20260809-002-hermes-fable-orchestration
-- Commit or diff: uncommitted working tree (base main@f45dc15)
+- Commit or diff: `main@f45dc15..de9d0df` plus the current hardening diff
 
 ## Result
 
-The repository-local orchestration layer is in place except for the three
-Claude Code agent definitions: writes to `.claude/` were refused by the session
-permission system, so `.claude/agents/{fable-orchestrator,opus-implementer,
-opus-reviewer}.md` do not exist and `scripts/orchestration-check.sh` currently
-fails on exactly those three files. Everything else exists: the cross-harness
-skill, the four wrappers, `docs/agent/ORCHESTRATION.md`, and the additive
-`AGENTS.md`/`PROTOCOL.md` pointers. No product file changed, nothing was
-committed, and the Hermes binary was never executed.
+The repository-local Fable/Opus/Hermes orchestration layer is implemented.
+Fable 5 is the Claude Code orchestrator, Opus is the editing/review subagent,
+and Hermes is an isolated read-only cross-provider reviewer backed by
+`openai-codex` OAuth. The dedicated Hermes `kitaprafi` profile was created and
+authenticated with user authorization; it has no Anthropic, OpenRouter, or
+other paid fallback. No product file changed.
 
 ## Changed artifacts
 
-- `docs/agent/plans/active/TASK-20260809-002-hermes-fable-orchestration.md`:
-  new task card; scope, boundaries, and verification for this work.
-- `.agents/skills/kitaprafi-orchestration/SKILL.md`: portable operating rules
-  for any harness (read-first, task-card-before-edit, isolation, verification,
-  boundaries, evidence). Scaffolded with the skill-creator `init_skill.py`,
-  then rewritten; all boilerplate removed.
-- `.agents/skills/kitaprafi-orchestration/agents/openai.yaml`: interface
-  metadata produced by the scaffold (identical to `generate_openai_yaml.py`
-  defaults).
-- `scripts/fable-orchestrate.sh`: launches Claude Code with the
-  `fable-orchestrator` agent; refuses to run without `--authorize-paid-models`;
-  passes `--max-budget-usd` (default 5); prints the exact command before exec.
-- `scripts/hermes-review.sh`: read-only cross-provider review worker. Prompt is
-  read from a file and delivered on stdin; probes `hermes --help` for one-shot,
-  profile, provider, model, and toolset-disabling constructs and fails closed;
-  requires the `kitaprafi` profile and `openai-codex` auth; disables terminal,
-  delegation, memory-write, skill-write toolsets; exports
-  `HERMES_WRITE_SAFE_ROOT` to a `mktemp -d` sentinel outside the repository;
-  writes transcript and usage JSON to temporary paths; no fallback provider.
-- `scripts/hermes-profile-setup.sh`: dry-run by default; prints the intended
-  profile plan (single `openai-codex` provider for primary and auxiliary,
-  no fallbacks, `skills.external_dirs` including `.agents/skills`, smart
-  approvals, approval-gated memory and skill writes) and the interactive auth
-  command the human must run. `--apply` probes `hermes --help` and still
-  refuses to write configuration it cannot verify.
-- `scripts/orchestration-check.sh`: deterministic structure gate for agent
-  definitions, skill files, wrapper presence/executability/syntax, provider and
-  safe-root invariants, the paid-model gate, and `ORCHESTRATION.md`.
-- `docs/agent/ORCHESTRATION.md`: architecture, commands, context envelopes,
-  cost accounting, failure modes, glossary.
-- `AGENTS.md`: three source-map lines and one project-command line, additive.
-- `docs/agent/PROTOCOL.md`: one pointer line to `ORCHESTRATION.md`.
+- `.claude/agents/fable-orchestrator.md`: Fable orchestration contract with
+  `Agent` delegation and explicit authority boundaries.
+- `.claude/agents/opus-implementer.md`: edit-capable Opus implementation role.
+- `.claude/agents/opus-reviewer.md`: read-only Opus review role.
+- `.agents/skills/kitaprafi-orchestration/`: portable repository workflow and
+  Codex interface metadata.
+- `scripts/fable-orchestrate.sh`: explicit paid-model acknowledgment, bounded
+  prompt, Claude subscription-auth checks, `--print`, and budget ceiling.
+- `scripts/hermes-profile-setup.sh`: dry-run by default; `--apply` creates or
+  repairs only the isolated `kitaprafi` profile, pins
+  `openai-codex`/`gpt-5.6-sol`, disables fallbacks, and links the repository
+  skill directory.
+- `scripts/hermes-review.sh`: one-shot read-only review using only
+  `file,project` toolsets, a safe-root sentinel outside the repository, and
+  transcript/usage files outside the repository.
+- `scripts/orchestration-check.sh`: deterministic checks for agent placement,
+  frontmatter, safe providers, wrapper syntax, and safety gates.
+- `docs/agent/ORCHESTRATION.md`: roles, flows, commands, context envelopes,
+  cost interpretation, failure modes, and glossary.
+- `AGENTS.md`, `docs/agent/PROTOCOL.md`, task card, and this handoff: additive
+  navigation and governance records.
 
 ## Verification evidence
 
 | Command or check | Result | Notes |
 |---|---|---|
-| `bash -n scripts/fable-orchestrate.sh` | pass | exit 0, no output |
-| `bash -n scripts/hermes-review.sh` | pass | exit 0, no output |
-| `bash -n scripts/orchestration-check.sh` | pass | exit 0, no output |
-| `bash -n scripts/hermes-profile-setup.sh` | pass | exit 0, no output |
-| `bash scripts/orchestration-check.sh` | fail | exit 1; only `FAIL: missing agent definition .claude/agents/{fable-orchestrator,opus-implementer,opus-reviewer}.md` |
-| `bash scripts/agent-protocol-check.sh` | pass | exit 0, `PASS: agent protocol structure and task semantics are valid` |
-| `node --check server.js` | pass | exit 0, no output |
-| `node scripts/test-parse.js` | pass | exit 0, printed the two parsed sample books |
-| skill `quick_validate.py` | not-run | `ModuleNotFoundError: No module named 'yaml'`; `python3 -m pip install --user pyyaml` was refused by the session sandbox, and no alternative interpreter could be probed. Frontmatter was inspected manually: only `name` and `description` keys, hyphen-case name, no angle brackets, well under the length limits. |
-| `hermes` execution | not-run | Out of scope by task constraint; the binary is also not executable from this sandbox. |
+| `bash -n scripts/{fable-orchestrate,hermes-profile-setup,hermes-review,orchestration-check}.sh` | pass | all four scripts parse |
+| `bash scripts/orchestration-check.sh` | pass | orchestration structure and safety invariants |
+| `bash scripts/agent-protocol-check.sh` | pass | protocol/task semantics |
+| `node --check server.js` | pass | no syntax regression |
+| `node scripts/test-parse.js` | pass | two sample books parsed |
+| `quick_validate.py .agents/skills/kitaprafi-orchestration` | pass | `Skill is valid!` |
+| `scripts/hermes-profile-setup.sh --apply` | pass | isolated profile created and pinned |
+| `hermes --profile kitaprafi auth add openai-codex --type oauth` | pass | device OAuth completed |
+| `git diff --check` | pass | no whitespace errors |
 
 ## Deviations
 
-- `.claude/agents/*.md` were not created: three `Write` attempts were refused
-  by the permission system ("Claude requested permissions to write to ...,
-  but you haven't granted it yet"). Not authorized, not worked around; using
-  `Bash` heredocs to bypass a denied permission would have been circumvention.
-- `generate_openai_yaml.py` could not be re-run (sandbox refused the command),
-  so `agents/openai.yaml` is the scaffold output from `init_skill.py`, which
-  uses the same generator logic and produced a valid 37-character
-  `short_description`.
-- `scripts/hermes-profile-setup.sh --apply` intentionally never writes
-  configuration even when `hermes --help` mentions `config`/`profile`/`auth`,
-  because the exact profile-creation argument spellings are unverified and a
-  wrong guess could create a profile with a paid fallback provider.
-- A throwaway validation script was created and deleted inside the worktree;
-  one stray copy remains at `/tmp/kitaprafi-skill-validate.py` (outside the
-  repository) because the sandbox refused to delete it.
+- The Opus implementer initially staged Claude agent definitions under
+  `docs/agent/claude-agents/` after its write permission to `.claude/` was
+  denied. Codex moved the definitions to the required `.claude/agents/`
+  location and deleted the staging copies.
+- The initial wrappers contained assumptions that did not match the installed
+  CLIs (`Task`, missing Claude `--print`, nonexistent Hermes
+  `--disable-toolset`, and stdin use with `-z`). These were corrected against
+  Claude Code 2.1.226 and Hermes Agent 0.20.0 before review.
+- Fable's implementation run reported USD-equivalent usage metadata. This is a
+  budget/accounting estimate from Claude Code, not evidence of a separate API
+  charge; the wrapper rejects API-key authentication.
 
 ## Remaining risks and assumptions
 
-- `scripts/orchestration-check.sh` will keep failing until the three
-  `.claude/agents/*.md` files exist. The check is correct; the artifacts are
-  missing.
-- Hermes flag spellings are assumed only through runtime probing. The candidate
-  lists in `hermes-review.sh` (`-z`, `--profile`, `--provider`, `--model`,
-  `--disable-toolset*`) and the profile/auth listing subcommands were never
-  executed and may need adjustment on first real run; the script fails closed
-  rather than guessing.
-- `HERMES_WRITE_SAFE_ROOT` enforcement is assumed to be honored by Hermes; the
-  disabled toolsets are the primary read-only control.
-- The Hermes `kitaprafi` profile and its `openai-codex` OAuth session do not
-  exist yet; until the human creates them, review falls back to `opus-reviewer`.
+- Hermes review has not yet supplied the independent verdict recorded by this
+  handoff; integration must wait for that review and remediation of any
+  blocking finding.
+- `skills.external_dirs.0` currently resolves from the task worktree. After
+  fast-forward integration, rerun `scripts/hermes-profile-setup.sh --apply`
+  from the main checkout to pin the stable repository path.
+- The OAuth credential and profile are user-level state, intentionally outside
+  Git. Repository scripts validate presence and fail closed when unavailable.
 
 ## Next action
 
-Orchestrator: obtain permission to write `.claude/agents/` (or create the three
-definitions yourself from the content described in the task card), rerun
-`bash scripts/orchestration-check.sh` until it prints PASS, then route the diff
-to an independent reviewer and own the commit.
+Commit the hardening diff, run `scripts/hermes-review.sh` against the exact
+`main..HEAD` range, record the reviewer artifact, and integrate by fast-forward
+only if the verdict passes.

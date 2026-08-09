@@ -6,9 +6,8 @@
 - From role/agent: orchestrator (Fable 5) with Opus implementer; Codex hardening
 - To role/agent: independent Hermes/Codex reviewer
 - Branch: agent/TASK-20260809-002-hermes-fable-orchestration
-- Commit or diff: baseline `main@f45dc15..HEAD`; Hermes r1 reviewed the exact
-  immutable ref `6ccd0c3` and required remediation. The immutable r2 target is
-  recorded in its review prompt and tracked review artifact.
+- Commit or diff: implementation baseline `f45dc15..a13f9a7`; Hermes r3 passed
+  exact immutable ref `a13f9a7eb9b29ad6e0a2506ad1c1ac9df4798980`.
 
 ## Result
 
@@ -76,11 +75,14 @@ other paid fallback. No product file changed.
 - Hermes/Codex r2 reviewed immutable ref `8da14b4`; authority and evidence refs
   closed, while exact fallback-output matching and pre-creation path rejection
   required another remediation.
+- Hermes/Codex r3 reviewed immutable ref `a13f9a7` and returned `pass` with no
+  new blocker. Its native usage report recorded `cost_status: included` and
+  `estimated_cost_usd: 0.0`.
 
 ## Remaining risks and assumptions
 
-- Hermes reviews r1 and r2 are blocked; integration must wait for a passing r3
-  verdict.
+- The passing r3 review covers the implementation through `a13f9a7`; the r3
+  review artifact and task-status update are evidence-only follow-up changes.
 - `skills.external_dirs.0` currently resolves from the task worktree. After
   fast-forward integration, rerun `scripts/hermes-profile-setup.sh --apply`
   from the main checkout to pin the stable repository path.
@@ -89,5 +91,5 @@ other paid fallback. No product file changed.
 
 ## Next action
 
-Commit the r2 remediation and evidence, resolve the exact immutable commit in
-the r3 prompt, and integrate by fast-forward only if r3 passes.
+Commit the r3 evidence, then perform the human-authorized fast-forward
+integration. Do not push or deploy.

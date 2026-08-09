@@ -1,11 +1,11 @@
 ---
 id: TASK-20260809-002-hermes-fable-orchestration
-status: review
+status: accepted
 risk: medium
 owner: human
 orchestrator: Fable 5 (Claude Code)
 implementer: Opus (opus-implementer subagent)
-reviewer: Opus (opus-reviewer subagent), cross-check Hermes/Codex once configured
+reviewer: Hermes / openai-codex / gpt-5.6-sol (independent rounds 1-3)
 branch: agent/TASK-20260809-002-hermes-fable-orchestration
 base_ref: main
 blocked_on: none
@@ -93,6 +93,7 @@ independent read-only review. Product behavior is unchanged.
 - [x] `docs/agent/ORCHESTRATION.md` documents roles, commands, cost, failure
       modes, and glossary without inventing Hermes flags.
 - [x] Diff has no unrelated or product changes.
+- [x] Independent Hermes/Codex review has a tracked `verdict: pass` artifact.
 
 ## Verification
 
@@ -133,3 +134,6 @@ python3 /Users/osmanevski/.codex/skills/.system/skill-creator/scripts/quick_vali
 - Hermes/Codex r2 reviewed `f45dc15..8da14b4`. Human authority and immutable
   evidence refs closed; exact full-output fallback matching and pre-creation
   path rejection remained blocked and are remediated in the next commit.
+- Hermes/Codex r3 reviewed `f45dc15..a13f9a7` and returned `pass` with no new
+  blockers. Native usage reported subscription-included cost status and zero
+  estimated USD cost.

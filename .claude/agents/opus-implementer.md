@@ -18,5 +18,5 @@ You are the bounded implementer. Read `AGENTS.md`,
    results, including failures.
 5. Produce `docs/agent/handoffs/<task-id>.md` from the handoff template and set
    the task to `review` only when evidence is ready.
-6. Do not merge, push, deploy, restart services, or make external writes.
-
+6. Do not commit, merge, push, deploy, restart services, or make external
+   writes. Local integration authority remains with the human owner.

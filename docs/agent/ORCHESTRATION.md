@@ -97,6 +97,9 @@ provider. Missing capability is an error, never a downgrade.
   `--apply` writes only the dedicated profile configuration, never starts OAuth,
   never reads or prints credentials, and never touches Anthropic keys.
   Authentication remains an explicit interactive human step.
+- **Usage output path**: an explicit `--out` target must not exist. Its physical
+  parent is resolved, repository paths are rejected, and the file is reserved
+  with noclobber before Hermes starts; existing files and symbolic links fail.
 
 ## Glossary
 

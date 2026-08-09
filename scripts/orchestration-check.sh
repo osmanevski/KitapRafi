@@ -94,6 +94,10 @@ if [ -f "$review_script" ]; then
     note_fail "hermes-review.sh must restrict toolsets to file"
   grep -Fq -- '--usage-file' "$review_script" ||
     note_fail "hermes-review.sh must request native usage JSON"
+  grep -Fq 'No fallback providers configured' "$review_script" ||
+    note_fail "hermes-review.sh must require a provably empty fallback chain"
+  grep -Fq 'set -o noclobber' "$review_script" ||
+    note_fail "hermes-review.sh must reserve usage output without overwrite"
   if grep -Eq '^[^#]*ANTHROPIC_API_KEY' "$review_script"; then
     note_fail "hermes-review.sh must never use ANTHROPIC_API_KEY"
   fi
@@ -113,6 +117,11 @@ if [ -f "$orchestrate_script" ]; then
     note_fail "fable-orchestrate.sh must use print mode for budget enforcement"
   grep -Fq -- "--max-budget-usd" "$orchestrate_script" ||
     note_fail "fable-orchestrate.sh must set a CLI budget ceiling"
+fi
+
+if [ -f "$fable_agent" ]; then
+  grep -Eq 'Never commit, merge' "$fable_agent" ||
+    note_fail "fable-orchestrator must keep commit and integration authority human"
 fi
 
 skill_metadata="$skill_dir/agents/openai.yaml"

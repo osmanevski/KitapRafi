@@ -6,7 +6,9 @@
 - From role/agent: orchestrator (Fable 5) with Opus implementer; Codex hardening
 - To role/agent: independent Hermes/Codex reviewer
 - Branch: agent/TASK-20260809-002-hermes-fable-orchestration
-- Commit or diff: `main@f45dc15..de9d0df` plus the current hardening diff
+- Commit or diff: baseline `main@f45dc15..HEAD`; Hermes r1 reviewed the exact
+  immutable ref `6ccd0c3` and required remediation. The immutable r2 target is
+  recorded in its review prompt and tracked review artifact.
 
 ## Result
 
@@ -68,12 +70,12 @@ other paid fallback. No product file changed.
 - Fable's implementation run reported USD-equivalent usage metadata. This is a
   budget/accounting estimate from Claude Code, not evidence of a separate API
   charge; the wrapper rejects API-key authentication.
+- Hermes/Codex r1 returned `blocked`: fallback verification, human authority,
+  usage-output path safety, and this handoff's stale ref required remediation.
 
 ## Remaining risks and assumptions
 
-- Hermes review has not yet supplied the independent verdict recorded by this
-  handoff; integration must wait for that review and remediation of any
-  blocking finding.
+- Hermes review r1 is blocked; integration must wait for a passing r2 verdict.
 - `skills.external_dirs.0` currently resolves from the task worktree. After
   fast-forward integration, rerun `scripts/hermes-profile-setup.sh --apply`
   from the main checkout to pin the stable repository path.
@@ -82,6 +84,5 @@ other paid fallback. No product file changed.
 
 ## Next action
 
-Commit the hardening diff, run `scripts/hermes-review.sh` against the exact
-`main..HEAD` range, record the reviewer artifact, and integrate by fast-forward
-only if the verdict passes.
+Commit the r1 remediation, resolve the exact immutable commit in the r2 prompt,
+record the reviewer artifact, and integrate by fast-forward only if r2 passes.

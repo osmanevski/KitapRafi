@@ -31,8 +31,8 @@ independent read-only review. Product behavior is unchanged.
 - Installing or changing Hermes, Claude Code, Codex CLI, or MCP servers.
 - Changing the user's default Hermes profile or enabling a paid-provider
   fallback.
-- Pushing or deploying; local commits and fast-forward integration are owned by
-  the orchestrator.
+- Self-authorized commits, merge, acceptance, push, or deployment. The human
+  retains authority; Fable may coordinate or recommend these actions only.
 
 ## Context entry points
 
@@ -70,7 +70,9 @@ independent read-only review. Product behavior is unchanged.
   acknowledgment and a budget ceiling.
 - No secrets: never read or print `.env*` or credentials; usage JSON is written
   outside the repository.
-- No commit, push, merge, or deploy from this task.
+- No agent may authorize a commit, merge, acceptance, push, or deploy. A local
+  commit or fast-forward integration may be executed only under the human's
+  explicit instruction; push and deployment remain outside this task.
 
 ## Dependencies
 

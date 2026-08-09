@@ -44,11 +44,16 @@ done
 
 [ -n "$prompt_file" ] || { usage; fail "a prompt file is required"; }
 [ -f "$prompt_file" ] || fail "prompt file not found: $prompt_file"
+[ ! -L "$prompt_file" ] || fail "prompt file must not be a symbolic link"
 [ -s "$prompt_file" ] || fail "prompt file is empty: $prompt_file"
 [ "$(wc -c <"$prompt_file")" -le 200000 ] || fail "prompt file exceeds 200000 bytes"
+case "$(basename "$prompt_file")" in
+  .env|.env.*) fail "refusing to read a credential-like prompt filename" ;;
+esac
 
 repo_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
 [ -n "$repo_root" ] || fail "not inside a Git repository"
+repo_root="$(cd "$repo_root" && pwd -P)"
 command -v hermes >/dev/null 2>&1 || fail "'hermes' binary not found in PATH"
 
 hermes profile list | grep -Eq "(^|[[:space:]])${HERMES_PROFILE}([[:space:]]|$)" ||
@@ -58,10 +63,12 @@ configured_provider="$(hermes --profile "$HERMES_PROFILE" config get model.provi
 [ "$configured_provider" = "$HERMES_PROVIDER" ] ||
   fail "profile provider is '$configured_provider', expected '$HERMES_PROVIDER'"
 
-fallback_output="$(hermes --profile "$HERMES_PROFILE" fallback list 2>/dev/null || true)"
-if printf '%s\n' "$fallback_output" | grep -Eqi 'anthropic|openrouter|^[[:space:]]*[0-9]+[.)]'; then
-  fail "profile has a fallback provider; clear it before review"
+if ! fallback_output="$(hermes --profile "$HERMES_PROFILE" fallback list 2>&1)"; then
+  fail "cannot verify the fallback chain; refusing review"
 fi
+printf '%s\n' "$fallback_output" |
+  grep -Eq '^[[:space:]]*No fallback providers configured\.[[:space:]]*$' ||
+  fail "profile fallback chain is not provably empty; clear it before review"
 
 hermes --profile "$HERMES_PROFILE" auth status "$HERMES_PROVIDER" >/dev/null 2>&1 ||
   fail "'$HERMES_PROVIDER' OAuth is unavailable; authenticate interactively"
@@ -71,9 +78,17 @@ if [ -n "$usage_json" ]; then
     /*) ;;
     *) fail "--out must be an absolute path" ;;
   esac
+  if [ -e "$usage_json" ] || [ -L "$usage_json" ]; then
+    fail "--out must not already exist (regular files and links are rejected)"
+  fi
   usage_parent="$(dirname "$usage_json")"
   [ -d "$usage_parent" ] || fail "--out parent directory does not exist: $usage_parent"
   usage_json="$(cd "$usage_parent" && pwd -P)/$(basename "$usage_json")"
+  # Reserve the exact destination with noclobber before handing it to Hermes.
+  # This rejects a link or file created between the earlier check and this open.
+  if ! (umask 077; set -o noclobber; : >"$usage_json") 2>/dev/null; then
+    fail "cannot securely reserve --out without overwriting an existing path"
+  fi
 else
   usage_json="$(mktemp "${TMPDIR:-/tmp}/hermes-review-usage.XXXXXX.json")"
 fi

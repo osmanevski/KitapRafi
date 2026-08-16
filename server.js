@@ -23,7 +23,7 @@ const PORT      = process.env.PORT || 3000;
 // GEMINI_API_KEY (Google AI Studio) varsa Gemini kullanılır; yoksa OPENROUTER_KEY.
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const OPENROUTER_KEY = process.env.OPENROUTER_KEY || '';
-const AI_MODEL       = process.env.AI_MODEL || (GEMINI_API_KEY ? 'gemini-2.5-flash' : 'google/gemini-3-flash-preview');
+const AI_MODEL       = process.env.AI_MODEL || (GEMINI_API_KEY ? 'gemini-3.7-flash' : 'google/gemini-3.7-flash');
 
 const DATA_FILE   = path.join(__dirname, 'data', 'books.json');
 const AUTHORS_FILE = path.join(__dirname, 'data', 'authors.json');

@@ -94,7 +94,8 @@
       ]
     ],
     "cover": "/uploads/1783348372286-cover.jpg",
-    "authorId": "yzr-mustafa-kemal-ataturk"
+    "authorId": "yzr-mustafa-kemal-ataturk",
+    "year": "1927"
   },
   {
     "plain": "Yabancı",
@@ -187,7 +188,8 @@
     ],
     "slug": "yabanci",
     "authorId": "yzr-albert-camus",
-    "cover": "/uploads/1783348372763-cover.jpg"
+    "cover": "/uploads/1783348372763-cover.jpg",
+    "year": "1942"
   },
   {
     "plain": "Veba",
@@ -280,7 +282,8 @@
     ],
     "slug": "veba",
     "authorId": "yzr-albert-camus",
-    "cover": "/uploads/1783348373235-cover.jpg"
+    "cover": "/uploads/1783348373235-cover.jpg",
+    "year": "1947"
   },
   {
     "slug": "kurt-kanunu",
@@ -377,7 +380,8 @@
       ]
     ],
     "cover": "/uploads/1783348473035-Kurt-Kanunu_2.png",
-    "authorId": "yzr-kemal-tahir"
+    "authorId": "yzr-kemal-tahir",
+    "year": "1969"
   },
   {
     "plain": "Esir Şehrin Mahpusu",
@@ -484,7 +488,8 @@
     "sourceUrl": "",
     "slug": "esir-sehrin-mahpusu",
     "authorId": "yzr-kemal-tahir",
-    "cover": "/uploads/1783348374311-cover.jpg"
+    "cover": "/uploads/1783348374311-cover.jpg",
+    "year": "1961"
   },
   {
     "plain": "Esir Şehrin İnsanları",
@@ -603,7 +608,8 @@
     "sourceUrl": "",
     "slug": "esir-sehrin-insanlari",
     "authorId": "yzr-kemal-tahir",
-    "cover": "/uploads/1783348374867-cover.jpg"
+    "cover": "/uploads/1783348374867-cover.jpg",
+    "year": "1973"
   },
   {
     "plain": "İstanbul Hatırası",
@@ -702,7 +708,8 @@
     "sourceUrl": "",
     "slug": "istanbul-hatirasi",
     "authorId": "yzr-ahmet-umit",
-    "cover": "/uploads/1783348375501-cover.jpg"
+    "cover": "/uploads/1783348375501-cover.jpg",
+    "year": "2010"
   },
   {
     "plain": "Ateş Sönene Kadar",
@@ -805,7 +812,8 @@
     "sourceUrl": "",
     "slug": "ates-sonene-kadar",
     "authorId": "yzr-aylin-balboa",
-    "cover": "/uploads/1783348376106-cover.jpg"
+    "cover": "/uploads/1783348376106-cover.jpg",
+    "year": "2021"
   },
   {
     "plain": "Yenişehir'de Bir Öğle Vakti",
@@ -916,7 +924,8 @@
     "sourceUrl": "",
     "slug": "yenisehir-de-bir-ogle-vakti",
     "authorId": "yzr-sevgi-soysal",
-    "cover": "/uploads/1783348376737-cover.jpg"
+    "cover": "/uploads/1783348376737-cover.jpg",
+    "year": "1973"
   },
   {
     "plain": "Bu Hikâye Senden Uzun Osman",
@@ -1007,7 +1016,8 @@
     "sourceUrl": "",
     "slug": "bu-hik-ye-senden-uzun-osman",
     "authorId": "yzr-aylin-balboa",
-    "cover": "/uploads/1783348426790-cover.jpg"
+    "cover": "/uploads/1783348426790-cover.jpg",
+    "year": "2022"
   },
   {
     "plain": "Kavim",
@@ -1106,7 +1116,8 @@
     "sourceUrl": "",
     "slug": "kavim",
     "authorId": "yzr-ahmet-umit",
-    "cover": "/uploads/1783348377537-cover.jpg"
+    "cover": "/uploads/1783348377537-cover.jpg",
+    "year": "2006"
   },
   {
     "plain": "Şeytan Ayrıntıda Gizlidir",
@@ -1209,7 +1220,8 @@
     "sourceUrl": "",
     "slug": "seytan-ayrintida-gizlidir",
     "authorId": "yzr-ahmet-umit",
-    "cover": "/uploads/1783348378040-cover.jpg"
+    "cover": "/uploads/1783348378040-cover.jpg",
+    "year": "2019"
   },
   {
     "plain": "Agatha'nın Anahtarı",
@@ -1308,7 +1320,8 @@
     "sourceUrl": "",
     "slug": "agatha-nin-anahtari",
     "authorId": "yzr-ahmet-umit",
-    "cover": "/uploads/1783348378675-cover.jpg"
+    "cover": "/uploads/1783348378675-cover.jpg",
+    "year": "2010"
   },
   {
     "plain": "Sürgün",
@@ -1407,7 +1420,8 @@
     "sourceUrl": "",
     "slug": "surgun",
     "authorId": "yzr-aytug-akdogan",
-    "cover": "/uploads/1783348379184-cover.jpg"
+    "cover": "/uploads/1783348379184-cover.jpg",
+    "year": "1944"
   },
   {
     "plain": "Zehra",
@@ -1502,7 +1516,8 @@
     "sourceUrl": "",
     "slug": "zehra",
     "authorId": "yzr-nabizade-nazim",
-    "cover": "/uploads/1783348379775-cover.jpg"
+    "cover": "/uploads/1783348379775-cover.jpg",
+    "year": "1892"
   },
   {
     "plain": "Son Ada",
@@ -1605,7 +1620,8 @@
     "sourceUrl": "",
     "slug": "son-ada",
     "authorId": "yzr-zulfu-livaneli",
-    "cover": "/uploads/1783348380353-cover.jpg"
+    "cover": "/uploads/1783348380353-cover.jpg",
+    "year": "2008"
   },
   {
     "plain": "Beyoğlu'nun En Güzel Abisi",
@@ -1712,7 +1728,8 @@
     "sourceUrl": "",
     "slug": "beyoglu-nun-en-guzel-abisi",
     "authorId": "yzr-ahmet-umit",
-    "cover": "/uploads/1783348381053-cover.jpg"
+    "cover": "/uploads/1783348381053-cover.jpg",
+    "year": "2014"
   },
   {
     "plain": "İntibah",
@@ -1807,7 +1824,8 @@
     "sourceUrl": "",
     "slug": "intibah",
     "authorId": "yzr-namik-kemal",
-    "cover": "/uploads/1783348381571-cover.jpg"
+    "cover": "/uploads/1783348381571-cover.jpg",
+    "year": "1870"
   },
   {
     "plain": "Bir Tereddüdün Romanı",
@@ -1914,7 +1932,8 @@
     "sourceUrl": "",
     "slug": "bir-tereddudun-romani",
     "authorId": "yzr-peyami-safa",
-    "cover": "/uploads/1783348382169-cover.jpg"
+    "cover": "/uploads/1783348382169-cover.jpg",
+    "year": "1973"
   },
   {
     "plain": "Sergüzeşt",
@@ -2009,7 +2028,8 @@
     "sourceUrl": "",
     "slug": "serguzest",
     "authorId": "yzr-samipasazade-sezai",
-    "cover": "/uploads/1783348382736-cover.jpg"
+    "cover": "/uploads/1783348382736-cover.jpg",
+    "year": "1924"
   },
   {
     "plain": "Fatih Harbiye",
@@ -2108,7 +2128,8 @@
     "sourceUrl": "",
     "slug": "fatih-harbiye",
     "authorId": "yzr-peyami-safa",
-    "cover": "/uploads/1783348383269-cover.jpg"
+    "cover": "/uploads/1783348383269-cover.jpg",
+    "year": "1931"
   },
   {
     "plain": "Dokuzuncu Hariciye Koğuşu",
@@ -2211,7 +2232,8 @@
     "sourceUrl": "",
     "slug": "dokuzuncu-hariciye-kogusu",
     "authorId": "yzr-peyami-safa",
-    "cover": "/uploads/1783348383779-cover.jpg"
+    "cover": "/uploads/1783348383779-cover.jpg",
+    "year": "2005"
   },
   {
     "plain": "Serenad",
@@ -2306,7 +2328,8 @@
     "sourceUrl": "",
     "slug": "serenad",
     "authorId": "yzr-zulfu-livaneli",
-    "cover": "/uploads/1783348384329-cover.jpg"
+    "cover": "/uploads/1783348384329-cover.jpg",
+    "year": "2011"
   },
   {
     "plain": "Nar Ağacı",
@@ -2409,7 +2432,8 @@
     "sourceUrl": "",
     "slug": "nar-agaci",
     "authorId": "yzr-nazan-bekiroglu",
-    "cover": "/uploads/1783348384846-cover.jpg"
+    "cover": "/uploads/1783348384846-cover.jpg",
+    "year": "1982"
   },
   {
     "plain": "Bozkurtlar",
@@ -2508,7 +2532,8 @@
     "sourceUrl": "",
     "slug": "bozkurtlar",
     "authorId": "yzr-huseyin-nih-l-atsiz",
-    "cover": "/uploads/1783348385451-cover.jpg"
+    "cover": "/uploads/1783348385451-cover.jpg",
+    "year": "1965"
   },
   {
     "plain": "Deli Kurt",
@@ -2611,7 +2636,8 @@
     "sourceUrl": "",
     "slug": "deli-kurt",
     "authorId": "yzr-huseyin-nih-l-atsiz",
-    "cover": "/uploads/1783348385985-cover.jpg"
+    "cover": "/uploads/1783348385985-cover.jpg",
+    "year": "1968"
   },
   {
     "plain": "Ruh Adam",
@@ -2718,7 +2744,8 @@
     "sourceUrl": "",
     "slug": "ruh-adam",
     "authorId": "yzr-huseyin-nih-l-atsiz",
-    "cover": "/uploads/1783348386748-cover.png"
+    "cover": "/uploads/1783348386748-cover.png",
+    "year": "1972"
   },
   {
     "plain": "Vatan Yahut Silistre",
@@ -2821,7 +2848,8 @@
     "sourceUrl": "",
     "slug": "vatan-yahut-silistre",
     "authorId": "yzr-namik-kemal",
-    "cover": "/uploads/1783348387307-cover.jpg"
+    "cover": "/uploads/1783348387307-cover.jpg",
+    "year": "1940"
   },
   {
     "plain": "Solaris",
@@ -2920,7 +2948,8 @@
     "sourceUrl": "",
     "slug": "solaris",
     "authorId": "yzr-stanislaw-lem",
-    "cover": "/uploads/1783348427448-cover.jpg"
+    "cover": "/uploads/1783348427448-cover.jpg",
+    "year": "1961"
   },
   {
     "plain": "Dune",
@@ -3019,7 +3048,8 @@
     "sourceUrl": "",
     "slug": "dune",
     "authorId": "yzr-frank-herbert",
-    "cover": "/uploads/1783348387768-cover.jpg"
+    "cover": "/uploads/1783348387768-cover.jpg",
+    "year": "1965"
   },
   {
     "plain": "Baba",
@@ -3118,7 +3148,8 @@
     "sourceUrl": "",
     "slug": "baba",
     "authorId": "yzr-mario-puzo",
-    "cover": "/uploads/1783348388397-cover.jpg"
+    "cover": "/uploads/1783348388397-cover.jpg",
+    "year": "2000"
   },
   {
     "plain": "İkinci Vakıf",
@@ -3217,7 +3248,8 @@
     "sourceUrl": "",
     "slug": "ikinci-vakif",
     "authorId": "yzr-isaac-asimov",
-    "cover": "/uploads/1783348389104-cover.jpg"
+    "cover": "/uploads/1783348389104-cover.jpg",
+    "year": "1953"
   },
   {
     "plain": "Sisifos Söyleni",
@@ -3316,7 +3348,8 @@
     "sourceUrl": "",
     "slug": "sisifos-soyleni",
     "authorId": "yzr-albert-camus",
-    "cover": "/uploads/1783348389801-cover.jpg"
+    "cover": "/uploads/1783348389801-cover.jpg",
+    "year": "1942"
   },
   {
     "plain": "Vakıf ve İmparatorluk",
@@ -3419,7 +3452,8 @@
     "sourceUrl": "",
     "slug": "vakif-ve-imparatorluk",
     "authorId": "yzr-isaac-asimov",
-    "cover": "/uploads/1783348390319-cover.jpg"
+    "cover": "/uploads/1783348390319-cover.jpg",
+    "year": "1952"
   },
   {
     "plain": "Efendi ile Uşağı",
@@ -3538,7 +3572,8 @@
     "sourceUrl": "",
     "slug": "efendi-ile-usagi",
     "authorId": "yzr-lev-tolstoy",
-    "cover": "/uploads/1783348390858-cover.jpg"
+    "cover": "/uploads/1783348390858-cover.jpg",
+    "year": "1747"
   },
   {
     "plain": "Duvar",
@@ -3637,7 +3672,8 @@
     "sourceUrl": "",
     "slug": "duvar",
     "authorId": "yzr-jean-paul-sartre",
-    "cover": "/uploads/1783348391383-cover.jpg"
+    "cover": "/uploads/1783348391383-cover.jpg",
+    "year": "1999"
   },
   {
     "plain": "Paris ve Londra'da Beş Parasız",
@@ -3736,7 +3772,8 @@
     "sourceUrl": "",
     "slug": "paris-ve-londra-da-bes-parasiz",
     "authorId": "yzr-george-orwell",
-    "cover": "/uploads/1783348391947-cover.jpg"
+    "cover": "/uploads/1783348391947-cover.jpg",
+    "year": "1933"
   },
   {
     "plain": "Gulyabani",
@@ -3839,7 +3876,8 @@
     "sourceUrl": "",
     "slug": "gulyabani",
     "authorId": "yzr-huseyin-rahmi-gurpinar",
-    "cover": "/uploads/1783348392454-cover.jpg"
+    "cover": "/uploads/1783348392454-cover.jpg",
+    "year": "1912"
   },
   {
     "plain": "Toprak Ana",
@@ -3938,7 +3976,8 @@
     "sourceUrl": "",
     "slug": "toprak-ana",
     "authorId": "yzr-cengiz-aytmatov",
-    "cover": "/uploads/1783348392969-cover.jpg"
+    "cover": "/uploads/1783348392969-cover.jpg",
+    "year": "2004"
   },
   {
     "plain": "Vakıf",
@@ -4037,7 +4076,8 @@
     "sourceUrl": "",
     "slug": "vakif",
     "authorId": "yzr-isaac-asimov",
-    "cover": "/uploads/1783348393475-cover.jpg"
+    "cover": "/uploads/1783348393475-cover.jpg",
+    "year": "1987"
   },
   {
     "plain": "Sonsuzluğun Sonu",
@@ -4136,7 +4176,8 @@
     "sourceUrl": "",
     "slug": "sonsuzlugun-sonu",
     "authorId": "yzr-isaac-asimov",
-    "cover": "/uploads/1783348393991-cover.jpg"
+    "cover": "/uploads/1783348393991-cover.jpg",
+    "year": "1953"
   },
   {
     "plain": "Ben, Robot",
@@ -4235,7 +4276,8 @@
     "sourceUrl": "",
     "slug": "ben-robot",
     "authorId": "yzr-isaac-asimov",
-    "cover": "/uploads/1783348394511-cover.jpg"
+    "cover": "/uploads/1783348394511-cover.jpg",
+    "year": "1950"
   },
   {
     "plain": "Dava",
@@ -4330,7 +4372,8 @@
     "sourceUrl": "",
     "slug": "dava",
     "authorId": "yzr-franz-kafka",
-    "cover": "/uploads/1783348395151-cover.jpg"
+    "cover": "/uploads/1783348395151-cover.jpg",
+    "year": "1925"
   },
   {
     "plain": "Zeytindağı",
@@ -4437,7 +4480,8 @@
     "sourceUrl": "",
     "slug": "zeytindagi",
     "authorId": "yzr-falih-rifki-atay",
-    "cover": "/uploads/1783348395657-cover.jpg"
+    "cover": "/uploads/1783348395657-cover.jpg",
+    "year": "1938"
   },
   {
     "plain": "Hangi Atatürk",
@@ -4540,7 +4584,8 @@
     "sourceUrl": "",
     "slug": "hangi-ataturk",
     "authorId": "yzr-attila-ilhan",
-    "cover": "/uploads/1783348396276-cover.jpg"
+    "cover": "/uploads/1783348396276-cover.jpg",
+    "year": "1981"
   },
   {
     "plain": "Cumhuriyet'in 100 Günü",
@@ -4647,7 +4692,8 @@
     "sourceUrl": "",
     "slug": "cumhuriyet-in-100-gunu",
     "authorId": "yzr-emrah-safa-gurkan",
-    "cover": "/uploads/1783348396938-cover.jpg"
+    "cover": "/uploads/1783348396938-cover.jpg",
+    "year": "2023"
   },
   {
     "plain": "Suyu Arayan Adam",
@@ -4758,7 +4804,8 @@
     "sourceUrl": "",
     "slug": "suyu-arayan-adam",
     "authorId": "yzr-sevket-sureyya-aydemir",
-    "cover": "/uploads/1783348397510-cover.jpg"
+    "cover": "/uploads/1783348397510-cover.jpg",
+    "year": "1959"
   },
   {
     "plain": "Yalnızız",
@@ -4853,7 +4900,8 @@
     "sourceUrl": "",
     "slug": "yalniziz",
     "authorId": "yzr-peyami-safa",
-    "cover": "/uploads/1783348398141-cover.jpg"
+    "cover": "/uploads/1783348398141-cover.jpg",
+    "year": "1927"
   },
   {
     "plain": "Kuyucaklı Yusuf",
@@ -4956,7 +5004,8 @@
     "sourceUrl": "",
     "slug": "kuyucakli-yusuf",
     "authorId": "yzr-sabahattin-ali",
-    "cover": "/uploads/1783348398658-cover.jpg"
+    "cover": "/uploads/1783348398658-cover.jpg",
+    "year": "1937"
   },
   {
     "plain": "Beyaz Gemi",
@@ -5059,7 +5108,8 @@
     "sourceUrl": "",
     "slug": "beyaz-gemi",
     "authorId": "yzr-cengiz-aytmatov",
-    "cover": "/uploads/1783348399163-cover.jpg"
+    "cover": "/uploads/1783348399163-cover.jpg",
+    "year": "1991"
   },
   {
     "plain": "İmparatorluğun En Uzun Yüzyılı",
@@ -5162,7 +5212,8 @@
     "sourceUrl": "",
     "slug": "imparatorlugun-en-uzun-yuzyili",
     "authorId": "yzr-ilber-ortayli",
-    "cover": "/uploads/1783348399749-cover.jpg"
+    "cover": "/uploads/1783348399749-cover.jpg",
+    "year": "1983"
   },
   {
     "plain": "Kürk Mantolu Madonna",
@@ -5269,7 +5320,8 @@
     "sourceUrl": "",
     "slug": "kurk-mantolu-madonna",
     "authorId": "yzr-sabahattin-ali",
-    "cover": "/uploads/1783348400219-cover.jpg"
+    "cover": "/uploads/1783348400219-cover.jpg",
+    "year": "1943"
   },
   {
     "plain": "Katalonya'ya Selam",
@@ -5368,7 +5420,8 @@
     "sourceUrl": "",
     "slug": "katalonya-ya-selam",
     "authorId": "yzr-george-orwell",
-    "cover": "/uploads/1783348400799-cover.jpg"
+    "cover": "/uploads/1783348400799-cover.jpg",
+    "year": "2011"
   },
   {
     "plain": "Cumhuriyet’in 100 İsmi",
@@ -5475,7 +5528,8 @@
     "sourceUrl": "",
     "slug": "cumhuriyet-in-100-ismi",
     "authorId": "yzr-emrah-safa-gurkan",
-    "cover": "/uploads/1783348401523-cover.jpg"
+    "cover": "/uploads/1783348401523-cover.jpg",
+    "year": "2023"
   },
   {
     "plain": "Türkçülüğün Esasları",
@@ -5574,7 +5628,8 @@
     "sourceUrl": "",
     "slug": "turkculugun-esaslari",
     "authorId": "yzr-ziya-gokalp",
-    "cover": "/uploads/1783348402245-cover.jpg"
+    "cover": "/uploads/1783348402245-cover.jpg",
+    "year": "1990"
   },
   {
     "plain": "Dünyalar Savaşı",
@@ -5689,7 +5744,8 @@
     "sourceUrl": "",
     "slug": "dunyalar-savasi",
     "authorId": "yzr-h-g-wells",
-    "cover": "/uploads/1783348402864-cover.jpg"
+    "cover": "/uploads/1783348402864-cover.jpg",
+    "year": "1898"
   },
   {
     "plain": "Silmarillion",
@@ -5780,7 +5836,8 @@
     "sourceUrl": "",
     "slug": "silmarillion",
     "authorId": "yzr-j-r-r-tolkien",
-    "cover": "/uploads/1783348403681-cover.jpg"
+    "cover": "/uploads/1783348403681-cover.jpg",
+    "year": "1977"
   },
   {
     "plain": "Düşüş",
@@ -5879,7 +5936,8 @@
     "sourceUrl": "",
     "slug": "dusus",
     "authorId": "yzr-albert-camus",
-    "cover": "/uploads/1783348404361-cover.jpg"
+    "cover": "/uploads/1783348404361-cover.jpg",
+    "year": "1956"
   },
   {
     "plain": "Nasıl Ölünür",
@@ -5994,7 +6052,8 @@
     "sourceUrl": "",
     "slug": "nasil-olunur",
     "authorId": "yzr-emile-zola",
-    "cover": "/uploads/1783348404904-cover.jpg"
+    "cover": "/uploads/1783348404904-cover.jpg",
+    "year": "1876"
   },
   {
     "slug": "kapilarin-disinda",
@@ -6091,7 +6150,8 @@
       ]
     ],
     "cover": "/uploads/1783348405441-cover.jpg",
-    "authorId": "yzr-wolfgang-borchert"
+    "authorId": "yzr-wolfgang-borchert",
+    "year": "1947"
   },
   {
     "plain": "Aspidistra",
@@ -6186,7 +6246,8 @@
     "sourceUrl": "",
     "slug": "aspidistra",
     "authorId": "yzr-george-orwell",
-    "cover": "/uploads/1783348405990-cover.jpg"
+    "cover": "/uploads/1783348405990-cover.jpg",
+    "year": "1936"
   },
   {
     "plain": "Fahrenheit 451",
@@ -6285,7 +6346,8 @@
     "sourceUrl": "",
     "slug": "fahrenheit-451",
     "authorId": "yzr-ray-bradbury",
-    "cover": "/uploads/1783348406550-cover.jpg"
+    "cover": "/uploads/1783348406550-cover.jpg",
+    "year": "1953"
   },
   {
     "plain": "Kendime Düşünceler",
@@ -6380,7 +6442,8 @@
     "sourceUrl": "",
     "slug": "kendime-dusunceler",
     "authorId": "yzr-marcus-aurelius",
-    "cover": "/uploads/1783348407092-cover.jpg"
+    "cover": "/uploads/1783348407092-cover.jpg",
+    "year": "180"
   },
   {
     "slug": "babaya-mektup",
@@ -6477,7 +6540,8 @@
       ]
     ],
     "cover": "/uploads/1783356352550-wh_e7278378a.jpeg",
-    "authorId": "yzr-franz-kafka"
+    "authorId": "yzr-franz-kafka",
+    "year": "2013"
   },
   {
     "plain": "Küçük Prens",
@@ -6576,7 +6640,8 @@
     "sourceUrl": "",
     "slug": "kucuk-prens",
     "authorId": "yzr-antoine-de-saint-exup-ry",
-    "cover": "/uploads/1783348408335-cover.jpg"
+    "cover": "/uploads/1783348408335-cover.jpg",
+    "year": "1943"
   },
   {
     "plain": "Mutlu Ölüm",
@@ -6679,7 +6744,8 @@
     "sourceUrl": "",
     "slug": "mutlu-olum",
     "authorId": "yzr-albert-camus",
-    "cover": "/uploads/1783348408964-cover.jpg"
+    "cover": "/uploads/1783348408964-cover.jpg",
+    "year": "1972"
   },
   {
     "plain": "Biz",
@@ -6774,7 +6840,8 @@
     "sourceUrl": "",
     "slug": "biz",
     "authorId": "yzr-yevgeni-ivanovic-zamyatin",
-    "cover": "/uploads/1783348409433-cover.jpg"
+    "cover": "/uploads/1783348409433-cover.jpg",
+    "year": "1921"
   },
   {
     "plain": "Yaz",
@@ -6873,7 +6940,8 @@
     "sourceUrl": "",
     "slug": "yaz",
     "authorId": "yzr-albert-camus",
-    "cover": "/uploads/1783348410054-cover.jpg"
+    "cover": "/uploads/1783348410054-cover.jpg",
+    "year": "2015"
   },
   {
     "plain": "Ermiş",
@@ -6972,7 +7040,8 @@
     "sourceUrl": "",
     "slug": "ermis",
     "authorId": "yzr-halil-cibran",
-    "cover": "/uploads/1783348410565-cover.jpg"
+    "cover": "/uploads/1783348410565-cover.jpg",
+    "year": "1922"
   },
   {
     "plain": "Sherlock Holmes - Korku Vadisi",
@@ -7079,7 +7148,8 @@
     "sourceUrl": "",
     "slug": "sherlock-holmes-korku-vadisi",
     "authorId": "yzr-arthur-conan-doyle",
-    "cover": "/uploads/1783348411141-cover.jpg"
+    "cover": "/uploads/1783348411141-cover.jpg",
+    "year": "1892"
   },
   {
     "plain": "Dürüst Hırsız",
@@ -7174,7 +7244,8 @@
     "sourceUrl": "",
     "slug": "durust-hirsiz",
     "authorId": "yzr-fyodor-mihaylovic-dostoyevski",
-    "cover": "/uploads/1783348411687-cover.jpg"
+    "cover": "/uploads/1783348411687-cover.jpg",
+    "year": "1848"
   },
   {
     "plain": "Bilinmeyen Bir Kadının Mektubu",
@@ -7285,7 +7356,8 @@
     "sourceUrl": "",
     "slug": "bilinmeyen-bir-kadinin-mektubu",
     "authorId": "yzr-stefan-zweig",
-    "cover": "/uploads/1783348412190-cover.jpg"
+    "cover": "/uploads/1783348412190-cover.jpg",
+    "year": "1922"
   },
   {
     "plain": "Bir İdam Mahkûmunun Son Günü",
@@ -7384,7 +7456,8 @@
     "sourceUrl": "",
     "slug": "bir-idam-mahk-munun-son-gunu",
     "authorId": "yzr-victor-hugo",
-    "cover": "/uploads/1783348412673-cover.jpg"
+    "cover": "/uploads/1783348412673-cover.jpg",
+    "year": "1829"
   },
   {
     "plain": "Kardeşimin Hikayesi",
@@ -7487,7 +7560,8 @@
     "sourceUrl": "",
     "slug": "kardesimin-hikayesi",
     "authorId": "yzr-zulfu-livaneli",
-    "cover": "/uploads/1783348413247-cover.jpg"
+    "cover": "/uploads/1783348413247-cover.jpg",
+    "year": "2013"
   },
   {
     "plain": "Sokrates'in Savunması",
@@ -7594,7 +7668,8 @@
     "sourceUrl": "",
     "slug": "sokrates-in-savunmasi",
     "authorId": "yzr-platon-eflatun",
-    "cover": "/uploads/1783348413761-cover.jpg"
+    "cover": "/uploads/1783348413761-cover.jpg",
+    "year": "1998"
   },
   {
     "plain": "Savaş Sanatı",
@@ -7685,7 +7760,8 @@
     "sourceUrl": "",
     "slug": "savas-sanati",
     "authorId": "yzr-sun-tzu",
-    "cover": "/uploads/1783348414283-cover.jpg"
+    "cover": "/uploads/1783348414283-cover.jpg",
+    "year": "2017"
   },
   {
     "plain": "Toplum Sözleşmesi",
@@ -7788,7 +7864,8 @@
     "sourceUrl": "",
     "slug": "toplum-sozlesmesi",
     "authorId": "yzr-jean-jacques-rousseau",
-    "cover": "/uploads/1783348414840-cover.jpg"
+    "cover": "/uploads/1783348414840-cover.jpg",
+    "year": "1762"
   },
   {
     "plain": "Devlet",
@@ -7883,7 +7960,8 @@
     "sourceUrl": "",
     "slug": "devlet",
     "authorId": "yzr-platon-eflatun",
-    "cover": "/uploads/1783348415355-cover.jpg"
+    "cover": "/uploads/1783348415355-cover.jpg",
+    "year": "2000"
   },
   {
     "slug": "zaman-makinesi",
@@ -7980,7 +8058,8 @@
       ]
     ],
     "cover": "/uploads/1783348415808-cover.jpg",
-    "authorId": "yzr-h-g-wells"
+    "authorId": "yzr-h-g-wells",
+    "year": "1895"
   },
   {
     "plain": "Medenî Bilgiler",
@@ -8095,7 +8174,8 @@
     "sourceUrl": "",
     "slug": "meden-bilgiler",
     "authorId": "yzr-mustafa-kemal-ataturk",
-    "cover": "/uploads/1783348428062-cover.jpg"
+    "cover": "/uploads/1783348428062-cover.jpg",
+    "year": "1969"
   },
   {
     "plain": "Sherlock Holmes - Kızıl Dosya",
@@ -8202,7 +8282,8 @@
     "sourceUrl": "",
     "slug": "sherlock-holmes-kizil-dosya",
     "authorId": "yzr-arthur-conan-doyle",
-    "cover": "/uploads/1783348419131-cover.jpg"
+    "cover": "/uploads/1783348419131-cover.jpg",
+    "year": "1892"
   },
   {
     "plain": "Baskerville'lerin Köpeği",
@@ -8309,7 +8390,8 @@
     "sourceUrl": "",
     "slug": "baskerville-lerin-kopegi",
     "authorId": "yzr-arthur-conan-doyle",
-    "cover": "/uploads/1783348428701-cover.jpg"
+    "cover": "/uploads/1783348428701-cover.jpg",
+    "year": "1902"
   },
   {
     "plain": "Sherlock Holmes - Dörtlerin İmzası",
@@ -8412,7 +8494,8 @@
     "sourceUrl": "",
     "slug": "sherlock-holmes-dortlerin-imzasi",
     "authorId": "yzr-arthur-conan-doyle",
-    "cover": "/uploads/1783348419668-cover.jpg"
+    "cover": "/uploads/1783348419668-cover.jpg",
+    "year": "1892"
   },
   {
     "plain": "Yeraltından Notlar",
@@ -8519,7 +8602,8 @@
     "sourceUrl": "",
     "slug": "yeraltindan-notlar",
     "authorId": "yzr-fyodor-mihaylovic-dostoyevski",
-    "cover": "/uploads/1783348420188-cover.jpg"
+    "cover": "/uploads/1783348420188-cover.jpg",
+    "year": "1999"
   },
   {
     "plain": "Cesur Yeni Dünya",
@@ -8634,7 +8718,8 @@
     "sourceUrl": "",
     "slug": "cesur-yeni-dunya",
     "authorId": "yzr-aldous-huxley",
-    "cover": "/uploads/1783348420715-cover.jpg"
+    "cover": "/uploads/1783348420715-cover.jpg",
+    "year": "1932"
   },
   {
     "plain": "Hobbit",
@@ -8729,7 +8814,8 @@
     "sourceUrl": "",
     "slug": "hobbit",
     "authorId": "yzr-j-r-r-tolkien",
-    "cover": "/uploads/1783348421367-cover.jpg"
+    "cover": "/uploads/1783348421367-cover.jpg",
+    "year": "1937"
   },
   {
     "plain": "Yüzüklerin Efendisi - Kralın Dönüşü",
@@ -8828,7 +8914,8 @@
     "sourceUrl": "",
     "slug": "yuzuklerin-efendisi-kralin-donusu",
     "authorId": "yzr-j-r-r-tolkien",
-    "cover": "/uploads/1783348421898-cover.jpg"
+    "cover": "/uploads/1783348421898-cover.jpg",
+    "year": "1955"
   },
   {
     "plain": "Yüzüklerin Efendisi - İki Kule",
@@ -8927,7 +9014,8 @@
     "sourceUrl": "",
     "slug": "yuzuklerin-efendisi-iki-kule",
     "authorId": "yzr-j-r-r-tolkien",
-    "cover": "/uploads/1783348422436-cover.jpg"
+    "cover": "/uploads/1783348422436-cover.jpg",
+    "year": "1954"
   },
   {
     "plain": "Yüzüklerin Efendisi - Yüzük Kardeşliği",
@@ -9026,7 +9114,8 @@
     "sourceUrl": "",
     "slug": "yuzuklerin-efendisi-yuzuk-kardesligi",
     "authorId": "yzr-j-r-r-tolkien",
-    "cover": "/uploads/1783348422982-cover.jpg"
+    "cover": "/uploads/1783348422982-cover.jpg",
+    "year": "1954"
   },
   {
     "plain": "Yüzüklerin Efendisi",
@@ -9125,7 +9214,8 @@
     "sourceUrl": "",
     "slug": "yuzuklerin-efendisi",
     "authorId": "yzr-j-r-r-tolkien",
-    "cover": "/uploads/1783348429255-cover.jpg"
+    "cover": "/uploads/1783348429255-cover.jpg",
+    "year": "1954"
   },
   {
     "plain": "Tersi ve Yüzü",
@@ -9232,7 +9322,8 @@
     "sourceUrl": "",
     "slug": "tersi-ve-yuzu",
     "authorId": "yzr-albert-camus",
-    "cover": "/uploads/1783348423526-cover.jpg"
+    "cover": "/uploads/1783348423526-cover.jpg",
+    "year": "1935"
   },
   {
     "plain": "Türkiye'nin Yakın Tarihi",
@@ -9331,7 +9422,8 @@
     "sourceUrl": "",
     "slug": "turkiye-nin-yakin-tarihi",
     "authorId": "yzr-ilber-ortayli",
-    "cover": "/uploads/1783348424113-cover.jpg"
+    "cover": "/uploads/1783348424113-cover.jpg",
+    "year": "2010"
   },
   {
     "plain": "Otomatik Portakal",
@@ -9430,7 +9522,8 @@
     "sourceUrl": "",
     "slug": "otomatik-portakal",
     "authorId": "yzr-anthony-burgess",
-    "cover": "/uploads/1783348424577-cover.jpg"
+    "cover": "/uploads/1783348424577-cover.jpg",
+    "year": "1962"
   },
   {
     "plain": "Hayvan Çiftliği",
@@ -9541,7 +9634,8 @@
     "sourceUrl": "",
     "slug": "hayvan-ciftligi",
     "authorId": "yzr-george-orwell",
-    "cover": "/uploads/1783348425067-cover.jpg"
+    "cover": "/uploads/1783348425067-cover.jpg",
+    "year": "1945"
   },
   {
     "plain": "1984",
@@ -9652,7 +9746,8 @@
     "sourceUrl": "",
     "slug": "1984",
     "authorId": "yzr-george-orwell",
-    "cover": "/uploads/1783348425690-cover.jpg"
+    "cover": "/uploads/1783348425690-cover.jpg",
+    "year": "1949"
   },
   {
     "plain": "İçimizdeki Şeytan",
@@ -9755,7 +9850,8 @@
     "sourceUrl": "",
     "slug": "icimizdeki-seytan",
     "authorId": "yzr-sabahattin-ali",
-    "cover": "/uploads/1783348426224-cover.jpg"
+    "cover": "/uploads/1783348426224-cover.jpg",
+    "year": "1872"
   },
   {
     "slug": "pic",
@@ -9860,7 +9956,8 @@
       ]
     ],
     "cover": "/uploads/1783544546421-27823_1709191161_1wOyU.jpg",
-    "authorId": "yzr-hakan-gunday"
+    "authorId": "yzr-hakan-gunday",
+    "year": "2003"
   },
   {
     "plain": "Sherlock Holmes’un Maceraları",
@@ -9961,7 +10058,8 @@
     ],
     "category": "Polisiye — Öykü",
     "slug": "sherlock-holmes-un-maceralari",
-    "authorId": "yzr-arthur-conan-doyle"
+    "authorId": "yzr-arthur-conan-doyle",
+    "year": "1892"
   },
   {
     "slug": "sherlock-holmes-un-anilari",
@@ -10065,7 +10163,8 @@
         "1902"
       ]
     ],
-    "authorId": "yzr-arthur-conan-doyle"
+    "authorId": "yzr-arthur-conan-doyle",
+    "year": "1894"
   },
   {
     "plain": "Sherlock Holmes’un Dönüşü",
@@ -10170,7 +10269,8 @@
     ],
     "category": "Polisiye / Öykü",
     "slug": "sherlock-holmes-un-donusu",
-    "authorId": "yzr-arthur-conan-doyle"
+    "authorId": "yzr-arthur-conan-doyle",
+    "year": "1905"
   },
   {
     "slug": "gercekler-kanit-ister",
@@ -10266,7 +10366,8 @@
         "1902"
       ]
     ],
-    "authorId": "yzr-arthur-conan-doyle"
+    "authorId": "yzr-arthur-conan-doyle",
+    "year": "1924"
   },
   {
     "plain": "Sherlock Holmes’un Vaka Dosyası",
@@ -10371,6 +10472,7 @@
     ],
     "category": "Polisiye — Öykü",
     "slug": "sherlock-holmes-un-vaka-dosyasi",
-    "authorId": "yzr-arthur-conan-doyle"
+    "authorId": "yzr-arthur-conan-doyle",
+    "year": "1917"
   }
 ]

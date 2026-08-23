@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitap Kataloğu — Osman'ın Kitap Arşivi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f4efe6;
+  --paper2: #ece5d8;
+  --ink: #23201b;
+  --ink-soft: #6d655a;
+  --red: #9e2b25;
+  --line: rgba(35,32,27,.16);
+  --line-strong: rgba(35,32,27,.45);
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "Inter", -apple-system, sans-serif;
+  --mono: "IBM Plex Mono", monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:
+    radial-gradient(900px 500px at 85% -5%, rgba(158,43,37,.05), transparent 60%),
+    var(--paper);
+  color: var(--ink); font-family: var(--sans); font-weight:300; min-height:100vh;
+}
+::selection { background: var(--red); color: var(--paper); }
+
+/* subtle paper texture */
+body::after {
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:90; opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* ---------- masthead ---------- */
+.masthead { padding: clamp(40px,6vw,72px) clamp(20px,5vw,64px) 0; }
+.mast-top { display:flex; justify-content:space-between; align-items:baseline;
+  border-bottom: 2px solid var(--ink); padding-bottom:14px; }
+.mast-top .date { font-family:var(--mono); font-size:.62rem; letter-spacing:.3em;
+  text-transform:uppercase; color:var(--ink-soft); }
+h1 { font-family:var(--serif); font-weight:500; line-height:.95;
+  font-size:clamp(3rem,9vw,7rem); margin-top:26px; letter-spacing:-.01em; }
+h1 em { font-style:italic; color:var(--red); }
+.mast-sub { display:flex; gap:26px; flex-wrap:wrap; align-items:baseline;
+  margin:18px 0 30px; color:var(--ink-soft); font-size:.88rem; }
+.mast-sub b { font-family:var(--serif); font-size:1.5rem; color:var(--ink); font-weight:500; }
+
+/* ---------- toolbar ---------- */
+.toolbar { position:sticky; top:0; z-index:50;
+  background:rgba(244,239,230,.92); backdrop-filter:blur(10px);
+  border-top:1px solid var(--line-strong); border-bottom:1px solid var(--line-strong);
+  padding:14px clamp(20px,5vw,64px) 12px; }
+.trow { display:flex; align-items:center; gap:16px; }
+.trow + .trow { margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); }
+.toolbar input[type=search] {
+  background:transparent; border:none; border-bottom:1px solid var(--line-strong);
+  font-family:var(--sans); font-weight:300; font-size:.92rem; color:var(--ink);
+  padding:6px 2px; width:min(240px,40vw); outline:none; transition:border-color .3s; }
+.toolbar input[type=search]:focus { border-color:var(--red); }
+.toolbar input::placeholder { color:var(--ink-soft); }
+.tlabel { font-family:var(--mono); font-size:.58rem; letter-spacing:.28em;
+  text-transform:uppercase; color:var(--ink-soft); margin-left:8px; }
+.seg { display:inline-flex; border:1px solid var(--line-strong); border-radius:999px; overflow:hidden; }
+.seg button { background:none; border:none; font-family:var(--sans); font-weight:300;
+  font-size:.74rem; letter-spacing:.06em; padding:7px 15px; cursor:pointer;
+  color:var(--ink-soft); transition:all .25s; border-right:1px solid var(--line); }
+.seg button:last-child { border-right:none; }
+.seg button:hover { color:var(--ink); }
+.seg button.on { background:var(--ink); color:var(--paper); }
+select.plain { background:transparent; border:1px solid var(--line-strong); border-radius:999px;
+  font-family:var(--sans); font-weight:300; font-size:.74rem; letter-spacing:.06em;
+  color:var(--ink); padding:7px 13px; outline:none; cursor:pointer; }
+select.plain option { background:var(--paper); color:var(--ink); }
+
+/* ---------- dark mode ---------- */
+body[data-theme="dark"] {
+  --paper: #16130f;
+  --paper2: #201b15;
+  --ink: #e9e1d3;
+  --ink-soft: #8f8577;
+  --red: #d4544c;
+  --line: rgba(233,225,211,.14);
+  --line-strong: rgba(233,225,211,.4);
+  background:
+    radial-gradient(900px 500px at 85% -5%, rgba(212,84,76,.06), transparent 60%),
+    var(--paper);
+}
+body[data-theme="dark"] .toolbar { background:rgba(22,19,15,.92); }
+body[data-theme="dark"] thead th { background:var(--paper); }
+body[data-theme="dark"] .seg button.on { background:var(--red); color:#16130f; }
+body[data-theme="dark"] .status-pill.okundu { background:var(--red); color:#16130f; }
+body[data-theme="dark"] .status-pill.bekleyen { color:var(--red); border-color:var(--red); }
+body[data-theme="dark"] tbody tr:hover,
+body[data-theme="dark"] tbody tr.sel { background:var(--paper2); }
+body[data-theme="dark"] #drawer { box-shadow:-30px 0 80px rgba(0,0,0,.5); }
+body[data-theme="dark"] .minibar, body[data-theme="dark"] #drawer .bigbar { background:rgba(233,225,211,.12); }
+body[data-theme="dark"] ::selection { background:var(--red); color:#16130f; }
+
+.theme-btn { background:none; border:1px solid var(--line-strong);
+  border-radius:999px; width:36px; height:36px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--ink-soft); transition:all .3s; flex-shrink:0; }
+.theme-btn:hover { color:var(--red); border-color:var(--red); transform:rotate(30deg); }
+.theme-btn svg { width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.6;
+  stroke-linecap:round; transition:opacity .3s; }
+body[data-theme="dark"] .icon-sun { display:block; }
+body[data-theme="dark"] .icon-moon { display:none; }
+body:not([data-theme="dark"]) .icon-sun { display:none; }
+.count { margin-left:auto; font-family:var(--mono); font-size:.66rem; letter-spacing:.2em;
+  color:var(--ink-soft); white-space:nowrap; }
+
+/* ---------- table ---------- */
+.sheet { padding: 0 clamp(20px,5vw,64px) 100px; }
+table { width:100%; border-collapse:collapse; table-layout:fixed; }
+th.c-title-h, td.c-title { width:30%; }
+th.c-year-h, td.c-year { width:7%; }
+th.c-dir-h, td.c-dir { width:17%; }
+th.c-score-h, td.c-score { width:11%; }
+th.c-genres-h, td.c-genres { width:15%; }
+th.c-plat-h, td.c-plat { width:13%; }
+thead th, tbody td { overflow:hidden; text-overflow:ellipsis; }
+thead th { position:sticky; top:96px; z-index:40;
+  background:var(--paper);
+  font-family:var(--mono); font-weight:400; font-size:.58rem; letter-spacing:.26em;
+  text-transform:uppercase; color:var(--ink-soft); text-align:left;
+  padding:16px 14px 10px; border-bottom:1px solid var(--ink);
+  cursor:pointer; user-select:none; white-space:nowrap; transition:color .2s; }
+thead th:hover { color:var(--red); }
+thead th .arr { display:inline-block; width:1em; color:var(--red); }
+tbody td { padding:13px 14px; border-bottom:1px solid var(--line); vertical-align:baseline; }
+tbody tr { transition:background .2s; cursor:pointer; }
+tbody tr:hover { background:var(--paper2); }
+tbody tr.sel { background:var(--paper2); box-shadow:inset 3px 0 0 var(--red); }
+td.c-title { font-family:var(--serif); font-weight:500; font-size:1.22rem; line-height:1.15; min-width:200px; }
+td.c-title .unseen { color:var(--ink-soft); font-style:italic; }
+td.c-year { font-family:var(--mono); font-size:.78rem; color:var(--ink-soft); width:70px; }
+td.c-dir { font-family:var(--serif); font-style:italic; font-size:1.02rem; color:var(--ink); }
+td.c-genres, td.c-plat { font-size:.76rem; color:var(--ink-soft); letter-spacing:.03em; max-width:220px; }
+.score-cell { display:flex; align-items:center; gap:10px; }
+.minibar { height:4px; width:74px; background:rgba(35,32,27,.1); border-radius:2px; overflow:hidden; flex-shrink:0; }
+.minibar i { display:block; height:100%; background:var(--red); width:0;
+  transition:width .7s cubic-bezier(.2,.7,.2,1); }
+.score-num { font-family:var(--mono); font-size:.78rem; color:var(--ink); }
+.status-pill { font-family:var(--mono); font-size:.6rem; letter-spacing:.14em;
+  text-transform:uppercase; border:1px solid var(--line-strong); border-radius:999px;
+  padding:3px 10px; color:var(--ink-soft); }
+.status-pill.okundu { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.watchlist { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-soft); border-bottom:1px dotted var(--ink-soft); }
+.perfect { color:var(--red); font-weight:500; }
+
+/* group headers */
+tr.grouprow td { padding:26px 14px 10px; border-bottom:2px solid var(--ink); cursor:default; }
+.grouprow h4 { font-family:var(--serif); font-style:italic; font-weight:500;
+  font-size:1.35rem; color:var(--red); }
+.grouprow span { font-family:var(--mono); font-size:.6rem; letter-spacing:.25em;
+  text-transform:uppercase; color:var(--ink-soft); margin-left:14px; }
+
+.emptynote { text-align:center; padding:80px 20px; font-family:var(--serif);
+  font-style:italic; font-size:1.4rem; color:var(--ink-soft); }
+
+footer { text-align:center; padding:34px 20px 44px; border-top:1px solid var(--line-strong);
+  font-family:var(--mono); font-size:.6rem; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--ink-soft); }
+footer em { color:var(--red); font-style:normal; }
+
+/* ---------- detail drawer ---------- */
+#veil { position:fixed; inset:0; z-index:100; background:rgba(35,32,27,.35);
+  opacity:0; pointer-events:none; transition:opacity .35s; }
+#veil.open { opacity:1; pointer-events:auto; }
+#drawer { position:fixed; top:0; right:-520px; bottom:0; width:min(480px,94vw); z-index:101;
+  background:var(--paper); border-left:2px solid var(--ink);
+  padding:clamp(28px,4vw,48px); overflow-y:auto;
+  transition:right .5s cubic-bezier(.2,.7,.2,1); box-shadow:-30px 0 80px rgba(35,32,27,.18); }
+#drawer.open { right:0; }
+#drawer .close { position:absolute; top:16px; right:20px; background:none; border:none;
+  font-size:1.5rem; color:var(--ink-soft); cursor:pointer; }
+#drawer .close:hover { color:var(--red); }
+#drawer .dk { font-family:var(--mono); font-size:.58rem; letter-spacing:.4em;
+  text-transform:uppercase; color:var(--ink-soft); }
+#drawer h2 { font-family:var(--serif); font-weight:500; font-size:clamp(2rem,4vw,2.8rem);
+  line-height:1.05; margin:14px 0 4px; }
+#drawer .ddir { font-family:var(--serif); font-style:italic; font-size:1.3rem; color:var(--red); }
+#drawer .dscore { display:flex; align-items:center; gap:14px; margin:26px 0; }
+#drawer .bigbar { flex:1; height:6px; background:rgba(35,32,27,.1); border-radius:3px; overflow:hidden; }
+#drawer .bigbar i { display:block; height:100%; background:var(--red); width:0;
+  transition:width .8s .2s cubic-bezier(.2,.7,.2,1); }
+#drawer .dbignum { font-family:var(--serif); font-weight:500; font-size:2rem; }
+.dgrid { margin-top:8px; border-top:1px solid var(--line-strong); }
+.dgrid > div { padding:14px 0; border-bottom:1px solid var(--line); }
+.dgrid label { display:block; font-family:var(--mono); font-size:.56rem; letter-spacing:.3em;
+  text-transform:uppercase; color:var(--ink-soft); margin-bottom:5px; }
+.dgrid div div { font-family:var(--serif); font-size:1.15rem; }
+
+@media (max-width:900px){
+  thead th:nth-child(5), tbody td.c-genres { display:none; }
+}
+@media (max-width:640px){
+  thead th:nth-child(3), tbody td.c-dir,
+  thead th:nth-child(4), tbody td.c-score { display:none; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="mast-top">
+    <div class="date">Kitap Kataloğu · Baskı No. I</div>
+    <div class="date" id="mdate"></div>
+  </div>
+  <h1>Kitap <em>Kataloğu</em></h1>
+  <div class="mast-sub" id="msub"></div>
+</header>
+
+<div class="toolbar">
+  <div class="trow">
+    <input id="q" type="search" placeholder="Kitap / yazar ara…">
+    <span class="tlabel">Durum</span>
+    <div class="seg" id="statusSeg">
+      <button class="on" data-st="">Tümü</button>
+      <button data-st="Okundu">Okundu</button>
+      <button data-st="Okunuyor">Okunuyor</button>
+      <button data-st="Planlandı">Sırada</button>
+    </div>
+    <div class="count" style="margin-left:auto" id="count"></div>
+    <a class="theme-btn" id="shelfLink" href="/" onclick='if(window.parent!==window){event.preventDefault();parent.postMessage("kapat-liste","*");}' title="Kitap Rafı'na dön" style="text-decoration:none">
+      <svg viewBox="0 0 24 24"><path d="M4 4v16M9 4v16M14 5l5 15M6.5 4h0M11.5 4h0"/><path d="M3.5 20h17" stroke-linejoin="round"/></svg>
+    </a>
+    <button class="theme-btn" id="themeBtn" title="Koyu / açık mod">
+      <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
+    </button>
+  </div>
+  <div class="trow">
+    <span class="tlabel" style="margin-left:0">Grupla</span>
+    <select class="plain" id="groupSel">
+      <option value="">—</option>
+      <option value="lang">Dil</option>
+      <option value="genre">Tür</option>
+      <option value="author">Yazar</option>
+    </select>
+    <span class="tlabel">Sırala</span>
+    <select class="plain" id="sortSel">
+      <option value="title">Başlık A–Z</option>
+      <option value="year-desc" selected>Yıl ↓</option>
+      <option value="year">Yıl ↑</option>
+      <option value="author">Yazar A–Z</option>
+    </select>
+    <span class="tlabel">Dil</span>
+    <select class="plain" id="platSel"><option value="">Tümü</option></select>
+  </div>
+</div>
+
+<main class="sheet">
+  <table>
+    <thead><tr>
+      <th class="c-title-h" data-k="title">Başlık <span class="arr"></span></th>
+      <th class="c-year-h" data-k="year">Yıl <span class="arr"></span></th>
+      <th class="c-dir-h" data-k="author">Yazar <span class="arr"></span></th>
+      <th class="c-score-h">Durum</th>
+      <th class="c-genres-h">Tür</th>
+      <th class="c-plat-h">Dil</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p class="emptynote" id="empty" hidden>Bu kriterlere uyan bir gösterim yok.</p>
+</main>
+
+<footer>Osman'ın kitap arşivi · <em id="fmeta"></em></footer>
+
+<div id="veil"></div>
+<aside id="drawer"><button class="close" aria-label="Kapat">×</button><div id="dbody"></div></aside>
+
+<script>
+let FILMS = [];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const state = { q:"", st:"", sort:"year", dir:-1, group:"", plat:"" };
+
+async function init() {
+  const d = await (await fetch("books.json")).json();
+  FILMS = d.books;
+  const read = FILMS.filter(f => f.status === "Okundu");
+  const reading = FILMS.filter(f => f.status === "Okunuyor");
+  const pages = read.reduce((s,f)=>s+(f.pages||0),0);
+  $("#msub").innerHTML =
+    `<span><b>${FILMS.length}</b> kitap</span>` +
+    `<span><b>${read.length}</b> okundu</span>` +
+    `<span><b>${reading.length}</b> okunuyor</span>` +
+    `<span>toplam <b>${pages.toLocaleString("tr-TR")}</b> sayfa</span>`;
+  $("#mdate").textContent = d.meta.exported
+    ? new Date(d.meta.exported).toLocaleDateString("tr-TR","tr",{day:"numeric",month:"long",year:"numeric"}).toUpperCase()
+    : "";
+  $("#fmeta").textContent = d.meta.exported
+    ? "kaynak güncel · " + new Date(d.meta.exported).toLocaleDateString("tr-TR","tr")
+    : "";
+  // populate platform filter from data
+  const plats = [...new Set(FILMS.map(f => f.lang).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"tr"));
+  $("#platSel").innerHTML = `<option value="">Tümü</option>` +
+    plats.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join("");
+  render();
+}
+
+function base() {
+  let r = FILMS.filter(f =>
+    (!state.q || (f.title+" "+(f.author||"")).toLowerCase().includes(state.q)));
+  if (state.st) r = r.filter(f => f.status === state.st);
+  if (state.plat) r = r.filter(f => f.lang === state.plat);
+
+  const k = state.sort, d = state.dir;
+  const val = f => k==="year" ? parseInt(f.year)||0
+    : k==="author" ? (f.author||"zzz").toLowerCase()
+    : f.title.toLowerCase();
+  return r.sort((a,b)=>{ const x=val(a),y=val(b);
+    return (x<y?-1:x>y?1:0)*d || a.title.localeCompare(b.title,"tr"); });
+}
+
+function render() {
+  const rows = base();
+  $("#count").textContent = rows.length + " kayıt";
+  $("#empty").hidden = rows.length > 0;
+
+  // column sort arrows
+  document.querySelectorAll("thead th[data-k]").forEach(th =>
+    th.querySelector(".arr").textContent =
+      th.dataset.k === state.sort ? (state.dir===1 ? "↑" : "↓") : "");
+
+  if (!state.group) {
+    $("#rows").innerHTML = rows.map(rowHtml).join("");
+  } else {
+    const groups = groupOf(rows);
+    let html = "";
+    for (const [g, list] of groups) {
+    html += `<tr class="grouprow"><td colspan="6"><h4>${esc(g)}</h4><span>${list.length} kitap</span></td></tr>`;
+      html += list.map(rowHtml).join("");
+    }
+    $("#rows").innerHTML = html;
+  }
+  // animate minibars in
+  requestAnimationFrame(() =>
+    document.querySelectorAll(".minibar i").forEach(i => i.style.width = i.dataset.w + "%"));
+}
+
+function rowHtml(f) {
+  const idx = FILMS.indexOf(f);
+  const pill = f.status==="Okundu" ? "okundu" : "bekleyen";
+  return `<tr data-f="${idx}">
+    <td class="c-title${f.status==="Planlandı"?" unseen":""}">${esc(f.title)}</td>
+    <td class="c-year">${f.year || ""}</td>
+    <td class="c-dir">${esc(f.author||"")}</td>
+    <td class="c-score"><span class="status-pill ${pill}" style="display:inline-block">${esc(f.status||"—")}</span></td>
+    <td class="c-genres">${esc(f.genre||"")}</td>
+    <td class="c-plat">${esc(f.lang||"") || `<span style="color:var(--ink-soft)">—</span>`}</td>
+  </tr>`;
+}
+
+function groupOf(rows) {
+  const key = f => {
+    if (state.group === "lang") return f.lang || "Belirtilmedi";
+    if (state.group === "genre") return f.genre || "Diğer";
+    if (state.group === "author") return (f.author || "Bilinmiyor").split(",")[0];
+  };
+  const m = new Map();
+  for (const f of rows) { const g = key(f); if (!m.has(g)) m.set(g, []); m.get(g).push(f); }
+  return [...m.entries()].sort((a,b)=>a[0].localeCompare(b[0],"tr","{numeric:true}"));
+}
+
+/* detail drawer */
+$("#rows").addEventListener("click", e => {
+  const tr = e.target.closest("tr[data-f]");
+  if (!tr || e.target.closest(".grouprow")) return;
+  openDrawer(+tr.dataset.f);
+});
+function openDrawer(idx) {
+  document.querySelectorAll("tbody tr").forEach(r => r.classList.toggle("sel", r.dataset.f == idx));
+  const f = FILMS[idx];
+  $("#dbody").innerHTML = `
+    <div class="dk">Kayıt No. ${String(idx+1).padStart(4,"0")}</div>
+    <h2>${esc(f.title)}</h2>
+    ${f.author ? `<div class="ddir">${esc(f.author)}</div>` : ""}
+    ${f.pages ? `<div class="dscore">
+        <span class="dbignum">${f.pages.toLocaleString("tr-TR")}</span>
+        <span style="font-family:var(--mono);font-size:.7rem;color:var(--ink-soft)">sayfa</span>
+      </div>` : ""}
+    <div class="dgrid">
+      ${dcell("Durum", f.status)}
+      ${dcell("Yıl", f.year)}
+      ${dcell("Tür", f.genre)}
+      ${dcell("Dil", f.lang)}
+      ${dcell("Bitirme Tarihi", f.date)}
+    </div>`;
+  $("#veil").classList.add("open"); $("#drawer").classList.add("open");
+  requestAnimationFrame(() =>
+    $("#drawer").querySelectorAll(".bigbar i, .minibar i").forEach(i => i.style.width = i.dataset.w + "%"));
+}
+const dcell = (l,v) => v ? `<div><label>${l}</label><div>${esc(v)}</div></div>` : "";
+function closeDrawer() {
+  $("#veil").classList.remove("open"); $("#drawer").classList.remove("open");
+  document.querySelectorAll(".sel").forEach(r=>r.classList.remove("sel"));
+}
+$("#veil").addEventListener("click", closeDrawer);
+$("#drawer .close").addEventListener("click", closeDrawer);
+document.addEventListener("keydown", e => e.key === "Escape" && closeDrawer());
+
+/* controls */
+let deb;
+$("#q").addEventListener("input", e => { clearTimeout(deb);
+  deb = setTimeout(() => { state.q = e.target.value.trim().toLowerCase(); render(); }, 140); });
+$("#statusSeg").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  document.querySelectorAll("#statusSeg button").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on"); state.st = b.dataset.st; render(); });
+$("#sortSel").addEventListener("change", e => { state.sort = e.target.value.replace("-desc","");
+  state.dir = e.target.value.endsWith("-desc") ? -1 : 1; render(); });
+$("#groupSel").addEventListener("change", e => { state.group = e.target.value; render(); });
+$("#platSel").addEventListener("change", e => { state.plat = e.target.value; render(); });
+document.querySelectorAll("thead th[data-k]").forEach(th => th.addEventListener("click", () => {
+  const k = th.dataset.k;
+  if (state.sort === k) state.dir *= -1;
+  else { state.sort = k; state.dir = (k==="year") ? -1 : 1; }
+  $("#sortSel").value = state.sort + (state.dir===-1 && (k==="year") ? "-desc" : "");
+  render(); }));
+
+/* theme toggle */
+const themeBtn = $("#themeBtn");
+try { if (localStorage.getItem("katalog-theme") === "dark") document.body.dataset.theme = "dark"; } catch(e) {}
+themeBtn.addEventListener("click", () => {
+  const dark = document.body.dataset.theme === "dark";
+  document.body.dataset.theme = dark ? "" : "dark";
+  try { localStorage.setItem("katalog-theme", dark ? "light" : "dark"); } catch(e) {}
+});
+
+init();
+</script>
+</body>
+</html>

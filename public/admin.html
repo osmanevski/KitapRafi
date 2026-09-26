@@ -75,7 +75,7 @@ hr{border:none;border-top:1px dashed var(--line);margin:20px 0}
 <div class="modal-back" id="modalBack"></div>
 <div class="wrap">
   <h1>Kitap Rafı · <em>Yönetim</em></h1>
-  <div class="sub">Kitap ekle, düzenle, sırala. Siteye dön: <a href="/">ana sayfa</a></div>
+  <div class="sub">Kitap ekle, düzenle, sırala. Siteye dön: <a href="./">ana sayfa</a></div>
 
   <!-- GİRİŞ -->
   <div class="card" id="loginCard">
@@ -248,7 +248,7 @@ function api(method, url, body, isForm){
 /* --- giriş --- */
 function tryLogin(){
   KEY = $('pw').value || KEY;
-  fetch('/api/auth', {method:'POST', headers:{'x-admin-key': KEY}})
+  fetch('api/auth', {method:'POST', headers:{'x-admin-key': KEY}})
     .then(r=>r.json())
     .then(d=>{
       if(d.ok){ sessionStorage.setItem('rr-key', KEY); $('loginCard').style.display='none'; $('tabs').style.display='flex'; $('listCard').style.display='block'; loadBooks(); }
@@ -261,13 +261,13 @@ if(KEY) tryLogin();
 
 /* --- liste --- */
 function loadBooks(){
-  fetch('/api/books').then(r=>r.json()).then(d=>{ BOOKS = d; renderList(); });
+  fetch('api/books').then(r=>r.json()).then(d=>{ BOOKS = d; renderList(); });
 }
 function renderList(){
   $('bookList').innerHTML = BOOKS.map((b,i)=>`
     <li>
       ${b.cover
-        ? `<img class="thumb" src="${esc(b.cover)}" alt="">`
+        ? `<img class="thumb" src="${esc(b.cover.replace(/^\/uploads\//, 'uploads/'))}" alt="">`
         : `<div class="thumb" style="background:${esc(b.pal.bg)}">${esc((b.plain||'').charAt(0))}</div>`}
       <div class="name"><b>${esc(b.plain)}</b><span>${esc(b.authorName)}</span></div>
       <div class="ops">
@@ -285,20 +285,20 @@ $('bookList').addEventListener('click', e=>{
   if(t.dataset.cover){
     const slug = t.dataset.cover;
     t.disabled = true; t.textContent = 'Aranıyor…';
-    api('POST','/api/books/'+slug+'/find-cover')
+    api('POST','api/books/'+slug+'/find-cover')
       .then(d=>{ loadBooks(); })
       .catch(err=>{ alert(err.message); t.disabled=false; t.textContent='Kapak Bul'; });
   }
   if(t.dataset.del){
     const b = BOOKS.find(x=>x.slug===t.dataset.del);
     if(confirm(`"${b.plain}" silinsin mi? Bu işlem geri alınamaz.`))
-      api('DELETE','/api/books/'+t.dataset.del).then(loadBooks).catch(err=>alert(err.message));
+      api('DELETE','api/books/'+t.dataset.del).then(loadBooks).catch(err=>alert(err.message));
   }
   if(t.dataset.up !== undefined || t.dataset.down !== undefined){
     const i = +(t.dataset.up ?? t.dataset.down);
     const j = t.dataset.up !== undefined ? i-1 : i+1;
     [BOOKS[i], BOOKS[j]] = [BOOKS[j], BOOKS[i]];
-    api('PUT','/api/order',{order:BOOKS.map(b=>b.slug)}).then(loadBooks).catch(err=>alert(err.message));
+    api('PUT','api/order',{order:BOOKS.map(b=>b.slug)}).then(loadBooks).catch(err=>alert(err.message));
   }
 });
 $('newBtn').addEventListener('click', ()=>openForm(null));
@@ -313,7 +313,7 @@ $('aiAddBtn').addEventListener('click', ()=>{
   const old = btn.textContent;
   btn.disabled = true; btn.textContent = 'Üretiliyor…';
   m.textContent = 'Yapay zekâ kitabı araştırıyor (10-30 sn sürebilir)…'; m.className='msg';
-  api('POST','/api/books/ai-add',{kitap, yazar, guncelle})
+  api('POST','api/books/ai-add',{kitap, yazar, guncelle})
     .then(d=>{
       m.textContent = (d.updated?'Güncellendi':'Eklendi')+' ✓  '+d.slug+(d.cover?' · kapak bulundu':' · kapak yok');
       m.className='msg ok';
@@ -352,7 +352,7 @@ $('tabs').addEventListener('click', e=>{
 
 /* --- yazarlar --- */
 function loadAuthors(){
-  fetch('/api/authors').then(r=>r.json()).then(d=>{ AUTHORS = d; renderAuthors(); });
+  fetch('api/authors').then(r=>r.json()).then(d=>{ AUTHORS = d; renderAuthors(); });
 }
 function renderAuthors(){
   if(!AUTHORS.length){ $('authorList').innerHTML = '<li style="padding:14px;color:#8a8064">Henüz yazar yok. Kitap ekledikçe yazarlar otomatik oluşur.</li>'; return; }
@@ -399,7 +399,7 @@ $('authorSaveBtn').addEventListener('click', ()=>{
     fact: $('aFact').value.trim(),
     works: pairs($('aWorks').value)
   };
-  api('PUT','/api/authors/'+editingAuthorId, body)
+  api('PUT','api/authors/'+editingAuthorId, body)
     .then(()=>{
       const m=$('authorMsg'); m.textContent='Kaydedildi ✓'; m.className='msg ok';
       loadAuthors();
@@ -527,8 +527,8 @@ $('saveBtn').addEventListener('click', ()=>{
   if(f) fd.append('cover', f);
 
   const req = editingSlug
-    ? api('PUT', '/api/books/' + editingSlug, fd, true)
-    : api('POST', '/api/books', fd, true);
+    ? api('PUT', 'api/books/' + editingSlug, fd, true)
+    : api('POST', 'api/books', fd, true);
 
   req.then(()=>{
     showMsg('Kaydedildi ✓', false);

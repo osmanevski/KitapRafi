@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/svg+xml" href="/icon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kitap Rafı</title>
@@ -28,6 +28,13 @@ body::before{
 }
 #main{transition:opacity .35s ease}
 #main.switching{opacity:0}
+
+/* ---- liste modu (kitap katalogu) ---- */
+#listBtn{font-family:'Archivo';font-weight:800;letter-spacing:.1em;font-size:11px;text-transform:uppercase}
+body.liste-mod #raf{display:none}
+#listeModu{display:none}
+body.liste-mod #listeModu{display:block}
+body.liste-mod .edge{display:none}
 
 /* ---- nav ---- */
 .topbar{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;pointer-events:none}
@@ -288,6 +295,7 @@ body::before{
   </div>
   <div class="counter" style="display:none"><span id="cTitle"></span></div>
   <div class="navbtns">
+    <button class="menubtn" id="listBtn">Katalog</button>
     <button class="navbtn" id="prevBtn" aria-label="Önceki kitap">‹</button>
     <button class="navbtn" id="nextBtn" aria-label="Sonraki kitap">›</button>
   </div>
@@ -407,7 +415,7 @@ function render(book){
   cover.style.setProperty('--cb', book.pal.bg);
   if(book.cover){
     cover.classList.add('has-img');
-    $('coverImg').src = book.cover;
+    $('coverImg').src = book.cover.replace(/^\/uploads\//, 'uploads/');
     $('coverImg').alt = book.plain + ' kitap kapağı';
   }else{
     cover.classList.remove('has-img');
@@ -736,7 +744,7 @@ $('authBtn').addEventListener('click', () => {
 
 /* ---- başlat ---- */
 let ALL = [];
-fetch('/api/books')
+fetch('api/books')
   .then(r => r.json())
   .then(data => {
     ALL = data;
@@ -750,6 +758,23 @@ fetch('/api/books')
     $('introTitle').textContent = 'Sunucuya bağlanılamadı';
     $('introAuthor').textContent = 'node server.js çalışıyor mu?';
   });
+</script>
+<div id="listeModu">
+  <iframe src="kitaplar.html" style="position:fixed;inset:0;width:100%;height:100%;border:none;z-index:1000;background:#f4efe6"></iframe>
+</div>
+<script>
+const listBtn=document.getElementById('listBtn');
+let listMode=false;
+function setList(v){
+  listMode=v;
+  document.body.classList.toggle('liste-mod',v);
+  try{ v?localStorage.removeItem('raf-mode'):localStorage.setItem('raf-mode','raf'); }catch(e){}
+}
+listBtn.addEventListener('click',()=>setList(!listMode));
+window.addEventListener('message',e=>{ if(e.data==='kapat-liste') setList(false); });
+// Varsayılan katalog modu; raf görünümünü seçen ziyaretçide raf hatırlanır.
+let rafModu=null; try{ rafModu=localStorage.getItem('raf-mode'); }catch(e){}
+if(rafModu!=='raf') setList(true);
 </script>
 </body>
 </html>

@@ -3,7 +3,9 @@
 import json, re, sys, pathlib
 
 SRC = pathlib.Path.home() / "Projects" / "OsmanOS" / "Beyin" / "🧠 500-Knowledge" / "Notion-Aynası" / "Kitaplar.md"
-OUT = pathlib.Path(__file__).resolve().parent.parent / "public" / "books.json"
+# Varsayılan çıktı depodaki geliştirme kopyası; sync.sh depo dışına yazdırır.
+OUT = pathlib.Path(sys.argv[sys.argv.index("--out") + 1]) if "--out" in sys.argv \
+    else pathlib.Path(__file__).resolve().parent.parent / "public" / "books.json"
 # Yayın yılları: Open Library + elle doğrulanmış. Aynada bu veri yok;
 # yeniden build yılları silmesin diye ayrı tutulur.
 YEARS = pathlib.Path(__file__).resolve().parent / "yayin-yillari.json"

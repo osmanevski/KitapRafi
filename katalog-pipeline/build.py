@@ -2,10 +2,13 @@
 """Kitaplar.md (Notion aynası) → books.json üretir. Tek kaynak: ayna dosyası."""
 import json, re, sys, pathlib
 
-SRC = pathlib.Path.home() / "Projects" / "OsmanOS" / "Beyin" / "🧠 500-Knowledge" / "Notion-Aynası" / "Kitaplar.md"
-# Varsayılan çıktı depodaki geliştirme kopyası; sync.sh depo dışına yazdırır.
-OUT = pathlib.Path(sys.argv[sys.argv.index("--out") + 1]) if "--out" in sys.argv \
-    else pathlib.Path(__file__).resolve().parent.parent / "public" / "books.json"
+def arg(name, default):
+    return pathlib.Path(sys.argv[sys.argv.index(name) + 1]) if name in sys.argv else default
+
+# Varsayılanlar Mac geliştirme ortamı; canlıda sunucudaki kitap-katalogu.timer
+# --src /srv/osmanos-vault/... --out /opt/kitaprafi-katalog/books.json verir.
+SRC = arg("--src", pathlib.Path.home() / "Projects" / "OsmanOS" / "Beyin" / "🧠 500-Knowledge" / "Notion-Aynası" / "Kitaplar.md")
+OUT = arg("--out", pathlib.Path(__file__).resolve().parent.parent / "public" / "books.json")
 # Yayın yılları: Open Library + elle doğrulanmış. Aynada bu veri yok;
 # yeniden build yılları silmesin diye ayrı tutulur.
 YEARS = pathlib.Path(__file__).resolve().parent / "yayin-yillari.json"
@@ -44,5 +47,8 @@ m = re.search(r"^exported:\s*(.+)$", text, re.M)
 if m:
     meta["exported"] = m.group(1).strip()
 
-OUT.write_text(json.dumps({"meta": meta, "books": rows}, ensure_ascii=False), encoding="utf-8")
+# Geçici dosya + rename: canlıda okuyan Caddy yarım dosya görmesin.
+tmp = OUT.with_suffix(".json.tmp")
+tmp.write_text(json.dumps({"meta": meta, "books": rows}, ensure_ascii=False), encoding="utf-8")
+tmp.replace(OUT)
 print(f"{len(rows)} kitap -> {OUT}")

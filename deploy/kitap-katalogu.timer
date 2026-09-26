@@ -1,0 +1,9 @@
+[Unit]
+Description=Kitap Rafı kataloğunu 30 dakikada bir tazele
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=30min
+
+[Install]
+WantedBy=timers.target

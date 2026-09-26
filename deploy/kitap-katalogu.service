@@ -1,0 +1,14 @@
+# Kitap Rafı kataloğu: Notion aynası (Kitaplar.md) -> /opt/kitaprafi-katalog/books.json
+# Caddy /kitaprafi/books.json ve /kitaprafi/klasik/books.json yollarını bu dosyadan sunar.
+# Kurulum: /etc/systemd/system/ altına kopyala; systemctl enable --now kitap-katalogu.timer
+[Unit]
+Description=Kitap Rafı kataloğunu Notion aynasından üret
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/kitaprafi/katalog-pipeline/build.py --src "/srv/osmanos-vault/🧠 500-Knowledge/Notion-Aynası/Kitaplar.md" --out /opt/kitaprafi-katalog/books.json
+ProtectSystem=strict
+ReadWritePaths=/opt/kitaprafi-katalog
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050719">
+  <link rel="canonical" href="https://osmanevski.com/kitaprafi/">
+  <title>Kitap Rafı — Terminal Katalog</title>
+  <meta name="description" content="Osman’ın okuma günlüğü. Kitap kataloğunu terminal görünümünde ara, filtrele ve keşfet.">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/kitaprafi/vt/style.css">
+  <script type="module" src="/kitaprafi/vt/app.js"></script>
+</head>
+<body>
+  <div class="wallpaper" aria-hidden="true"><img src="/nighthawks.jpg" alt=""></div>
+  <a class="skip" href="#catalog">Kataloğa geç</a>
+  <main class="window">
+    <div class="bar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="title">osmanevski — ~/kitaprafi/katalog</span><a href="/" class="home" aria-label="Ana terminale dön">~/</a></div>
+    <header class="head">
+      <pre class="book-mark" aria-hidden="true"> ┌──┬──┐
+ │  │  │
+ └──┴──┘</pre>
+      <div><h1>kitaprafı <span class="dim">/ katalog</span></h1><p class="dim">Osman’ın okuma günlüğü</p><p class="location">~/osmanevski.com/kitaprafi</p></div>
+      <a class="classic" href="/kitaprafi/klasik/">Klasik katalog ↗</a>
+    </header>
+    <div class="welcome"><span class="dot" aria-hidden="true">●</span><span id="summary" role="status">Katalog yükleniyor…</span></div>
+    <nav class="tools" aria-label="Katalog filtreleri">
+      <div class="statuses" id="statuses" aria-label="Okuma durumu"><button type="button" data-status="" aria-pressed="true">Tümü <span>—</span></button><button type="button" data-status="Okundu" aria-pressed="false">Okundu <span>—</span></button><button type="button" data-status="Okunuyor" aria-pressed="false">Okunuyor <span>—</span></button><button type="button" data-status="Planlandı" aria-pressed="false">Planlandı <span>—</span></button></div>
+      <div class="filters"><label>Tür <select id="genre" aria-label="Tür"><option value="">Tümü</option></select></label><label>Dil <select id="language" aria-label="Dil"><option value="">Tümü</option></select></label><label>Grupla <select id="group" aria-label="Grupla"><option value="">Yok</option><option value="author">Yazar</option><option value="genre">Tür</option><option value="lang">Dil</option></select></label><button id="reset" type="button" title="Aramayı ve filtreleri temizle" aria-label="Aramayı ve filtreleri temizle">↺</button></div>
+    </nav>
+    <div class="command-line"><span>❯ <b id="list-command">ls kitaplar</b></span><span id="result-count" class="dim" role="status">…</span></div>
+    <section class="catalog" id="catalog" aria-label="Kitap kataloğu, yatay ve dikey kaydırılabilir" tabindex="0" aria-busy="true">
+      <table><caption class="sr-only">Kitap listesi. Kitap adına basarak ayrıntıları açabilirsin.</caption><thead><tr>
+        <th scope="col" data-key="title" aria-sort="none"><button type="button" data-sort="title">Kitap <span class="sort-arrow" aria-hidden="true"></span></button></th>
+        <th scope="col" data-key="year" aria-sort="descending"><button type="button" data-sort="year">Yıl <span class="sort-arrow" aria-hidden="true">↓</span></button></th>
+        <th scope="col" data-key="author" aria-sort="none"><button type="button" data-sort="author">Yazar <span class="sort-arrow" aria-hidden="true"></span></button></th>
+        <th scope="col">Durum</th><th scope="col">Tür</th><th scope="col">Dil</th>
+      </tr></thead><tbody id="rows"></tbody></table>
+      <div class="empty" id="empty"><p id="empty-text">Kitaplar getiriliyor<span class="cursor" aria-hidden="true">_</span></p><button type="button" id="empty-action" hidden>Yeniden dene</button></div>
+    </section>
+    <footer class="footer">
+      <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+      <form id="command-form" autocomplete="off"><label class="prompt-sign" for="command" aria-hidden="true">❯</label><input id="command" type="search" placeholder="Kitap, yazar ara veya /yardım" aria-label="Kitap, yazar ara veya komut yaz" spellcheck="false" autocapitalize="off" aria-describedby="command-hint"><button type="submit" class="enter" aria-label="Aramayı veya komutu çalıştır">↵</button></form>
+      <div class="statusbar"><span><span class="yellow">⏵⏵</span> <span id="status">katalog yükleniyor</span></span><span class="mobile-hint">← tabloyu kaydır →</span><span id="command-hint"><kbd>↑ ↓</kbd> gezin <span class="sep">·</span> <kbd>enter</kbd> ayrıntı <span class="sep">·</span> <button type="button" id="help">/yardım</button></span></div>
+    </footer>
+  </main>
+  <dialog id="detail-dialog" aria-labelledby="detail-title"><div class="dialog-bar"><span class="dim" id="detail-path">~/kitaplar</span><button type="button" id="close-detail" aria-label="Ayrıntıyı kapat">esc ×</button></div><article id="detail"></article></dialog>
+</body>
+</html>

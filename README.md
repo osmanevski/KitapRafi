@@ -97,3 +97,18 @@ Kod güncellemesinde yalnız değişen kod/statik dosyaları gönder ve ardında
 `n8n-workflow.json`, OpenRouter üzerinden `google/gemini-3-flash-preview` modelini kullanır
 ve üretilen kitabı korumalı `/api/books/ingest` endpoint'ine gönderir. Kurulum ve kullanım
 ayrıntıları için [OTOMASYON.md](OTOMASYON.md) dosyasına bak.
+
+## Terminal liste kataloğu (26 Eylül 2026)
+
+Kaynak `public/vt/`; canlı ana adres `https://osmanevski.com/kitaprafi/`.
+`/kitaprafi/vt/` aynı görünümü açar. Klasik liste `/kitaprafi/klasik/`, eski sergi
+`/kitaprafi/sergi` altında korunur. Liste `public/books.json` verisini kullanır;
+serginin `data/books.json` veya `/api/books` verisi değildir.
+
+Canlı Caddy terminal dosyalarını `/opt/kitaprafi/public/vt/` içinden doğrudan sunar.
+Yalnız değişen `public/vt/` dosyalarını aynı sunucu dizinine kopyala; konteyneri
+ve canlı veri dosyalarını değiştirme. Ana site deposundaki katalog dosyaları artık
+kaynak değildir. Ortak fontlar, favicon ve duvar kâğıdı ana siteden yüklenir.
+Yerel önizlemede `/kitaprafi/vt/*` yollarını bu dizine, `/kitaprafi/books.json`
+yolunu `public/books.json` dosyasına yönlendir. Normal sergi geliştirme akışı aynıdır.
+Kontrol: `node scripts/test-terminal-catalog.mjs`, `node --check public/vt/app.js`, `npm test`.

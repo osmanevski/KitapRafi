@@ -26,7 +26,8 @@ for line in text.splitlines():
     if m:
         date = m.group(0)
     # Yıl sütunu = kitabın yayın yılı; aynada yoksa bitirme tarihine düş
-    year = years.get(title) or (date[:4] if date else "")
+    # Boş değer bilinçli: yılı belirsiz eser (ör. derleme cilt); bitirme tarihine düşme
+    year = years[title] if title in years else (date[:4] if date else "")
     rows.append({
         "title": title,
         "author": author,

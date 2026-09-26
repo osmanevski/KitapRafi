@@ -1,6 +1,6 @@
 ---
 id: TASK-20260926-001-terminal-catalog
-status: accepted
+status: completed
 risk: medium
 owner: human
 orchestrator: root
@@ -35,7 +35,7 @@ Root site provides wallpaper/fonts. Catalog reads /kitaprafi/books.json, never t
 ## Acceptance criteria
 - [x] Catalog source is owned here and existing catalog behavior preserved.
 - [x] Tests and independent review pass.
-- [ ] Live routes serve these project files; classic and data routes remain available.
+- [x] Live routes serve these project files; classic and data routes remain available.
 
 ## Verification
 npm test

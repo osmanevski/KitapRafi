@@ -15,8 +15,10 @@ Original exhibition, classic catalog, data and uploads are unchanged.
 - node scripts/test-terminal-catalog.mjs: pass.
 - node --check public/vt/app.js: pass.
 - Independent review catalog_source_review: pass.
-- Live source-root migration: pending integration.
+- Live source-root migration: pass. Caddy serves /opt/kitaprafi/public/vt and /opt/film-katalogu/vt; all asset SHA-256 checks passed.
+- Classic book/film routes, exhibition and catalog JSON are byte-identical before/after.
+- Live Chrome: 110 book rows, 727 film rows; no film JS errors.
+- Backup: /var/backups/osmanevski-catalog-owners-20260926-225716.
 
-## Next action
-Integrate the reviewed branch, deploy only public/vt, patch guarded Caddy routes, compare live
-HTML/assets and catalog data, then mark completed. Deployment explicitly authorized by user.
+## Completion
+Reviewed branch integrated; requested live routing and browser verification passed. Main site source duplicates removed; user preexisting work preserved.
